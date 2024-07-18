@@ -1,0 +1,238 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<title>Hector J. Rivas - Syntax Highlighting Done Right, Part II</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Expires" content="0">
+<meta name="description" content="Syntax Highlighting Done Right, Part II">
+<meta content="text/html; charset=iso-8859-1" http="http">
+<style type="text/css" media="all"><!-- media="all": hack to hide stuff from NS 4 --></style>
+<link rel="stylesheet" href="styles.css">
+<script type="text/javascript" src="prototypes.js"></script>
+<script type="text/javascript" src="dom.js"></script>
+<script type="text/javascript" src="utility.js"></script>
+<script type="text/javascript" src="syntax.js"></script>
+<script type="text/javascript" src="scripts.js"></script>
+</head>
+<body>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr><td class="tdheader"><table border="0" cellpadding="0" cellspacing="0" class="tbheader"><tr><td></td></tr></table></td></tr>
+<tr><td class="tdspacer"></td></tr>
+<tr><td class="tdcontent">
+<table  border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td>
+<h2>Syntax Highlighting Done Right, Part II</h2>
+<p>
+<img src="../sitebuilderpictures/syntaxhighlighting.0.jpg" align="right" class="imgfigure">
+<i>Syntax highlighting</i> is a secondary form of notation that helps  human readers interpret what a code snippet does and how. The idea is to use different colors&mdash;and other font attributes&mdash;for string literals so that the contrasts become visual cues for keywords, blocks of text, operators and symbols. Most code editors have a syntax highlighting strategy that along with <i>line numbering</i>, <i>brace matching</i>, and <i>code folding</i> help developers determine scope, detect errors and organize code into sections.
+</p>
+<p>
+In <a href="syntaxhighlighting.1.html" title="part I">Part I</a> of this series I explained what is at the heart of every syntax highlighter, and presented a basic strategy that highlights well-formed code snippets using HTML, CSS and JavaScript, which incidentally is the strategy I use to highlight every code snippet on this website.
+</p>
+<p>
+In this last part of the series, I will I demonstrate how I use the Syntax object to highlight code.
+</p>
+<h3>The HTML code table</h3>
+<p>
+A HTML page typically contains more than one code snippet, therefore I use a repeatable structure to identify and contain code snippets: a
+table with a specific ID (tbcode) containing certain elements:
+</p>
+<p class="pfigure">
+Figure 1. HTML elements in a code table
+<br/>
+<br/>
+<img src="../sitebuilderpictures/syntaxhighlighting.n.jpg" class="imgfigure">
+</p>
+<p>
+The TEXTAREA element is the <b>source</b> control, where the actual code resides. It is hidden through the style attribute, so it is just a
+placeholder. As opposed to most HTML tags, the contents of a text area element are <i>not</i> parsed by the HTML engine, which is in
+advantage in this scenario.
+</p>
+<p>
+The preformatted (PRE) element is the <b>target</b> control, where the highligted code will be shown, and the SPAN
+element is the placeholder for <b>line numbers</b>, filled after highlighting the code. I could have used any other tag than PRE as the target, but if the syntax highlighter fails for any reason, the contents of the text area are copied to the preformatted tag, ensuring that the code is at least shown with a mono-spaced font.
+</p>
+<p>
+When a page on my website loads, I gather browser info to handle cross-browser mishaps, and I collect all the elements that require highlighting in the code tables (ctables) array. I then instance an array of syntaxes. A page typically has various code snippets, and sometimes code nippets in different languages; if a Syntax object has been instanced for a particular language, I just "reuse" it to minimize the code's footprint on the client's machine.
+</p>
+<p>Also, before parsing the code snippets, a universal style sheet object is added to the HEAD section of the page by createStyleElement (found in dom.js):
+</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="JavaScript"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+window.onload = function()
+{
+	// get browser info
+	BrowserInfo.init();
+	
+	// get code tables on this document
+	var ctables = document.getElementsByName("tbcode");
+
+	// nothing to do
+	if (!ctables)
+		return;
+
+	// a collection of syntaxes so that they can be reused
+	var syntaxes = [];
+
+	// a stylesheet object
+	var style = createStyleElement();
+}
+</textarea>
+<pre class="JavaScript"></pre>
+</td>
+</tr>
+</table>
+<p>
+The onload event continues by looping through code tables, and for each, it grabs the expected elements and the target language, embedded in the class attribute of the target element. It then references a syntax object for the language if it exists in the array:
+</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="JavaScript"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+for (var i = 0, j; i < ctables.length; i++)
+{
+	var _linens = ctables[i].getElementsByTagName("SPAN")[0];
+	var _source = ctables[i].getElementsByTagName("TEXTAREA")[0];
+	var _target = ctables[i].getElementsByTagName("PRE")[0];
+
+	// skip bad-formed ctables (nothing will be shown)
+	if (!_linens || !_source || !_target)
+		continue;
+
+	// the PRE element class attribute indicates the language to parse
+	var language = _target.className;
+
+	// reference a syntax object if already created for the language
+	var syntax = syntaxes.find("language", language);
+
+	// none found, create it
+	if (syntax == null)
+	{
+		switch (language)
+		{
+			case "CSharp":
+				syntax = new CSharpSyntax(style);
+	
+				syntax.AddGroup("user1", "HJR ReadPassword", "#FF46A3");
+				break;
+	
+			case "Batch":
+				syntax = new BatchSyntax(style);
+				break;
+	
+			case "JavaScript":
+				syntax = new JavaScriptSyntax(style);
+	
+				syntax.AddGroup("user1", "box compact escapeTags fChar fromBase26 ...",      "color: #FF46A3");
+				syntax.AddGroup("user2", "Syntax BatchSyntax CSharpSyntax JavaScriptSyntax", "color: #FF46A3");
+				break;
+	
+			default:
+				break;
+		}
+	
+		// save the subclassed syntax object for reuse
+		if (syntax)
+			syntaxes.push(syntax);
+	}
+}
+</textarea>
+<pre class="JavaScript"></pre>
+</td>
+</tr>
+</table>
+<p>
+In the switch statement, a subclassed Syntax object is created for the target language when none exists, and it is pushed into the array to complete the reusability logic.
+</p>
+<p>
+Each sublclassed Syntax object is defined in syntax.js, with its own set of predefined highlighting groups and blocks, but notice how we can add custom keyword groups on the onload event. We could have different pages load different scripts with different syntax objects.
+</p>
+<p>
+To add a language, say Visual Basic, you start by defining a syntax object for it, say VisualBasicSyntax. It should subclass the Syntax object, add keyword groups and block definitions to it&mdash;along with their CSS styles&mdash;and return it. Then, we add a case to the switch statement to handle the "VisualBasic" language, and then we add code tables containing Visual Basic code snippets to our HTML page.
+</p>
+<p>
+Still inside the code tables loop, if a syntax object is successfully created, it is used to parse the source. A helper function then counts source lines and tweaks the SPAN's style; I could have hardcoded it <i>a priori</i>, but at the very minimum the font family and size properties must be the same as the PRE object's. Finally, if anything goes wrong when parsing or if the language is unknown to the script, the source is copied to the target "as is".
+</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="JavaScript"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+// we managed to create a syntax object ( === language is known )
+if (syntax)
+{			
+	// parse the source
+	try 
+	{
+		_target.innerHTML = syntax.parse(_source.innerText);
+	}
+	catch(e)
+	{
+		_target.innerHTML = _source.innerHTML;
+	}
+
+	// count source lines
+	_linens.innerHTML = lineCountHTML(_source);
+	
+	// copy and modify line numbers' style
+	_linens.className = language;
+	
+	with (_linens.style)
+	{
+		borderRadius = 0;
+		textAlign = "right";
+		backgroundColor = "#C0C0C0";
+		color = "#FFFFFF";
+	}
+}
+else
+	_target.innerHTML = _source.innerHTML;
+</textarea>
+<pre class="JavaScript"></pre>
+</td>
+</tr>
+</table>
+<p>
+And that is it for the parsing logic. It works based on a structure of HTML placeholders and JavaScript. In general, I can simply copy the code into the text area placeholder and render the page. The exceptions are complicated expressions such as embedded hierarchical HTML and JavaScript regular expressions (see <a href="syntaxhighlighting.1.html" title="part I">Part I</a> for more details). Hopefully I have given you a good starting point to think on the meta level of languages: remember that the code on this page is highlighted by the code described on this page!
+</p>
+<p>
+I will leave it to you to build on this... If you want a challenge, I have always wanted to highlight the background of HTML color literals with the actual color being defined... This takes a new type of object, namely a prefix object, not covered here.
+</p>
+</td>
+</tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td class="tdcloser">
+<a href="../.."><img alt="Hector [.j.] Rivas" border="" src="../sitebuilderpictures/webassets/logo.gif" vspace="0" hspace="5"></a>
+</td>
+</tr>
+<tr>
+<td class="tdcloser">
+<div itemscope itemtype="http://data-vocabulary.org/Person"> 
+<span itemprop="name" style="font-size:10px;">Hector [.j.] Rivas</span>
+</div>
+</td>
+</tr>
+</table>
+</td></tr>
+<tr>
+<td class="tdfooter">
+<div class="divcontact">Rowlett, TX&nbsp;| 214.789.1733&nbsp;| <a href="mailto:hector.j.rivas@hotmail.com">hector.j.rivas@hotmail.com</a></div>
+<div class="divhosting"><a href="http://www.register.com/retail/product/website.rcmx" target="_blank">Powered by Register.com</a></div>
+</td>
+</tr>
+</table>
+</body>
+</html>

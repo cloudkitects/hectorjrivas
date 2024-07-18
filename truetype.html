@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0"/>
+	<!-- <link rel='stylesheet' type='text/css' href="style.css"> -->
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+	<script type="text/javascript" src="prototypes.js"></script>
+	<script type="text/javascript" src="utility.js"></script>
+	<script type="text/javascript" src="zipper.js"></script>
+	<script type="text/javascript" src="base64.js"></script>
+	<script type="text/javascript" src="CRC.js"></script>
+	<script type="text/javascript" src="truetype.js"></script>
+	<title>Read a True Type Font file from scratch</title>
+	<style>
+	</style>
+</head>
+<body>
+
+<h1>Read a True Type Font file from scratch</h1>
+<div>
+Drag a font file here to reveal its innermost secrets! <a href="https://github.com/creationix/font-awesome/blob/master/FontAwesome.ttf?raw=true">Here's one in case you don't have one handy.</a>
+
+<div id="dropTarget" style="border:3px dashed #5f90d0; font-size:30px;width:300px;height:100px;padding:20px;margin:0 auto; text-align: center">Drag a TTF file here</div>
+
+<div id=font-container></div>
+
+<p>
+Here are the steps we will follow:
+<ol>
+<li>When the file is dragged onto the web page, we want to read it.
+<li>We need to be able to interpret the numbers in the file, even though they were made for C programs to read.
+<li>We have to find the number of characters in the file and the positions of the glyph outlines in the file
+<li>We have to interpret the format of the glyph outlines
+<li>Finally, we have to render them to the web page.
+</ol>
+
+<h2>Reading Files from Javascript</h2>
+<p>
+Whoah that sounds dangerous. But javascript can't read any file on your computer; just the ones you happen to drag over the web page, intentionally or accidentally. We do that by handling the dragover and drop events. When the drop event is received, it contains a reference to the file and then our code is allowed to read it. This is done without any interactions with the server.
+<p>
+We also have to handle the ondragover event and cancel it, because otherwise it won't work.
+
+<pre>
+var dropTarget = document.getElementById("dropTarget");
+dropTarget.ondragover = function(e) {
+    e.preventDefault();
+};
+dropTarget.ondrop = function(e) {
+    e.preventDefault();
+
+    if (!e.dataTransfer || !e.dataTransfer.files) {
+        alert("Your browser didn't include any files in the drop event");
+        return;
+    }
+
+    var reader = new FileReader();
+    reader.readAsArrayBuffer(e.dataTransfer.files[0]);
+    reader.onload = function(e) {
+        ShowTtfFile(reader.result);
+    };
+
+};
+</pre>
+
+<p>
+You can't do much with the HTML5 File object. To get its data, you have to use the FileReader to read it asynchronously. You can choose to read it as a base64 encoded string or an array buffer. We choose an ArrayBuffer.
+<p>
+
+<h2>Interpreting the C structures</h2>
+TrueType files were designed when computers had very little memory. They were designed to be mapped into RAM and read in place. C structures were even placed directly in the file. Opening a true type file was just a matter of loading it in. There was no need to do anything else. We will do a similar thing, but we will need a way to easily seek around the file and read numbers in various formats.
+<p>
+Here's a class that lets you do that.
+
+<pre>
+function BinaryReader(arrayBuffer)
+{
+    assert(arrayBuffer instanceof ArrayBuffer);
+    this.pos = 0;
+    this.data = new Uint8Array(arrayBuffer);
+}
+
+BinaryReader.prototype = {
+    seek: function(pos) {
+        assert(pos >=0 && pos <= this.data.length);
+        var oldPos = this.pos;
+        this.pos = pos;
+        return oldPos;
+    },
+
+    tell: function() {
+        return this.pos;
+    },
+
+    getUint8: function() {
+        assert(this.pos < this.data.length);
+        return this.data[this.pos++];
+    },
+
+    getUint16: function() {
+        return ((this.getUint8() << 8) | this.getUint8()) >>> 0;
+    },
+
+    getUint32: function() {
+       return this.getInt32() >>> 0;
+    },
+
+    getInt16: function() {
+        var result = this.getUint16();
+        if (result & 0x8000) {
+            result -= (1 << 16);
+        }
+        return result;
+    }, 
+
+    getInt32: function() {
+        return ((this.getUint8() << 24) | 
+                (this.getUint8() << 16) |
+                (this.getUint8() <<  8) |
+                (this.getUint8()      ));
+    }, 
+
+    getFword: function() {
+        return this.getInt16();
+    },
+
+    get2Dot14: function() {
+        return this.getInt16() / (1 << 14);
+    },
+
+    getFixed: function() {
+        return this.getInt32() / (1 << 16);
+    },
+
+    getString: function(length) {
+        var result = "";
+        for(var i = 0; i < length; i++) {
+            result += String.fromCharCode(this.getUint8());
+        }
+        return result;
+    },
+
+    getDate: function() {
+        var macTime = this.getUint32() * 0x100000000 + this.getUint32();
+        var utcTime = macTime * 1000 + Date.UTC(1904, 1, 1);
+        return new Date(utcTime);
+    }
+};
+</pre>
+
+<h3>Fixed point numbers</h3>
+Besides unsigned and signed 8, 16, and 32 bit numbers, there are some other types of things that appear in font files. The Fixed type is a way of representing decimals in a certain number of bits. Like fixed-point arithmetic, only we use binary instead of 10s. Suppose we wanted to write (in base 10) the number 1.53 but our decimal point key is broken. We would instead write 153. To convert it back, we divide by 100. Likewise, in binary, it works the same way, except that we divide by a power of two.
+
+<h3>A note on Javascript numbers</h3>
+Javascript has a wishy-washy "number" type. It is usually a 32-bit integer. It switches from signed to unsigned whenever it feels like it, and when you least expect it, it will switch to a 64-bit double precision number.
+<p>
+But you can force it to be signed using the "unsigned shift right" operator (>>>). By shifting it by 0, it converts the internal type to unsigned.
+
+<h2>Finding the treasures</h2>
+The TrueType font format is <a href="https://developer.apple.com/fonts/TrueType-Reference-Manual/">described by Apple here</a>. The truetype file is prefixed with something called the "offset" table that tells you where everything else is in the file. We will have to go diving into various tables to find the actual outlines of the fonts.
+<p>
+The tables also have a checksum to ensure they are right. This is obtained by adding up all the 4-byte integers in them, modulo 2<sup>32</sup>.
+Here's the code to read the offsets.
+<pre>
+function TrueTypeFont(arrayBuffer)
+{
+    this.file = new BinaryReader(arrayBuffer);
+    this.tables = this.readOffsetTables(this.file);
+    this.readHeadTable(this.file);
+    this.length = this.glyphCount();
+}
+
+TrueTypeFont.prototype = {
+    readOffsetTables: function(file) {
+        var tables = {};
+        this.scalarType = file.getUint32();
+        var numTables = file.getUint16();
+        this.searchRange = file.getUint16();
+        this.entrySelector = file.getUint16();
+        this.rangeShift = file.getUint16();
+
+        for( var i = 0 ; i < numTables; i++ ) {
+            var tag = file.getString(4);
+            tables[tag] = {
+                checksum: file.getUint32(),
+                offset: file.getUint32(),
+                length: file.getUint32()
+            };
+
+            if (tag !== 'head') {
+                assert(this.calculateTableChecksum(file, tables[tag].offset,
+                            tables[tag].length) === tables[tag].checksum);
+            }
+        }
+
+        return tables;
+    },
+
+    calculateTableChecksum: function(file, offset, length)
+    {
+        var old = file.seek(offset);
+        var sum = 0;
+        var nlongs = ((length + 3) / 4) | 0;
+        while( nlongs-- ) {
+            sum = (sum + file.getUint32() & 0xffffffff) >>> 0;
+        }
+
+        file.seek(old);
+        return sum;
+    },
+</pre>
+
+Okay now we know where all the various tables are in the file. But one that we will need later is the "head" table, which contains the dimenions of the font, and importantly, the format of the glyph index.
+
+<pre>
+    readHeadTable: function(file) {
+        assert("head" in this.tables);
+        file.seek(this.tables["head"].offset);
+
+        this.version = file.getFixed();
+        this.fontRevision = file.getFixed();
+        this.checksumAdjustment = file.getUint32();
+        this.magicNumber = file.getUint32();
+        assert(this.magicNumber === 0x5f0f3cf5);
+        this.flags = file.getUint16();
+        this.unitsPerEm = file.getUint16();
+        this.created = file.getDate();
+        this.modified = file.getDate();
+        this.xMin = file.getFword();
+        this.yMin = file.getFword();
+        this.xMax = file.getFword();
+        this.yMax = file.getFword();
+        this.macStyle = file.getUint16();
+        this.lowestRecPPEM = file.getUint16();
+        this.fontDirectionHint = file.getInt16();
+        this.indexToLocFormat = file.getInt16();
+        this.glyphDataFormat = file.getInt16();
+    },
+</pre>
+
+There are many tables to obtain the characteristics of the font, or the horizontal distance between glyphs, or the minimum recommended height, creation date, etc. But I want to stay focused on the buried treasure -- the glyph outlines.
+
+<p>
+The glyph outlines are contained in the "glyf" section. The glyphs are highly compressed and each one is a different length. To find a particular one quickly, we have to first go to the <a href="https://developer.apple.com/fonts/TTRefMan/RM06/Chap6loca.html">"loca" table.</a> 
+
+<p>
+
+It is simply an array of 2 byte or four byte values, depending on the "indexToLocFormat" in the header. When this is set to one, the values are four bytes long and give the position of a glyph in the glyf table. Otherwise, they are  two bytes long, and give the position of the glyph divided by two in the glyf table. File formats make confusing tradeoffs to be small.
+
+<p>
+<pre>
+    getGlyphOffset: function(index) {
+        assert("loca" in this.tables);
+        var table = this.tables["loca"];
+        var file = this.file;
+        var offset, old;
+
+        if (this.indexToLocFormat === 1) {
+            old = file.seek(table.offset + index * 4);
+            offset = file.getUint32();
+        } else {
+            old = file.seek(table.offset + index * 2);
+            offset = file.getUint16() * 2;
+        }
+
+        file.seek(old);
+
+        return offset + this.tables["glyf"].offset;
+    },
+</pre>
+<p>
+Given any glyph index, we can now locate is exact position from the start of the file. Now things get a little complicated.
+<p>
+Conceptually the glyph can be one of two structures, which share a common header.
+
+(diagram)
+<p>
+When two shapes are drawn on top of each-other, it is convention that the second will cut out the first one if it has a different winding order. That is, if the points are specified going clockwise instead of counter-clockwise and vice-versa. Fonts use this convention to build up shapes from contours.
+For example, the letter O will have two contours -- one for the outer circle, and one for the inner one. 
+<p>
+But there are two kinds of glyphs. The simple type is made of contours, as above. The compound type is made up of other glyphs. To draw the glyph, we have to draw each of the component glyphs and shift them around. This is made to handle characters with accents. Accented versions of the letters can therefore take very little space.
+<p>
+Let's keep focused on getting the treasure. We will ignore the compound glyphs. We just want to extract those sweet outlines.
+
+<h2>Interpreting the outlines</h2>
+<p>
+This function will read the glyph header, and then call the right function to read it.
+<pre>
+    readGlyph: function(index) {
+        var offset = this.getGlyphOffset(index);
+        var file = this.file;
+
+        if (offset >= this.tables["glyf"].offset + this.tables["glyf"].length)
+        {
+            return null;
+        }
+
+        assert(offset >= this.tables["glyf"].offset);
+        assert(offset < this.tables["glyf"].offset + this.tables["glyf"].length);
+
+        file.seek(offset);
+
+        var glyph = {
+            numberOfContours: file.getInt16(),
+            xMin: file.getFword(),
+            yMin: file.getFword(),
+            xMax: file.getFword(),
+            yMax: file.getFword()
+        };
+
+        assert(glyph.numberOfContours >= -1);
+
+        if (glyph.numberOfContours === -1) {
+            this.readCompoundGlyph(file, glyph);
+        } else {
+            this.readSimpleGlyph(file, glyph);
+        }
+
+        return glyph;
+    },
+</pre>
+
+The simple glyphs are stored in a compressed format. They can deal with repeated points, and small movements from one point to the next very well. This is done using a series of one-byte flags. Each flag-byte indicates whether the corresponding point is stored in one byte or two bytes, for each of the X and Y coordinates. After the flags come the X coordinates, and finally the Y coordinates. The great thing about this is that if either the X or the Y coordinate doesn't change, only one byte is used to indicate this in the flags.
+<p>
+When we read a glyph, we will assemble the points together into one array of (x, y) coordinates, plus one of the flags which is very important for rendering.
+
+<pre>
+    readSimpleGlyph: function(file, glyph) {
+
+        var ON_CURVE        =  1,
+            X_IS_BYTE       =  2,
+            Y_IS_BYTE       =  4,
+            REPEAT          =  8,
+            X_DELTA         = 16,
+            Y_DELTA         = 32;
+
+        glyph.type = "simple";
+        glyph.contourEnds = [];
+        var points = glyph.points = [];
+
+        for( var i = 0; i < glyph.numberOfContours; i++ ) {
+            glyph.contourEnds.push(file.getUint16());
+        }
+
+        // skip over intructions
+        file.seek(file.getUint16() + file.tell());
+
+        if (glyph.numberOfContours === 0) {
+            return;
+        }
+
+        var numPoints = Math.max.apply(null, glyph.contourEnds) + 1;
+
+        var flags = [];
+
+        for( i = 0; i < numPoints; i++ ) {
+            var flag = file.getUint8();
+            flags.push(flag);
+            points.push({
+                onCurve: (flag & ON_CURVE) > 0
+            });
+
+            if ( flag & REPEAT ) {
+                var repeatCount = file.getUint8();
+                assert(repeatCount > 0);
+                i += repeatCount;
+                while( repeatCount-- ) {
+                    flags.push(flag);
+                    points.push({
+                        onCurve: (flag & ON_CURVE) > 0
+                    });
+                }
+            }
+        }
+
+        function readCoords(name, byteFlag, deltaFlag, min, max) {
+            var value = 0;
+
+            for( var i = 0; i < numPoints; i++ ) {
+                var flag = flags[i];
+                if ( flag & byteFlag ) {
+                    if ( flag & deltaFlag ) {
+                        value += file.getUint8();
+                    } else {
+                        value -= file.getUint8();
+                    }
+                } else if ( ~flag & deltaFlag ) {
+                    value += file.getInt16();
+                } else {
+                    // value is unchanged.
+                }
+
+                points[i][name] = value;
+            }
+        }
+
+        readCoords("x", X_IS_BYTE, X_DELTA, glyph.xMin, glyph.xMax);
+        readCoords("y", Y_IS_BYTE, Y_DELTA, glyph.yMin, glyph.yMax);
+    }
+</pre>
+
+<h2>Drawing the glyphs in the web page</h2>
+Finally we have something to show for all the effort. We want to draw the glyphs. HTML5 has its handy canvas API that will let us draw shapes.
+
+<p>
+Here's the function that controls the whole thing. It takes and array buffer
+from the drag & drop event, and creates our TrueType object from it. Then it removes any previous glyphs from the screen. For each character, it creates an &lt;canvas> element and scales the font so that it's EM height (literally, the height of the letter 'M') is about 64 pixels high. The font also has to be flipped vertically, because its coordinates assume zero is in the lower left of the screen, but our coordinates are in the top left.
+
+<pre>
+function ShowTtfFile(arrayBuffer)
+{
+    var font = new TrueTypeFont(arrayBuffer);
+
+    var width = font.xMax - font.xMin;
+    var height = font.yMax - font.yMin;
+    var scale = 64 / font.unitsPerEm;
+
+    var container = document.getElementById("font-container");
+
+    while(container.firstChild) {
+        container.removeChild(container.firstChild);
+    }
+
+    for( var i = 0; i < font.length; i++ ) {
+        var canvas = document.createElement("canvas");
+        canvas.style.border = "1px solid gray";
+        canvas.width = width * scale;
+        canvas.height = height * scale;
+        var ctx = canvas.getContext("2d");
+        ctx.scale(scale, -scale);
+        ctx.translate(-font.xMin, -font.yMin - height);
+        ctx.fillStyle = "#000000";
+        ctx.beginPath();
+        if (font.drawGlyph(i, ctx)) {
+            ctx.fill();
+            container.appendChild(canvas);
+        }
+    }
+
+}
+</pre>
+
+All that's left to show you is how they are drawn. In this function we ignore the curves and simply connect each point in the outline. However, in reality, some points are actually control points in a quadratic bezier curve.
+
+<pre>
+
+    drawGlyph: function(index, ctx) {
+
+        var glyph = this.readGlyph(index);
+
+        if ( glyph === null || glyph.type !== "simple" ) {
+            return false;
+        }
+
+        var p = 0,
+            c = 0,
+            first = 1;
+
+        while (p < glyph.points.length) {
+            var point = glyph.points[p];
+            if ( first === 1 ) {
+                ctx.moveTo(point.x, point.y);
+                first = 0;
+            } else {
+                ctx.lineTo(point.x, point.y);
+            }
+
+            if ( p === glyph.contourEnds[c] ) {
+                c += 1;
+                first = 1;
+            }
+
+            p += 1;
+        }
+
+        return true;
+    }
+</pre>
+</div>
+</body>
+</html>

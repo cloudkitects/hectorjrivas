@@ -1,0 +1,136 @@
+body
+{
+	font-family: Arial;
+	font-size: 0.83em;
+	background: #fff;
+	margin: 10px;
+}
+
+ol
+{
+	list-style-type: none;
+	counter-reset: itemCounter;
+	margin-left: 1em;
+	padding-left: 0;
+	
+	cursor: pointer;
+}
+
+ol > li
+{
+	position: relative;
+	
+	margin: 0 0 0 2em;
+	padding: 4px 8px;
+	list-style: none;
+	background: #fff;
+}
+
+ol > li:before
+{
+	content: counter(itemCounter, upper-alpha); /* use the counter as content */
+	counter-increment: itemCounter; /* increment the counter by 1 */
+	
+	position: absolute;
+	width: 2em;
+	left: -2em;
+	top: 2px;
+
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+
+	/* Some space between the number and the content in browsers that support
+	generated content but not positioning it (Camino 2 is one example) */
+	margin-right: 8px;
+	padding: 8px 4px 4px 4px;
+	color: #fff;
+	background: #666;
+	font-weight: bold;
+	font-family: inherit;
+	text-align: center;
+}
+ol > li:hover { background: #ccc; }
+
+li ol,
+li ul {margin-top:6px;}
+ol ol li:last-child {margin-bottom:0;}	
+
+/*ol li:hover:before { background: #3333FF; }*/
+
+.answered { background: #ccc; }
+.answered:before { background: #FF0000; }
+.answered.right:before { background: #00FF00; }
+
+input.CSharp
+{
+	display: inline-block;
+	position: absolute;
+	overflow: visible;
+
+	background-color: #ccc;
+	color: white;
+	margin: 0px;
+	padding: 0px;
+	border: none;
+	outline: #ccc solid 4px;
+	cursor: pointer;
+}
+
+.dropdown
+{
+	position: relative;
+}
+
+.dropdown > .list
+{
+	display: none;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	z-index: 1;
+	
+	margin: 0;
+	padding: 5px;
+	list-style: none;
+	
+	background: #fff;
+	color: #333;
+	cursor: pointer;
+	
+	-moz-box-shadow: 4px 4px 0 0 #ccc;
+	-webkit-box-shadow: 4px 4px 0 0 #ccc;
+	box-shadow: 4px 4px 0 0 #ccc;
+}
+
+.dropdown > .list li
+{
+	padding: 2px;
+
+	border-bottom: solid 1px #ccc;
+}
+
+.dropdown > .list li:hover
+{
+	background: #ccc;
+}
+
+.dropdown > .list li:last-child
+{
+	border:none
+}
+
+@media print
+{
+	.right
+	{
+		background-color: #ccc !important;
+		-webkit-print-color-adjust: exact;
+	}
+	.right:before
+	{
+		color: #000;
+		background-color: #00FF00 !important;
+		-webkit-print-color-adjust: exact;
+	}
+}

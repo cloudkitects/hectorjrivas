@@ -1,0 +1,200 @@
+/* hjr, Thu Jan 29 16:51:58 CST 2015 */
+#map1
+{
+	margin: 0 auto;
+	padding: 0;
+	width: 950px;
+	height: 1300px;
+	background: url(../sitebuilderpictures/alphadock.1.jpg) top left no-repeat #F1F0F0;
+	font-family: arial, helvetica, sans-serif;
+	font-size: 8pt;
+	display:table;
+}
+
+#map1 li
+{
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	position: relative;
+}
+
+#map1 li p
+{
+	display: block;
+	cursor: pointer;
+	color: #000;
+}
+
+#map1 li p span
+{
+	display: none;
+}
+
+#map1 li p:hover span
+{
+	position: absolute;
+	display: block;
+	width: 170px;
+	left: 180px;
+	top: 20px;
+	border: 1px solid #000;
+	background: #fff;
+	padding: 5px;
+
+	border-radius: 5px;
+	box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+}
+
+#map1 p.IElement
+{
+	position: absolute;
+	left:   342px;
+	top:     -3px;
+	width:  167px;
+	height: 137px;
+}
+
+#map1 p.IRenderable
+{
+	position: absolute;
+	left:   198px;
+	top:    213px;
+	width:  167px;
+	height: 108px;
+}
+
+#map1 p.IFloatable
+{
+	position: absolute;
+	left:     6px;
+	top:    381px;
+	width:  167px;
+	height: 168px;
+}
+
+#map1 p.IDockable
+{
+	position: absolute;
+	left:   198px;
+	top:    381px;
+	width:  167px;
+	height: 174px;
+}
+
+#map1 p.IContainer
+{
+	position: absolute;
+	left:   486px;
+	top:    213px;
+	width:  166px;
+	height: 188px;
+}
+
+#map1 p.IHidableContainer
+{
+	position: absolute;
+	left:   414px;
+	top:    477px;
+	width:  167px;
+	height: 138px;
+}
+
+#map1 p.IHidable
+{
+	position: absolute;
+	left:   606px;
+	top:    477px;
+	width:  143px;
+	height:  95px;
+}
+
+#map1 p.IGroup
+{
+	position: absolute;
+	left:   774px;
+	top:    477px;
+	width:  167px;
+	height: 205px;
+}
+
+#map1 p.IOrientableGroup
+{
+	position: absolute;
+	left:   774px;
+	top:    741px;
+	width:  167px;
+	height: 108px;
+}
+
+#map1 p.IPane
+{
+	position: absolute;
+	left:   414px;
+	top:    693px;
+	width:  167px;
+	height:  97px;
+}
+
+#map1 p.IRendered
+{
+	position: absolute;
+	left:     8px;
+	top:    890px;
+	width:  167px;
+	height: 112px;
+}
+
+#map1 p.ITransferrable
+{
+	position: absolute;
+	left:      8px;
+	top:    1034px;
+	width:   167px;
+	height:  113px;
+}
+
+#map1 p.ISerializable
+{
+	position: absolute;
+	left:      8px;
+	top:    1178px;
+	width:   167px;
+	height:   95px;
+}
+
+#map1 p.IRootLayout
+{
+	position: absolute;
+	left:    237px;
+	top:     891px;
+	width:   167px;
+	height:  286px;
+}
+
+#map1 p.IContentSelector
+{
+	position: absolute;
+	left:    488px;
+	top:     890px;
+	width:   167px;
+	height:  157px;
+}
+
+#map1 p.IUpdateStrategy
+{
+	position: absolute;
+	left:    680px;
+	top:     890px;
+	width:   191px;
+	height:  114px;
+}
+
+#map1 p.IControl
+{
+	position: absolute;
+	left:    680px;
+	top:    1034px;
+	width:   167px;
+	height:   94px;
+}

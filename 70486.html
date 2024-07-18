@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>70-486</title>
+	<link rel="stylesheet" href="styles.css">
+	<link rel="stylesheet" href="70486.css">
+	<script type="text/javascript" src="prototypes.js"></script>
+	<script type="text/javascript" src="DOM.js"></script>
+	<script type="text/javascript" src="utility.js"></script>
+	<script type="text/javascript" src="syntax.js"></script>
+	<script type="text/javascript" src="scripts.js"></script>
+	<script type="text/javascript" src="70486.js"></script>
+</head>
+<body>
+<h3>Question 1</h3>
+<p>You are developing an ASP.NET MVC application that uses forms authentication. The user database contains a user named <csharp>LibraryAdmin</csharp>. You have the following requirements:</p>
+<ul>
+	<li>You must allow all users to access the <csharp>GetBook</csharp> method.</li>
+	<li>You must restrict access to the <csharp>EditBook</csharp> method to the user named <csharp>LibraryAdmin</csharp>.</li>
+</ul>
+<p>You need to implement the controller to meet the requirements. Which code segment should you use? (Each correct answer presents a complete solution. Choose all that apply.)</p>
+
+<h3>Question 2</h3>
+<p>You are developing an ASP.NET MVC application that takes customer orders. Orders are restricted to customers with IP addresses based in the United States. You need to implement a custom route handler. How should you implement the route handler?</p>
+<table id="tbcode" name="tbcode">
+<tr>
+<td><pre class="CSharp"></pre></td>
+<td><pre class="CSharp"></pre></td>
+<td>
+<textarea class="code">
+public class USOnlyRouteHandler : <answer>IRouteHandler</answer>
+{
+	public <answer>IHttpHandler</answer> GetHttpHandler(<answer>RequestContext</answer> requestContext)
+	{
+		return new USIPHandler(requestContext);
+	}
+}
+</textarea>
+</td>
+</tr>
+<tr>
+<td colspan="3">
+<div class="dropdown">
+	<selector>[code]</selector>
+	<ul class="list">
+		<li><csharp>RequestContext</csharp></li>
+		<li><csharp>IRouteFactory</csharp></li>
+		<li class="right"><csharp>IRouteHandler</csharp></li>
+		<li><csharp>IHttpConstraint</csharp></li>
+		<li><csharp>ServerContext</csharp></li>
+		<li><csharp>IHttpHandler</csharp></li>
+	</ul>
+</div>
+<div class="dropdown">
+	<selector>[code]</selector>
+	<ul class="list">
+		<li><csharp>RequestContext</csharp></li>
+		<li><csharp>IRouteFactory</csharp></li>
+		<li><csharp>IRouteHandler</csharp></li>
+		<li><csharp>IHttpConstraint</csharp></li>
+		<li><csharp>ServerContext</csharp></li>
+		<li class="right"><csharp>IHttpHandler</csharp></li>
+	</ul>
+</div>
+<div class="dropdown">
+	<selector>[code]</selector>
+	<ul class="list">
+		<li class="right"><csharp>RequestContext</csharp></li>
+		<li><csharp>IRouteFactory</csharp></li>
+		<li><csharp>IRouteHandler</csharp></li>
+		<li><csharp>IHttpConstraint</csharp></li>
+		<li><csharp>ServerContext</csharp></li>
+		<li><csharp>IHttpHandler</csharp></li>
+	</ul>
+</div>
+</td>
+</tr>
+<tr>
+<td colspan="3">
+<span class="tip">
+<!--tip-->
+</span>
+</td>
+</tr>
+</table>
+
+<h3>Question 3</h3>
+<p>You are designing an HTML5 website. You need to design the interface to make the content of the web page viewable in all types of browsers, including voice recognition software, screen readers, and reading pens. What should you do? (Each correct answer presents a complete solution. Choose all that apply.)</p>
+
+<h3>Question 4</h3>
+<p>You are developing an ASP.NET MVC web application in Visual Studio 2012. The application has a model named <csharp>ReservationLocation</csharp> that contains properties named <csharp>City</csharp> and <csharp>State</csharp>. The view that displays reservations has a single text box named <csharp>loc</csharp> for entering the location information. The location is entered as city, state. There are action methods that have <csharp>ReservationLocation</csharp> as a parameter type. You need to ensure that the <csharp>City</csharp> and <csharp>State</csharp> properties are correctly populated. How should you implement model binding for the <csharp>ReservationLocation</csharp> type? (To answer, drag the appropriate code segment to the correct location or locations. Each code segment may be used once, more than once, or not at all. You may need to drag the split bar between panes or scroll to view content.)</p>
+<table id="tbcode" name="tbcode">
+<tr>
+<td><pre class="CSharp"></pre></td>
+<td><pre class="CSharp"></pre></td>
+<td>
+<textarea class="code">
+public class ReservationModelBinder : IModelBinder
+{
+	public object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
+	{
+		<answer>var raw = bindingContext.ValueProvider.getValue("loc");</answer>
+		
+		<answer>dynamic data = raw.RawValue.ToString().Split(',');</answer>
+		
+		return new ReservationLocation
+		{
+			City  = data[0];
+			State = data[1];
+		};
+	}
+}
+</textarea>
+</td>
+</tr>
+<tr>
+<td colspan="3">
+<div class="dropdown">
+	<selector>[code]</selector>
+	<ul class="list">
+		<li><csharp>bindingContext.ModelType = typeof(ReservationLocation);</csharp></li>
+		<li class="right"><csharp>var raw = bindingContext.ValueProvider.getValue("loc");</csharp></li>
+		<li><csharp>dynamic data = bindingContext.ValueProvider.getValue("loc");</csharp></li>
+		<li><csharp>bindingContext.ModelState.Add("city", "state", new ModelState { Value = data });</csharp></li>
+		<li><csharp>dynamic data = controllerContext.RouteData.Values[raw + "[city,state]"];</csharp></li>
+		<li><csharp>dynamic data = raw.RawValue.ToString().Split(',');</csharp></li>
+	</ul>
+</div>
+<div class="dropdown">
+	<selector>[code]</selector>
+	<ul class="list">
+		<li><csharp>bindingContext.ModelType = typeof(ReservationLocation);</csharp></li>
+		<li><csharp>var raw = bindingContext.ValueProvider.getValue("loc");</csharp></li>
+		<li><csharp>dynamic data = bindingContext.ValueProvider.getValue("loc");</csharp></li>
+		<li><csharp>bindingContext.ModelState.Add("city", "state", new ModelState { Value = data });</csharp></li>
+		<li><csharp>dynamic data = controllerContext.RouteData.Values[raw + "[city,state]"];</csharp></li>
+		<li class="right"><csharp>dynamic data = raw.RawValue.ToString().Split(',');</csharp></li>
+	</ul>
+</div>
+</td>
+</tr>
+<tr>
+<td colspan="3">
+<span class="tip">
+<!--tip-->
+</span>
+</td>
+</tr>
+</table>
+
+<h3>Question 5</h3>
+<p>You are developing an ASP.NET MVC web application in Visual Studio 2012. The application requires several thousand content files. All content is hosted on the same IIS instance as the application. You detect performance issues when the application starts. You need to resolve the performance issues. What should you do?</p>
+
+<h3>Question 6</h3>
+<p>You are developing an ASP.NET MVC application in Visual Studio 2012. The application supports multiple cultures. The application contains three resource files in the Resources directory:
+<ul>
+	<li><csharp>MyDictionary.resx</csharp></li>
+	<li><csharp>MyDictionary.es.resx</csharp></li>
+	<li><csharp>MyDictionary.fr.resx</csharp></li>
+</ul>
+<p>Each file contains a public resource named <csharp>Title</csharp> with localized translation. The application is configured to set the culture based on the client browser settings. The application contains a controller with the action defined in the following code segment:</p>
+<table id="tbcode" name="tbcode">
+<tr>
+<td><pre class="CSharp"></pre></td>
+<td><pre class="CSharp"></pre></td>
+<td>
+<textarea class="code">
+public ActionResult GetProducts()
+{
+	
+	List<ProductModel> products = DataBase.DBAccess.GetProducts();
+	
+	return View(products);
+}
+</textarea>
+</td>
+</tr>
+<tr>
+<td colspan="3">
+<!--dropdowns-->
+</td>
+</tr>
+<tr>
+<td colspan="3">
+<span class="tip">
+<!--tip-->
+</span>
+</td>
+</tr>
+</table>
+<p>You need to set <csharp>ViewBag.Title</csharp> to the localized title contained in the resource files. Which code segment should you add to the action at line 03?</p>
+
+<h3>Question 7</h3>
+<p>You are testing an ASP.NET application. The test plan requires that tests run against the application’s business layer. You need to use the test project template that meets this requirement. Which template should you use?</p>
+
+<h3>Question 8</h3>
+<p>You are authoring unit tests. The unit tests must test code that consumes sealed classes. You need to create, maintain, and inject dependencies in the unit tests. Which isolation method should you use?</p>
+
+<h3>Question 9</h3>
+<p>You are developing an ASP.NET MVC web application that includes the following method, which you need to test. Which unit test should you use?</p>
+</p>
+<table id="tbcode" name="tbcode">
+<tr>
+<td><pre class="CSharp"></pre></td>
+<td><pre class="CSharp"></pre></td>
+<td>
+<textarea class="code">
+public double AccountBalance(double currentBalance, double transactionAmount)
+{
+	double finalBalance = 0.00;
+	
+	finalBalance = currentBalance + transactionAmount;
+	
+	return finalBalance;
+}
+</textarea>
+</td>
+</tr>
+</table>
+<ol class="multiline">
+	<li><csharp>[TestMethod()]
+private void AccountBalanceTest()
+{
+	double currentBalance = 175.05;
+	double transactionAmount = 76.03;
+	double finalBalance = 251.08;
+	double result = 0.00;
+	
+	result = AccountBalance(currentBalance, transactionAmount);
+	
+	Assert.IsEqual(finalBalance, result);
+}</csharp></li>
+	<li><csharp>[TestMethod()]
+private void AccountBalanceTest()
+{
+	double currentBalance = 175.05;
+	double transactionAmount = 76.03;
+	double finalBalance = 251.08;
+	double result = 0.00;
+	
+	result = AccountBalance(currentBalance, transactionAmount);
+	
+	Assert.IsTrue(finalBalance, result);
+}</csharp></li>
+	<li class="right"><csharp>[TestMethod()]
+private void AccountBalanceTest()
+{
+	double currentBalance = 175.05;
+	double transactionAmount = 76.03;
+	double finalBalance = 251.08;
+	double result = 0.00;
+	
+	result = AccountBalance(currentBalance, transactionAmount);
+	
+	Assert.AreEqual(finalBalance, result);
+}</csharp></li>
+	<li><csharp>[UnitTest()]
+private void AccountBalanceTest()
+{
+	double currentBalance = 175.05;
+	double transactionAmount = 76.03;
+	double finalBalance = 251.08;
+	double result = 0.00;
+	
+	result = AccountBalance(currentBalance, transactionAmount);
+	
+	Assert.AreEqual(finalBalance, result);
+}
+</csharp></li>
+</ol>
+
+<h3>Question 10</h3>
+<p>You are developing an ASP.NET MVC application by using Visual Studio 2012. The application throws and handles exceptions when it runs. You need to examine the state of the application when exceptions are thrown. What should you do?</p>
+
+<h3>Question 11</h3>
+<p>You are developing an ASP.NET MVC news aggregation application that will be deployed to servers on multiple networks. The application must be compatible with multiple browsers. A user can search the website for news articles. You must track the page number that the user is viewing in search results. You need to program the location for storing state information about the user’s search. What should you do?</p>
+
+<h3>Question 12</h3>
+<p>You are developing an ASP.NET MVC application. The application is deployed in a web farm and is accessed by many users. The application must handle web server failures gracefully. The servers in the farm must share the state information. You need to persist the application state during the session. What should you implement?</p>
+
+<h3>Question 13</h3>
+<p>You are developing an ASP.NET MVC application that displays stock market information. The stock market information updates frequently and must be displayed in real-time. You need to eliminate unnecessary header data, minimize latency, and transmit data over a fullduplex connection. What should you do?</p>
+
+<h3>Question 14</h3>
+<p>You are designing a distributed application that runs on the Windows Azure platform. The application must store a small amount of insecure global information that does not change frequently. You need to configure the application to meet the requirements. Which serverside state management option should you use? (Each correct answer presents a complete solution. Choose all that apply.)</p>
+
+<h3>Question 15</h3>
+<p>You are developing an ASP.NET MVC application that has pages for users who browse the site with Windows Phone 7. The pages for Windows Phone 7 include the following files:
+<ul>
+	<li><csharp>_Layout.WP7.cshtml</csharp></li>
+	<li><csharp>Index.WP7.cshtml</csharp></li>
+</ul>
+<p>You need to update the application so that it renders the customized files correctly to Windows Phone 7 users. How should you update the <csharp>Application_Start</csharp> method?</p>
+<table id="tbcode" name="tbcode">
+<tr>
+<td><pre class="CSharp"></pre></td>
+<td><pre class="CSharp"></pre></td>
+<td>
+<textarea class="code">
+protected void Application_Start()
+{
+	DisplayModeProvider.Instance.Modes.Insert(0, new <answer>DefaultDisplayMode("Mobile")</answer>
+	{
+		ContextCondition = (context => context.GetOverridenUserAgent().IndexOf(
+			
+			<answer>"Windows Phone OS",</answer>
+			
+			<answer>StringComparison.OrdinalIgnoreCase) >= 0)</answer>
+	});
+	
+	AreaRegistration.RegisterAllAreas();
+</textarea>
+</td>
+</tr>
+<tr>
+<td colspan="3">
+<div class="dropdown">
+	<selector>[code]</selector>
+	<ul class="list">
+		<li class="right"><csharp>DefaultDisplayMode("WP7"),</csharp></li>
+		<li><csharp>"Windows Phone OS",</csharp></li>
+		<li><csharp>StringComparison.OrdinalIgnoreCase) >= 0)</csharp></li>
+		<li><csharp>DefaultDisplayMode("Mobile")</csharp></li>
+		<li><csharp>"Mobile",</csharp></li>
+		<li><csharp>AreaRegistration.RegisterAllDevices();</csharp></li>
+	</ul>
+</div>
+<div class="dropdown">
+	<selector>[code]</selector>
+	<ul class="list">
+		<li><csharp>DefaultDisplayMode("WP7"),</csharp></li>
+		<li class="right"><csharp>"Windows Phone OS",</csharp></li>
+		<li><csharp>StringComparison.OrdinalIgnoreCase) >= 0)</csharp></li>
+		<li><csharp>DefaultDisplayMode("Mobile")</csharp></li>
+		<li><csharp>"Mobile",</csharp></li>
+		<li><csharp>AreaRegistration.RegisterAllDevices();</csharp></li>
+	</ul>
+</div>
+<div class="dropdown">
+	<selector>[code]</selector>
+	<ul class="list">
+		<li><csharp>DefaultDisplayMode("WP7"),</csharp></li>
+		<li><csharp>"Windows Phone OS",</csharp></li>
+		<li class="right"><csharp>StringComparison.OrdinalIgnoreCase) >= 0)</csharp></li>
+		<li><csharp>DefaultDisplayMode("Mobile")</csharp></li>
+		<li><csharp>"Mobile",</csharp></li>
+		<li><csharp>AreaRegistration.RegisterAllDevices();</csharp></li>
+	</ul>
+</div>
+</td>
+</tr>
+</table>
+
+
+<h3>Question 16</h3>
+<p>You are developing an ASP.NET MVC web application for viewing a list of contacts. The application is designed for devices that support changes in orientation, such as tablets and smartphones. The application displays a grid of contact tiles in portrait mode. When the orientation changes to landscape, each tile in the grid expands to include each contact’s details. The HTML that creates the tiled interface resembles the following markup:</p>
+<table id="tbcode" name="tbcode">
+<tr>
+<td><pre class="HTML"></pre></td>
+<td><pre class="HTML"></pre></td>
+<td>
+<textarea class="code">
+&amp;lt;ul class="contacts"&amp;gt;
+	&amp;lt;li&amp;gt;
+		&amp;lt;img src="..."/&amp;gt;
+		&amp;lt;div&amp;gt;Details&amp;lt;div/&amp;gt;
+	&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+</textarea>
+</td>
+</tr>
+</table>
+<p>The CSS used to style the tiles in landscape mode is as follows:</p>
+<table id="tbcode" name="tbcode">
+<tr>
+<td><pre class="HTML"></pre></td>
+<td><pre class="HTML"></pre></td>
+<td>
+<textarea class="code">
+ul.contacts > li
+{
+	width: 150px;
+}
+ul.contacts > li > div
+{
+	display: block;
+}
+</textarea>
+</td>
+</tr>
+</table>
+<p>If this CSS is omitted, the existing CSS displays the tiles in portrait mode. You need to update the landscape-mode CSS to apply only to screens with a width greater than or equal to 500 pixels. Which code segment should you use?</p>
+
+<h3>Question 17</h3>
+<p>You are developing an ASP.NET MVC application. You need to authenticate clients by using NT LAN Manager (NTLM). Which authentication method should you implement?</p>
+
+<h3>Question 18</h3>
+<p>You are developing an ASP.NET MVC application in Visual Studio 2012. The application contains sensitive bank account data. The application contains a helper class named SensitiveData.Helpers.CustomEncryptor:</p>
+<table id="tbcode" name="tbcode">
+<tr>
+<td><pre class="CSharp"></pre></td>
+<td><pre class="CSharp"></pre></td>
+<td>
+<textarea class="code">
+public class CustomEncryptor
+{
+	public string Encrypt(string plainText)
+	{
+		...
+	}
+}
+</textarea>
+</td>
+</tr>
+</table>
+<p>The application contains a controller with two actions and a model:</p>
+<table id="tbcode" name="tbcode">
+<tr>
+<td><pre class="CSharp"></pre></td>
+<td><pre class="CSharp"></pre></td>
+<td>
+<textarea class="code">
+// controller
+public class BankAccountController : Controller
+{
+	public ActionResult GetAccounts()
+	{
+		...
+	}
+
+	public ActionResult EditAccount(string maskedAccountNum)
+	{
+		...
+	}
+}
+
+// model
+public class BankAccount
+{
+	public string AccountNumber { get; set; }
+
+	public string AccountName { get; set; }
+
+	public double Balance { get; set; }
+}
+</textarea>
+</td>
+</tr>
+</table>
+<p>The application must not display AccountNumber in clear text in any URL. You need to build the view for the GetAccounts action. How should you complete the code?</p>
+<table id="tbcode" name="tbcode">
+<tr>
+<td><pre class="CSharp"></pre></td>
+<td><pre class="CSharp"></pre></td>
+<td>
+<textarea class="code">
+<span class="cshtml">@model</span> IEnumerable&amp;lt;SensitiveData.Models.GamerAccount&amp;gt;
+<span class="cshtml">@{</span>SensitiveData.Helpers.CustomEncryptor();<span class="cshtml">}</span>
+&amp;lt;h2&amp;gt;GetAccounts&amp;lt;/h2&amp;gt;
+&amp;lt;table&amp;gt;
+	&amp;lt;tr&amp;gt;
+		&amp;lt;th&amp;gt;Account Name&amp;lt;/th&amp;gt;
+		&amp;lt;th&amp;gt;Balance&amp;lt;/th&amp;gt;
+	&amp;lt;/tr&amp;gt;
+	<span class="cshtml">@</span>foreach (var item in Model)
+	{
+	&amp;lt;tr&amp;gt;
+		&amp;lt;td&amp;gt;<span class="cshtml">@</span>Html.DisplayFor(modelItem =&amp;gt; item.AccountName)&amp;lt;/td&amp;gt;
+		&amp;lt;td&amp;gt;<span class="cshtml">@</span>Html.DisplayFor(modelItem =&amp;gt; item.HighScore)&amp;lt;/td&amp;gt;
+		&amp;lt;td&amp;gt;<span class="cshtml">@</span>Html.ActionLink("Edit", "EditAccount", new
+		{
+			<answer>maskedAccountNum</answer> = <answer>custEncrypt</answer>.<answer>Encrypt(item.AccountNumber);</answer>
+		})
+		&amp;lt;/td&amp;gt;
+	&amp;lt;/tr&amp;gt;
+&amp;lt;/table&amp;gt;
+</textarea>
+</td>
+</tr>
+<tr>
+<td colspan="3">
+<div class="dropdown">
+	<selector>[code]</selector>
+	<ul class="list">
+		<li><csharp>custEncrypt</csharp></li>
+		<li><csharp>Encrypt(item.AccountNumber);</csharp></li>
+		<li class="right"><csharp>maskedAccountNum</csharp></li>
+		<li><csharp>Encode(item.AccountNumber);</csharp></li>
+		<li><csharp>Html</csharp></li>
+	</ul>
+</div>
+<div class="dropdown">
+	<selector>[code]</selector>
+	<ul class="list">
+		<li class="right"><csharp>custEncrypt</csharp></li>
+		<li><csharp>Encrypt(item.AccountNumber);</csharp></li>
+		<li><csharp>maskedAccountNum</csharp></li>
+		<li><csharp>Encode(item.AccountNumber);</csharp></li>
+		<li><csharp>Html</csharp></li>
+	</ul>
+</div>
+<div class="dropdown">
+	<selector>[code]</selector>
+	<ul class="list">
+		<li><csharp>custEncrypt</csharp></li>
+		<li class="right"><csharp>Encrypt(item.AccountNumber);</csharp></li>
+		<li><csharp>maskedAccountNum</csharp></li>
+		<li><csharp>Encode(item.AccountNumber);</csharp></li>
+		<li><csharp>Html</csharp></li>
+	</ul>
+</div>
+</td>
+</tr>
+</table>
+
+<h3>Question 19</h3>
+<p>You are developing an ASP.NET MVC application. The application must allow users to enter JavaScript in a feedback text box only. You need to disable request validation. What should you do?</p>
+
+<h3>Question 20</h3>
+<p>You are developing an ASP.NET MVC application that will be deployed on a web farm. Passwords must be stored in the web.config file and must not be readable or in a format that is easily decodable. You need to encrypt the passwords that are stored in the web.config file. Which command-line tool should you use?</p>
+
+<h3>Question 21</h3>
+<p>You are developing an ASP.NET MVC application that authenticates a user by using claimsbased authentication. The application must:</p>
+<ul>
+	<li>Use Windows Identity Foundation 4.5.</li>
+	<li>Support the Windows Azure Access Control Service.</li>
+</ul>
+<p>You need to implement authentication. How should you build the class constructor?</p>
+<img src="../sitebuilderpictures/70486/20.jpg">
+<table id="tbcode" name="tbcode">
+<tr>
+<td><pre class="CSharp"></pre></td>
+<td><pre class="CSharp"></pre></td>
+<td>
+<textarea class="code">
+Using Microsoft.IdentityModel.Claims;
+
+public class IdentityClaim
+{
+	private string _identityProvider;
+	private string _identityValue;
+	public string ACSProviderClaim = "http://schemas.microsoft.com/accesscontrolservice/provider";
+	
+	public IdentityClaim(IIdentityClaims identity)
+	{
+		if (identity != null)
+		{
+			foreach (var claim in identity.Claims)
+			{
+				if (claim.ClaimName == 
+			}
+		}
+	}
+}
+</textarea>
+</td>
+</tr>
+<tr>
+<td colspan="3">
+<!--dropdowns-->
+</td>
+</tr>
+<tr>
+<td colspan="3">
+<span class="tip">
+See <a href="https://msdn.microsoft.com/en-us/library/ee517291.aspx">The Claims-Based Identity Model</a>.
+</span>
+</td>
+</tr>
+</table>
+<h3>Question 22</h3>
+<p>HOTSPOT You are developing an ASP.NET MVC application. You need to store membership information in a Microsoft SQL Server database. How should you configure the membership provider? (To answer, select the appropriate options in the answer area.) <img src="../sitebuilderpictures/70486/22.jpg"> <img src="../sitebuilderpictures/70486/23.jpg"></p>
+<p>You are designing a distributed application. The application must store a small amount of insecure global information that does not change frequently. You need to configure the application to meet the requirements. Which server-side state management option should you use? (Each correct answer presents a complete solution. Choose all that apply.)</p>
+<p>You are developing an ASP.NET MVC application. The application is deployed in a web farm and is accessed by many users. The application must handle web server failures gracefully. The servers in the farm must share the short-term state information. You need to persist the application state during the session. What should you implement?</p>
+<p>You are developing an ASP.NET MVC application that will be deployed to servers on multiple networks. The application must be compatible with multiple browsers. You must track the page number that the user is viewing in search results. You need to program the location for storing state information. Where should you persist state information?</p>
+<p>You are developing an ASP.NET MVC web application that enables users to open Microsoft Excel files. The current implementation of the ExcelResult class is as follows. <img src="../sitebuilderpictures/70486/25.jpg"></p>
+<p>You need to enable users to open Excel files. How should you implement the ExecuteResult method? (To answer, select the appropriate options in the answer area.) <img src="../sitebuilderpictures/70486/26.jpg"> <img src="../sitebuilderpictures/70486/27.jpg"></p>
+<p>You are designing an HTML5 website. You need to design the interface such that the content is viewable in all types of browsers, including screen readers, What should you do? (Each correct answer presents a complete solution. Choose all that apply.)</p>
+<p>You are developing an ASP.NET MVC application in Visual Studio 2012. The application supports multiple cultures. The application contains three resource files in the Resources directory:
+ProductDictionary.resx
+ProductDictionary.es.resx
+ProductDictionary.fr.resx Each file contains a public resource named Currency with the localized currency symbol. The application is configured to set the culture based on the client browser settings. The application contains a controller with the action defined in the following code segment.  <img src="../sitebuilderpictures/70486/29.jpg"></p>
+<p>You need to set ViewBag.LocalizedCurrency to the localized currency contained in the resource files. Which code segment should you add to the action at line 03?</p>
+<p>You are developing an ASP.NET MVC application. You need to authenticate clients by using an ASP.NET membership database. Which authentication method should you implement?</p>
+<p>You are developing an ASP.NET MVC application that authenticates a user by using claimsbased authentication. The application must:
+Use Windows Identity Foundation 4.5.
+Support the Windows Azure Access Control Service. You need to implement authentication. How should you build the class constructor? (To answer, drag the appropriate code segment to the correct location or locations in the answer area. Each code segment may be used once, more than once, or not at all. You may need to drag the split bar between panes or scroll to view content.) <img src="../sitebuilderpictures/70486/30.jpg"></p>
+<p>You are developing an ASP.NET MVC application that will be deployed on a web farm. Passwords must be stored in the web.config file and must not be readable or in a format that is easily decodable. You need to encrypt the passwords that are stored in the web.config file. Which command-line tool should you use?</p>
+<p>You are developing an ASP.NET MVC web application that includes the following method. <img src="../sitebuilderpictures/70486/32.jpg"></p>
+<p>You need to test the GoldMined method. Which unit test should you use? <img src="../sitebuilderpictures/70486/33.jpg"></p>
+<p>HOTSPOT You are developing an ASP.NET MVC application that has pages for users who browse the site with Windows Phone 7. The pages for Windows Phone 7 include the following files:
+_Layout.WP7.cshtml
+Index.WP7.cshtml You need to update the application so that it renders the customized files correctly to Windows Phone 7 users. How should you update the Application_Start method? (To answer, select the appropriate option from the drop-down list in the answer area.) <img src="../sitebuilderpictures/70486/34.jpg"> <img src="../sitebuilderpictures/70486/35.jpg"></p>
+<p>You are developing an ASP.NET MVC web application for viewing a photo album. The application is designed for devices that support changes in orientation, such as tablets and smartphones. The application displays a grid of photos in portrait mode. When the orientation changes to landscape, each tile in the grid expands to include a description. The HTML that creates the gallery interface resembles the following markup. <img src="../sitebuilderpictures/70486/37.jpg"></p>
+<p>If this CSS is omitted, the existing CSS displays the tiles in landscape mode. You need to update the portrait mode CSS to apply only to screens with a width less than 500 pixels. Which code segment should you use?</p>
+
+<h2>Case Study: 1 Scenario 1</h2>
+<h3>Background</h3>
+<p>You are developing an ASP.NET MVC application in Visual Studio 2012 that will be used by Olympic marathon runners to log data about training runs.
+<h3>Business Requirements</h3>
+<p>The application stores date, distance, and duration information about a user’s training runs. The user can view, insert, edit, and delete records. The application must be optimized for accessibility. All times must be displayed in the user’s local time.</p>
+<h3>Technical Requirements</h3>
+<p><b>Data Access</b>: Database access is handled by a public class named <csharp>RunnerLog.DataAccess.RunnerLogDb</csharp>. All data retrieval must be done by HTTP GET and all data updates must be done by HTTP POST.</p>
+<p><b>Layout</b>: All pages in the application use a master layout file named <csharp>\Views\Shared\_Layout.cshtml</csharp>.</p>
+<p><b>Models</b>: The application uses the <csharp>\Models\LogModel.cs</csharp> model.</p>
+<p><b>Views</b>: All views in the application use the Razor view engine. Four views located in <csharp>\Views\RunLog</csharp> are named:</p>
+<ul>
+	<li>_CalculatePace.cshtml</li>
+	<li>EditLog.cshtml</li>
+	<li>GetLog.cshtml</li>
+	<li>InsertLog.cshtml</li>
+</ul>
+<p>The application also contains a <csharp>\Views\Home\Index.cshtml</csharp> view.</p>
+<p><b>Controllers</b>: The application contains a <csharp>\Controllers\RunLogController.cs</csharp> controller.</p>
+<p><b>Images</b>: A <csharp>stopwatch.png</csharp> image is located in the <csharp>\Images</csharp> folder.</p>
+<p><b>Videos</b>: A map of a runner’s path is available when a user views a run log. The map is implemented as an Adobe Flash application and video. The browser should display the video natively if possible, using H264, Ogg, or WebM formats, in that order. If the video cannot be displayed, then the Flash application should be used.</p>
+<p><b>Security</b>: You have the following security requirements:</p>
+<ul>
+	<li>The application is configured to use forms authentication.</li>
+	<li>Users must be logged on to insert runner data.\</li>
+	<li>Users must be members of the Admin role to edit or delete runner data.</li>
+	<li>There are no security requirements for viewing runner data.</li>
+	<li>You need to protect the application against cross-site request forgery.</li>
+	<li>Passwords are hashed by using the SHA1 algorithm.</li>
+	<li><csharp>RunnerLog.Providers.RunLogRoleProvider.es</csharp> contains a custom role provider.</li>
+</ul>
+<p>Relevant portions of the application files follow.</p>
+<h3>Application Structure</h3>
+<img src="../sitebuilderpictures/70486/38.jpg"> <img src="../sitebuilderpictures/70486/39.jpg"> <img src="../sitebuilderpictures/70486/40.jpg"> <img src="../sitebuilderpictures/70486/41.jpg"> <img src="../sitebuilderpictures/70486/42.jpg"> <img src="../sitebuilderpictures/70486/43.jpg"> <img src="../sitebuilderpictures/70486/44.jpg"> <h3>Question 1</h3>
+<p>You need to implement the Views\RunLog\_CalculatePace.cshtml partial view from Views\Runlog \GetLog.cshtml to display the runner’s average mile pace. How should you implement the view?</p>
+<img src="../sitebuilderpictures/70486/45.jpg">
+<h3>Question 2</h3>
+<p>You need to implement security according to the business requirements. How should you modify RunLogController?</p>
+<!--<img src="../sitebuilderpictures/70486/47.jpg">-->
+<img src="../sitebuilderpictures/70486/48.jpg">
+<h3>Question 3</h3>
+<p>You need to make the “Distance” header of the table bold in the Views/RunLog/GetLog.cshtml view. Which code segment should you use?</p>
+<h3>Question 4</h3>
+<p>You need to extend the edit functionality of RunLogController. Which code segment should you use?</p>
+<img src="../sitebuilderpictures/70486/49.jpg">
+<h3>Question 5</h3>
+<p>You need to implement the map of the runners’ paths. How should you build the video viewer?</p>
+<img src="../sitebuilderpictures/70486/50.jpg"> <img src="../sitebuilderpictures/70486/51.jpg">
+<h3>Question 6</h3>
+<p>You need to ensure that only valid parameters are passed to the EditLog action. How should you build the route?</p>
+<img src="../sitebuilderpictures/70486/53.jpg"></br><img src="../sitebuilderpictures/70486/54.jpg">
+<h3>Question 7</h3>
+<p>You need to ensure that the application uses RunLogRoleProvider custom role provider. How should you modify the web.config file?</p>
+<img src="../sitebuilderpictures/70486/56.jpg">
+<h3>Question 8</h3>
+<p>You need to ensure that only valid parameters are passed to the EditLog action. How should you build the route?</p>
+<img src="../sitebuilderpictures/70486/58.jpg">
+<h3>Question 9</h3>
+<p>If the canvas element is supported by the client browser, the application must display “London 2012” in the footer as text formatted by JavaScript at the end of the _Layout.cshtml file. You need to modify the layout to ensure that “London 2012” is displayed as either formatted text or as plain text, depending on what the client browser supports. Which code segment should you add?</p>
+<h3>Question 10</h3>
+<p>You need to add an action to RunLogController to validate the users’ passwords. Which code segment should you use?</p>
+<img src="../sitebuilderpictures/70486/60.jpg">
+<h3>Question 11</h3>
+<p>You need to make all of the rows in the table bold in the Views/RunLog/GetLog.cshtml view. Which code segment should you use?</p>
+<h3>Question 12</h3>
+<p>You need to display the “miles” unit description after the distance in the GetLog view. Which line of code should you use to replace line GL21? (Each correct answer presents a complete solution. Choose all that apply.)</p>
+
+<p>###BeginCaseStudy### Case Study: 2 Scenario 2 Background You are developing an online shopping web application. Business Requirements
+A user is not required to provide an email address. If a user enters an email address, it must be verified to be a valid email address.
+Information about the first product on the product page must fade out over time to encourage the user to continue browsing the catalog.
+Administrators must be able to edit information about existing customers.
+Administrators also must be able to specify a default product on the product page. Technical Requirements General:
+The web store application is in a load-balanced web farm. The load balancer is not configured to use server affinity.
+The web store application is an ASP.NET MVC application written in Visual Studio 2012.
+Products:
+The value of the productId property must always be greater than 0.
+The Products page for mobile devices must display to mobile users. The Products page for desktop devices must display to desktop users. Storage:
+The data must be stored in a serialized XML data format.
+Serialized objects must be schema-independent. Exception handling:
+Exceptions originating from IIS must display a page with support contact information.
+Some page links expire, and users who access these links encounter 404 errors.
+Exceptions must be logged by using the WriteLog method of the Utility class. Browser and device support:
+The application must support image format conversions from .bmp to .jpeg for mobile devices.
+The application must support image format conversions from .bmp to .png for desktop devices. Application Structure <img src="../sitebuilderpictures/70486/61.jpg"> <img src="../sitebuilderpictures/70486/62.jpg"> <img src="../sitebuilderpictures/70486/63.jpg"></p>
+<p>###EndCaseStudy###</p>
+<p>You need to ensure that new customers enter a valid email address. Which code should you use? (Each correct answer presents part of the solution. Choose all that apply.) <img src="../sitebuilderpictures/70486/64.jpg"></p>
+<p>###BeginCaseStudy### Case Study: 2 Scenario 2 Background You are developing an online shopping web application. Business Requirements
+A user is not required to provide an email address. If a user enters an email address, it must be verified to be a valid email address.
+Information about the first product on the product page must fade out over time to encourage the user to continue browsing the catalog.
+Administrators must be able to edit information about existing customers.
+Administrators also must be able to specify a default product on the product page. Technical Requirements General:
+The web store application is in a load-balanced web farm. The load balancer is not configured to use server affinity.
+The web store application is an ASP.NET MVC application written in Visual Studio 2012.
+Products:
+The value of the productId property must always be greater than 0.
+The Products page for mobile devices must display to mobile users. The Products page for desktop devices must display to desktop users. Storage:
+The data must be stored in a serialized XML data format.
+Serialized objects must be schema-independent. Exception handling:
+Exceptions originating from IIS must display a page with support contact information.
+Some page links expire, and users who access these links encounter 404 errors.
+Exceptions must be logged by using the WriteLog method of the Utility class. Browser and device support:
+The application must support image format conversions from .bmp to .jpeg for mobile devices.
+The application must support image format conversions from .bmp to .png for desktop devices. Application Structure <img src="../sitebuilderpictures/70486/61.jpg"> <img src="../sitebuilderpictures/70486/62.jpg"> <img src="../sitebuilderpictures/70486/63.jpg"></p>
+<p>###EndCaseStudy###</p>
+<p>You are designing a Windows Communication Foundation (WCF) service that uses the Product class. You need to update the class to meet the storage requirement. What should you do? (Each correct answer presents part of the solution. Choose all that apply.)</p>
+<p>###BeginCaseStudy### Case Study: 2 Scenario 2 Background You are developing an online shopping web application. Business Requirements
+A user is not required to provide an email address. If a user enters an email address, it must be verified to be a valid email address.
+Information about the first product on the product page must fade out over time to encourage the user to continue browsing the catalog.
+Administrators must be able to edit information about existing customers.
+Administrators also must be able to specify a default product on the product page. Technical Requirements General:
+The web store application is in a load-balanced web farm. The load balancer is not configured to use server affinity.
+The web store application is an ASP.NET MVC application written in Visual Studio 2012.
+Products:
+The value of the productId property must always be greater than 0.
+The Products page for mobile devices must display to mobile users. The Products page for desktop devices must display to desktop users. Storage:
+The data must be stored in a serialized XML data format.
+Serialized objects must be schema-independent. Exception handling:
+Exceptions originating from IIS must display a page with support contact information.
+Some page links expire, and users who access these links encounter 404 errors.
+Exceptions must be logged by using the WriteLog method of the Utility class. Browser and device support:
+The application must support image format conversions from .bmp to .jpeg for mobile devices.
+The application must support image format conversions from .bmp to .png for desktop devices. Application Structure <img src="../sitebuilderpictures/70486/61.jpg"> <img src="../sitebuilderpictures/70486/62.jpg"> <img src="../sitebuilderpictures/70486/63.jpg"></p>
+<p>###EndCaseStudy###</p>
+<p>You need to implement the requirements for handling IIS errors. What should you do? <img src="../sitebuilderpictures/70486/65.jpg"></p>
+<p>###BeginCaseStudy### Case Study: 2 Scenario 2 Background You are developing an online shopping web application. Business Requirements
+A user is not required to provide an email address. If a user enters an email address, it must be verified to be a valid email address.
+Information about the first product on the product page must fade out over time to encourage the user to continue browsing the catalog.
+Administrators must be able to edit information about existing customers.
+Administrators also must be able to specify a default product on the product page. Technical Requirements General:
+The web store application is in a load-balanced web farm. The load balancer is not configured to use server affinity.
+The web store application is an ASP.NET MVC application written in Visual Studio 2012.
+Products:
+The value of the productId property must always be greater than 0.
+The Products page for mobile devices must display to mobile users. The Products page for desktop devices must display to desktop users. Storage:
+The data must be stored in a serialized XML data format.
+Serialized objects must be schema-independent. Exception handling:
+Exceptions originating from IIS must display a page with support contact information.
+Some page links expire, and users who access these links encounter 404 errors.
+Exceptions must be logged by using the WriteLog method of the Utility class. Browser and device support:
+The application must support image format conversions from .bmp to .jpeg for mobile devices.
+The application must support image format conversions from .bmp to .png for desktop devices. Application Structure <img src="../sitebuilderpictures/70486/61.jpg"> <img src="../sitebuilderpictures/70486/62.jpg"> <img src="../sitebuilderpictures/70486/63.jpg"></p>
+<p>###EndCaseStudy###</p>
+<p>You need to add a method to the ProductController class to meet the exception handling requirements for logging. Which code segment should you use? <img src="../sitebuilderpictures/70486/66.jpg"></p>
+<p>###BeginCaseStudy### Case Study: 2 Scenario 2 Background You are developing an online shopping web application. Business Requirements
+A user is not required to provide an email address. If a user enters an email address, it must be verified to be a valid email address.
+Information about the first product on the product page must fade out over time to encourage the user to continue browsing the catalog.
+Administrators must be able to edit information about existing customers.
+Administrators also must be able to specify a default product on the product page. Technical Requirements General:
+The web store application is in a load-balanced web farm. The load balancer is not configured to use server affinity.
+The web store application is an ASP.NET MVC application written in Visual Studio 2012.
+Products:
+The value of the productId property must always be greater than 0.
+The Products page for mobile devices must display to mobile users. The Products page for desktop devices must display to desktop users. Storage:
+The data must be stored in a serialized XML data format.
+Serialized objects must be schema-independent. Exception handling:
+Exceptions originating from IIS must display a page with support contact information.
+Some page links expire, and users who access these links encounter 404 errors.
+Exceptions must be logged by using the WriteLog method of the Utility class. Browser and device support:
+The application must support image format conversions from .bmp to .jpeg for mobile devices.
+The application must support image format conversions from .bmp to .png for desktop devices. Application Structure <img src="../sitebuilderpictures/70486/61.jpg"> <img src="../sitebuilderpictures/70486/62.jpg"> <img src="../sitebuilderpictures/70486/63.jpg"></p>
+<p>###EndCaseStudy###</p>
+<p>An advertising campaign was recently launched. Some of the ads contain a link to products that no longer exist or have IDs that have changed. You need to ensure that all product links display a product. Which code segment should you use to configure the route? <img src="../sitebuilderpictures/70486/67.jpg"></p>
+<p>###BeginCaseStudy### Case Study: 2 Scenario 2 Background You are developing an online shopping web application. Business Requirements
+A user is not required to provide an email address. If a user enters an email address, it must be verified to be a valid email address.
+Information about the first product on the product page must fade out over time to encourage the user to continue browsing the catalog.
+Administrators must be able to edit information about existing customers.
+Administrators also must be able to specify a default product on the product page. Technical Requirements General:
+The web store application is in a load-balanced web farm. The load balancer is not configured to use server affinity.
+The web store application is an ASP.NET MVC application written in Visual Studio 2012.
+Products:
+The value of the productId property must always be greater than 0.
+The Products page for mobile devices must display to mobile users. The Products page for desktop devices must display to desktop users. Storage:
+The data must be stored in a serialized XML data format.
+Serialized objects must be schema-independent. Exception handling:
+Exceptions originating from IIS must display a page with support contact information.
+Some page links expire, and users who access these links encounter 404 errors.
+Exceptions must be logged by using the WriteLog method of the Utility class. Browser and device support:
+The application must support image format conversions from .bmp to .jpeg for mobile devices.
+The application must support image format conversions from .bmp to .png for desktop devices. Application Structure <img src="../sitebuilderpictures/70486/61.jpg"> <img src="../sitebuilderpictures/70486/62.jpg"> <img src="../sitebuilderpictures/70486/63.jpg"></p>
+<p>###EndCaseStudy###</p>
+<p>You need to modify the application to meet the productId requirement. What should you do?</p>
+<p>###BeginCaseStudy### Case Study: 2 Scenario 2 Background You are developing an online shopping web application. Business Requirements
+A user is not required to provide an email address. If a user enters an email address, it must be verified to be a valid email address.
+Information about the first product on the product page must fade out over time to encourage the user to continue browsing the catalog.
+Administrators must be able to edit information about existing customers.
+Administrators also must be able to specify a default product on the product page. Technical Requirements General:
+The web store application is in a load-balanced web farm. The load balancer is not configured to use server affinity.
+The web store application is an ASP.NET MVC application written in Visual Studio 2012.
+Products:
+The value of the productId property must always be greater than 0.
+The Products page for mobile devices must display to mobile users. The Products page for desktop devices must display to desktop users. Storage:
+The data must be stored in a serialized XML data format.
+Serialized objects must be schema-independent. Exception handling:
+Exceptions originating from IIS must display a page with support contact information.
+Some page links expire, and users who access these links encounter 404 errors.
+Exceptions must be logged by using the WriteLog method of the Utility class. Browser and device support:
+The application must support image format conversions from .bmp to .jpeg for mobile devices.
+The application must support image format conversions from .bmp to .png for desktop devices. Application Structure <img src="../sitebuilderpictures/70486/61.jpg"> <img src="../sitebuilderpictures/70486/62.jpg"> <img src="../sitebuilderpictures/70486/63.jpg"></p>
+<p>###EndCaseStudy###</p>
+<p>You need to implement the business requirements for managing customer data. What should you do? (Each correct answer presents part of the solution. Choose all that apply.)</p>
+<p>###BeginCaseStudy### Case Study: 2 Scenario 2 Background You are developing an online shopping web application. Business Requirements
+A user is not required to provide an email address. If a user enters an email address, it must be verified to be a valid email address.
+Information about the first product on the product page must fade out over time to encourage the user to continue browsing the catalog.
+Administrators must be able to edit information about existing customers.
+Administrators also must be able to specify a default product on the product page. Technical Requirements General:
+The web store application is in a load-balanced web farm. The load balancer is not configured to use server affinity.
+The web store application is an ASP.NET MVC application written in Visual Studio 2012.
+Products:
+The value of the productId property must always be greater than 0.
+The Products page for mobile devices must display to mobile users. The Products page for desktop devices must display to desktop users. Storage:
+The data must be stored in a serialized XML data format.
+Serialized objects must be schema-independent. Exception handling:
+Exceptions originating from IIS must display a page with support contact information.
+Some page links expire, and users who access these links encounter 404 errors.
+Exceptions must be logged by using the WriteLog method of the Utility class. Browser and device support:
+The application must support image format conversions from .bmp to .jpeg for mobile devices.
+The application must support image format conversions from .bmp to .png for desktop devices. Application Structure <img src="../sitebuilderpictures/70486/61.jpg"> <img src="../sitebuilderpictures/70486/62.jpg"> <img src="../sitebuilderpictures/70486/63.jpg"></p>
+<p>###EndCaseStudy###</p>
+<p>When users attempt to retrieve a product from the product page, a run-time exception occurs if the product does not exist. You need to route the exception to the CustomException.aspx page. Which method should you add to MvcApplication? <img src="../sitebuilderpictures/70486/68.jpg"></p>
+<p>###BeginCaseStudy### Case Study: 2 Scenario 2 Background You are developing an online shopping web application. Business Requirements
+A user is not required to provide an email address. If a user enters an email address, it must be verified to be a valid email address.
+Information about the first product on the product page must fade out over time to encourage the user to continue browsing the catalog.
+Administrators must be able to edit information about existing customers.
+Administrators also must be able to specify a default product on the product page. Technical Requirements General:
+The web store application is in a load-balanced web farm. The load balancer is not configured to use server affinity.
+The web store application is an ASP.NET MVC application written in Visual Studio 2012.
+Products:
+The value of the productId property must always be greater than 0.
+The Products page for mobile devices must display to mobile users. The Products page for desktop devices must display to desktop users. Storage:
+The data must be stored in a serialized XML data format.
+Serialized objects must be schema-independent. Exception handling:
+Exceptions originating from IIS must display a page with support contact information.
+Some page links expire, and users who access these links encounter 404 errors.
+Exceptions must be logged by using the WriteLog method of the Utility class. Browser and device support:
+The application must support image format conversions from .bmp to .jpeg for mobile devices.
+The application must support image format conversions from .bmp to .png for desktop devices. Application Structure <img src="../sitebuilderpictures/70486/61.jpg"> <img src="../sitebuilderpictures/70486/62.jpg"> <img src="../sitebuilderpictures/70486/63.jpg"></p>
+<p>###EndCaseStudy###</p>
+<p>You updated the web.config file with the HTTP run-time value required to display an alternative version of the site. You need to ensure that the correct page displays to the users. Which code segment should you use to update the controller?</p>
+<p>###BeginCaseStudy### Case Study: 2 Scenario 2 Background You are developing an online shopping web application. Business Requirements
+A user is not required to provide an email address. If a user enters an email address, it must be verified to be a valid email address.
+Information about the first product on the product page must fade out over time to encourage the user to continue browsing the catalog.
+Administrators must be able to edit information about existing customers.
+Administrators also must be able to specify a default product on the product page. Technical Requirements General:
+The web store application is in a load-balanced web farm. The load balancer is not configured to use server affinity.
+The web store application is an ASP.NET MVC application written in Visual Studio 2012.
+Products:
+The value of the productId property must always be greater than 0.
+The Products page for mobile devices must display to mobile users. The Products page for desktop devices must display to desktop users. Storage:
+The data must be stored in a serialized XML data format.
+Serialized objects must be schema-independent. Exception handling:
+Exceptions originating from IIS must display a page with support contact information.
+Some page links expire, and users who access these links encounter 404 errors.
+Exceptions must be logged by using the WriteLog method of the Utility class. Browser and device support:
+The application must support image format conversions from .bmp to .jpeg for mobile devices.
+The application must support image format conversions from .bmp to .png for desktop devices. Application Structure <img src="../sitebuilderpictures/70486/61.jpg"> <img src="../sitebuilderpictures/70486/62.jpg"> <img src="../sitebuilderpictures/70486/63.jpg"></p>
+<p>###EndCaseStudy###</p>
+<p>You need to implement client-side animations according to the business requirements. Which line of code should you use? (Each correct answer presents a complete solution. Choose all that apply.)</p>
+<p>###BeginCaseStudy### Case Study: 2 Scenario 2 Background You are developing an online shopping web application. Business Requirements
+A user is not required to provide an email address. If a user enters an email address, it must be verified to be a valid email address.
+Information about the first product on the product page must fade out over time to encourage the user to continue browsing the catalog.
+Administrators must be able to edit information about existing customers.
+Administrators also must be able to specify a default product on the product page. Technical Requirements General:
+The web store application is in a load-balanced web farm. The load balancer is not configured to use server affinity.
+The web store application is an ASP.NET MVC application written in Visual Studio 2012.
+Products:
+The value of the productId property must always be greater than 0.
+The Products page for mobile devices must display to mobile users. The Products page for desktop devices must display to desktop users. Storage:
+The data must be stored in a serialized XML data format.
+Serialized objects must be schema-independent. Exception handling:
+Exceptions originating from IIS must display a page with support contact information.
+Some page links expire, and users who access these links encounter 404 errors.
+Exceptions must be logged by using the WriteLog method of the Utility class. Browser and device support:
+The application must support image format conversions from .bmp to .jpeg for mobile devices.
+The application must support image format conversions from .bmp to .png for desktop devices. Application Structure <img src="../sitebuilderpictures/70486/61.jpg"> <img src="../sitebuilderpictures/70486/62.jpg"> <img src="../sitebuilderpictures/70486/63.jpg"></p>
+<p>###EndCaseStudy###</p>
+<p>You need to implement client-side animations according to the business requirements. Which line of code should you use? (Each correct answer presents a complete solution. Choose all that apply.)</p>
+<p>###BeginCaseStudy### Case Study: 2 Scenario 2 Background You are developing an online shopping web application. Business Requirements
+A user is not required to provide an email address. If a user enters an email address, it must be verified to be a valid email address.
+Information about the first product on the product page must fade out over time to encourage the user to continue browsing the catalog.
+Administrators must be able to edit information about existing customers.
+Administrators also must be able to specify a default product on the product page. Technical Requirements General:
+The web store application is in a load-balanced web farm. The load balancer is not configured to use server affinity.
+The web store application is an ASP.NET MVC application written in Visual Studio 2012.
+Products:
+The value of the productId property must always be greater than 0.
+The Products page for mobile devices must display to mobile users. The Products page for desktop devices must display to desktop users. Storage:
+The data must be stored in a serialized XML data format.
+Serialized objects must be schema-independent. Exception handling:
+Exceptions originating from IIS must display a page with support contact information.
+Some page links expire, and users who access these links encounter 404 errors.
+Exceptions must be logged by using the WriteLog method of the Utility class. Browser and device support:
+The application must support image format conversions from .bmp to .jpeg for mobile devices.
+The application must support image format conversions from .bmp to .png for desktop devices. Application Structure <img src="../sitebuilderpictures/70486/61.jpg"> <img src="../sitebuilderpictures/70486/62.jpg"> <img src="../sitebuilderpictures/70486/63.jpg"></p>
+<p>###EndCaseStudy###</p>
+<p>You need to configure session storage in the web.config file to meet the technical requirements for scalability. Which SessionState mode should you use? (Each correct answer presents a complete solution. Choose all that apply.)</p>
+<p>###BeginCaseStudy### Case Study: 2 Scenario 2 Background You are developing an online shopping web application. Business Requirements
+A user is not required to provide an email address. If a user enters an email address, it must be verified to be a valid email address.
+Information about the first product on the product page must fade out over time to encourage the user to continue browsing the catalog.
+Administrators must be able to edit information about existing customers.
+Administrators also must be able to specify a default product on the product page. Technical Requirements General:
+The web store application is in a load-balanced web farm. The load balancer is not configured to use server affinity.
+The web store application is an ASP.NET MVC application written in Visual Studio 2012.
+Products:
+The value of the productId property must always be greater than 0.
+The Products page for mobile devices must display to mobile users. The Products page for desktop devices must display to desktop users. Storage:
+The data must be stored in a serialized XML data format.
+Serialized objects must be schema-independent. Exception handling:
+Exceptions originating from IIS must display a page with support contact information.
+Some page links expire, and users who access these links encounter 404 errors.
+Exceptions must be logged by using the WriteLog method of the Utility class. Browser and device support:
+The application must support image format conversions from .bmp to .jpeg for mobile devices.
+The application must support image format conversions from .bmp to .png for desktop devices. Application Structure <img src="../sitebuilderpictures/70486/61.jpg"> <img src="../sitebuilderpictures/70486/62.jpg"> <img src="../sitebuilderpictures/70486/63.jpg"></p>
+<p>###EndCaseStudy###</p>
+<p>You need to update the routes to ensure that a product is always displayed on the product page. Which code segment should you use? <img src="../sitebuilderpictures/70486/69.jpg"></p>
+<p>###BeginCaseStudy### Case Study: 2 Scenario 2 Background You are developing an online shopping web application. Business Requirements
+A user is not required to provide an email address. If a user enters an email address, it must be verified to be a valid email address.
+Information about the first product on the product page must fade out over time to encourage the user to continue browsing the catalog.
+Administrators must be able to edit information about existing customers.
+Administrators also must be able to specify a default product on the product page. Technical Requirements General:
+The web store application is in a load-balanced web farm. The load balancer is not configured to use server affinity.
+The web store application is an ASP.NET MVC application written in Visual Studio 2012.
+Products:
+The value of the productId property must always be greater than 0.
+The Products page for mobile devices must display to mobile users. The Products page for desktop devices must display to desktop users. Storage:
+The data must be stored in a serialized XML data format.
+Serialized objects must be schema-independent. Exception handling:
+Exceptions originating from IIS must display a page with support contact information.
+Some page links expire, and users who access these links encounter 404 errors.
+Exceptions must be logged by using the WriteLog method of the Utility class. Browser and device support:
+The application must support image format conversions from .bmp to .jpeg for mobile devices.
+The application must support image format conversions from .bmp to .png for desktop devices. Application Structure <img src="../sitebuilderpictures/70486/61.jpg"> <img src="../sitebuilderpictures/70486/62.jpg"> <img src="../sitebuilderpictures/70486/63.jpg"></p>
+<p>###EndCaseStudy###</p>
+<p>The GetDealPrice method must be called by using Ajax. You need to get the price of a product by using the GetDealPrice method of the ProductController. Which code segment should you use? (Each correct answer presents a complete solution. Choose all that apply.) <img src="../sitebuilderpictures/70486/70.jpg"></p>
+</body>
+</html>

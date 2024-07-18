@@ -1,0 +1,170 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<title>Hector J. Rivas - Batch Logging Done Right</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Expires" content="0">
+<meta name="description" content="JavaScript String Prototypes Done Right">
+<meta content="text/html; charset=iso-8859-1" http="http">
+<style type="text/css" media="all"><!-- media="all": hack to hide stuff from NS 4 --></style>
+<link rel="stylesheet" href="styles.css">
+<script type="text/javascript" src="prototypes.js"></script>
+<script type="text/javascript" src="DOM.js"></script>
+<script type="text/javascript" src="utility.js"></script>
+<script type="text/javascript" src="syntax.js"></script>
+<script type="text/javascript" src="scripts.js"></script>
+</head>
+<body>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr><td class="tdheader"><table border="0" cellpadding="0" cellspacing="0" class="tbheader"><tr><td></td></tr></table></td></tr>
+<tr><td class="tdspacer"></td></tr>
+<tr><td class="tdcontent">
+<table  border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td>
+<h2>Batch Logging Done Right</h2>
+<p>
+I have come across too many batch scripts that write to log files with little response to the user, if any at all. Here is a little snippet that attempts at doing it right, and with little overhead for programmers.
+Hopefully it is self-explanatory and well commented.
+</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="Batch"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+:: LOGTEST.BAT: output a datetime stamp and progress message into a
+:: log file and optionally to the console.
+::
+:: Usage: logtest.bat
+::
+:: Version 1.0, Fri Sep 14 13:52:50 CDT 2012
+:: - Initial release
+
+@ECHO OFF
+SETLOCAL
+
+:: this script's version
+SET v=1.0
+
+:: log file
+SET logfile=test.log
+
+:: initialize the log file
+@ECHO OFF >%logfile%
+
+:: script's banner
+CLS
+ECHO.
+ECHO ===========================================================
+ECHO Log Test Utility, Version %v%, Fri Sep 14 13:53:16 CDT 2012
+ECHO ===========================================================
+ECHO.
+
+:: output something to the log and to the console
+CALL:LogMessage "%~nx0 started." /1
+
+:: simulate some work (from <a href="http://stackoverflow.com/questions/735285/how-to-wait-in-a-batch-script">How to wait in a batch script</a>)
+ping 123.45.67.89 -n 1 -w 3000 >nul
+
+:: output something to the log exclusively
+CALL:LogMessage "Process completed succesfully."
+
+:: output something to the log and to the console
+CALL:LogMessage "%~nx0 finished." /1
+
+:: output something to the console exclusively (same as ECHO, but with
+:: a datetime stamp)
+CALL:LogMessage "Done." /2
+
+ENDLOCAL
+GOTO :EOF
+
+:: Function: LogMessage text [option]
+::
+:: Outputs a datetime stamp and the passed-in text to the logfile,
+:: the console or both.
+::
+:: 'text' is appended to the datetime stamp after a single space.
+::
+:: 'option'         output
+:: -------------    -------------------------------
+:: empty            no console output
+:: /2               exclusive console output
+:: anything else    both logfile and console output
+:LogMessage
+SETLOCAL
+CALL:datetime
+SET msg=%datetime% %~1
+IF NOT "%~2"==""   ECHO %msg%
+IF NOT "%~2"=="/2" ECHO %msg% >>%logfile%
+ENDLOCAL
+GOTO :EOF
+
+:: Function: datetime
+::
+:: returns a formatted datetime stamp.
+:datetime
+SET datetime=%date:~10,4%-%date:~4,2%-%date:~7,2% %time:~0,2%:%time:~3,2%:%time:~6,2%
+GOTO :EOF
+</textarea>
+<pre class="Batch"></pre>
+</td>
+</tr>
+</table>
+<p>
+The gist of it all is in having a single function that can redirect output to the console, the log or both. The <b>datetime</b> stamp is just a clue
+about how long it takes to run the script, or a particular process within the script.
+</p>
+<p>
+Obviously plain <span style="color:#0000FF;">ECHO</span> commands (such as the script's banner)
+do not make it into the log.
+</p>
+<p>
+Here is the console output:
+</p>
+<pre>
+===============================================================
+HJR Log Test Utility, Version 1.0, Fri Sep 14 13:53:16 CDT 2012
+===============================================================
+
+2012-09-14 14:49:17 logtest.bat started.
+2012-09-14 14:49:19 logtest.bat finished.
+2012-09-14 14:49:19 Done.
+</pre>
+<p>
+And here is the output file (test.log) contents:
+</p>
+<pre>
+2012-09-14 14:49:17 logtest.bat started. 
+2012-09-14 14:49:19 Process completed succesfully. 
+2012-09-14 14:49:19 logtest.bat finished.
+</pre>
+</td>
+</tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td class="tdcloser">
+<a href="../.."><img alt="Hector [.j.] Rivas" border="" src="../sitebuilderpictures/webassets/logo.gif" vspace="0" hspace="5"></a>
+</td>
+</tr>
+<tr>
+<td class="tdcloser">
+<div itemscope itemtype="http://data-vocabulary.org/Person"> 
+<span itemprop="name" style="font-size:10px;">Hector [.j.] Rivas</span>
+</div>
+</td>
+</tr>
+</table>
+</td></tr>
+<tr>
+<td class="tdfooter">
+<div class="divcontact">Rowlett, TX&nbsp;| 214.789.1733&nbsp;| <a href="mailto:hector.j.rivas@hotmail.com">hector.j.rivas@hotmail.com</a></div>
+<div class="divhosting"><a href="http://www.register.com/retail/product/website.rcmx" target="_blank">Powered by Register.com</a></div>
+</td>
+</tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,204 @@
+body
+{
+	font-family: Arial;
+	font-size: 0.8333em; /* 13.33px/16px */
+	background: #fff;
+	margin: 1em;
+}
+
+/* line spacing */
+p
+{
+	line-height: 1.5em;
+}
+
+/* override inline code padding to preserve line spacing */
+p > code.CSharp
+{
+	padding: 1px;
+}
+
+/* custom bullet ordered list */
+ol
+{
+	margin-left: 1em;
+	padding-left: 0;
+	cursor: pointer;
+	list-style-type: none;
+	counter-reset: itemCounter;
+}
+
+ol > li
+{
+	position: relative;
+	margin: 0 0 4px 2em;
+	padding: 4px;
+	background: #fff;
+	list-style: none;
+}
+
+ol.plain > li
+{
+	padding: 8px;
+}
+
+/* bullet */
+ol > li:before
+{
+	content: counter(itemCounter, upper-alpha);
+	counter-increment: itemCounter;
+	
+	position: absolute;
+	left: -2em;
+	top: 0px;
+	width: 2em;
+
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+
+	margin-right: 8px;
+	padding: 8px 4px;
+	color: #fff;
+	background: #ccc;
+
+	font-weight: bold;
+	font-family: inherit;
+	text-align: center;
+}
+
+/* highlight */
+ol > li:hover { background: #eee; }
+
+/* answered right and wrong styles */
+.answered { background: #eee; }
+.answered:before { background: #ff0000; }
+.answered.right:before { background: #00ff00; }
+
+/* dropdown implementation: inputs are placeholders, spans are overimposed on them */
+input.CSharp,
+span.CSharp
+{
+	display: inline-block;
+	position: absolute;
+	white-space: nowrap;
+	overflow: visible;
+	width: auto;
+
+	background-color: transparent;
+	color: #000;
+	margin-top: 0px;
+	padding: 0;
+	border: none;
+	cursor: pointer;
+}
+
+/* code answer outline */
+span.CSharp:before
+{
+	content: '';
+	position: absolute;
+	width: 110%;
+	height: 160%;
+	top: -30%;
+	left: -5%;
+
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+
+	outline: #000 dotted 1px;
+	opacity: 0.5;
+	z-index: 1;
+}
+
+/* right and wrong answer outline and reduced size (class added via click script) */
+span.CSharp.right:before { outline: #0F0 dotted 1px; width: 100%; height:100%; top: 0; left: 0; }
+span.CSharp.wrong:before { outline: #F00 dotted 1px; width: 100%; height:100%; top: 0; left: 0; }
+
+/* dropdown div */
+.dropdown
+{
+	position: relative;
+}
+
+/* dropdown unordered list */
+.dropdown > .list
+{
+	display: none;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	z-index: 999;
+
+	margin: 0;
+	padding: 5px;
+	list-style: none;
+	white-space: nowrap;
+	
+	background: #fff;
+	cursor: pointer;
+	
+	-moz-box-shadow: 4px 4px 0 0 #eee;
+	-webkit-box-shadow: 4px 4px 0 0 #eee;
+	box-shadow: 4px 4px 0 0 #eee;
+}
+
+/* list item separator line */
+.dropdown > .list li
+{
+	padding: 2px;
+	border-bottom: solid 1px #eee;
+}
+
+/* list item highlighter */
+.dropdown > .list li:hover
+{
+	background: #eee;
+}
+
+/* remove last list item separator line */
+.dropdown > .list li:last-child
+{
+	border:none
+}
+
+/* hide tips from screen media */
+.tip { display: none; }
+
+/* hide answers from screen media */
+answerspan
+{
+	visibility: hidden;
+}
+
+@media print
+{
+	.right
+	{
+		background-color: #fafafa !important;
+		-webkit-print-color-adjust: exact;
+	}
+	.right:before
+	{
+		color: #000;
+		background-color: #00FF00;
+		-webkit-print-color-adjust: exact;
+	}
+	
+	.dropdown,
+	span.CSharp,
+	.list
+	{
+		display: none;
+	}
+
+	answerspan
+	{
+		visibility: visible !important;
+		outline: #000 dotted 1px;
+	}
+	
+	.tip { display: inline-block; }
+	table.tip { display: block; }
+}

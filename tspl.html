@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0"/>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+	<script type="text/javascript" src="prototypes.js"></script>
+	<script type="text/javascript" src="filesaver.js"></script>
+	<script type="text/javascript" src="base64.js"></script>
+	<script type="text/javascript" src="tspl.js"></script>
+	<title>TSPL Test Room</title>
+	<style>
+	</style>
+</head>
+<body>
+<h1>TSPL Playground</h1>
+
+<h2>Base64 Encoder</h2>
+<div>
+	<label for="HexCode">Copy hex data and hit Convert to Base64 below:</label><br/>
+	<textarea id="HexCode" rows="8" cols="160"></textarea>
+	<br/>
+	<button id="ConvertButton1">Convert to Base64</button><br/>
+	<br/>
+
+	<label for="Base64Code">Copy base64 data and hit Convert to Hex below:</label><br/>
+	<textarea id="Base64Code" rows="8" cols="160"></textarea>
+	<br/>
+	<button id="ConvertButton2">Convert to Hex</button>
+</div>
+
+<h2>Save TSPL to a Binary File</h2>
+<div>
+	<div id="dropTarget" style="border: 2px dashed #5f90d0; font-size: 20px; width: 300px; height: 100px;padding: 20px; margin: 0 0; text-align: center;">Drag a TSPL file here to save it in Binary format</div>
+</div>
+
+<h2>Make TSPL Font DOWNLOAD Command</h2>
+<div>
+	<div id="dropTarget1" style="border: 2px dashed #5f90d0; font-size: 20px; width: 300px; height: 100px;padding: 20px; margin: 0 0; text-align: center;">Drag a TSC Font file here to wrap it in a DOWNLOAD command</div>
+</div>
+</body>
+</html>

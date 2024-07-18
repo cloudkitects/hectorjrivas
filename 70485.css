@@ -1,0 +1,345 @@
+body
+{
+	font-family: Arial;
+	font-size: .8333em; /* 13.33px/16px */
+	background: white;
+	margin: 1em;
+}
+
+/* line spacing */
+p,
+.tip
+{
+	line-height: 1.5em;
+}
+
+/* override inline code padding to preserve line spacing */
+p > csharp,
+.tip > csharp
+{
+	padding: 1px;
+}
+
+/* customized ordered list */
+ol
+{
+	margin-left: 1em;
+	padding-left: 0;
+	cursor: pointer;
+	list-style-type: none;
+	counter-reset: itemCounter;
+}
+
+ol > li
+{
+	position: relative;
+	margin: 0 0 4px 2em;
+	padding: 4px;
+	background: white;
+	list-style: none;
+}
+
+/* bullet */
+ol > li:before
+{
+	content: counter(itemCounter, upper-alpha);
+	counter-increment: itemCounter;
+	
+	position: absolute;
+	left: -2em;
+	top: 0;
+	width: 2em;
+
+	box-sizing: border-box;
+
+	margin-right: 8px;
+	padding: 8px 4px;
+	color: white;
+	background: #ccc;
+
+	font-weight: 700;
+	font-family: inherit;
+	text-align: center;
+}
+
+/* highlight */
+ol > li:hover { background: #eee; }
+
+.plain > li
+{
+	padding: 8px;
+}
+
+.multiline li,
+.multiline > csharp,
+.multiline > xaml,
+.multiline > selector
+{
+	white-space: pre;
+}
+
+.number
+{
+	left: -2em;
+	top: 0;
+	width: 2em;
+	
+	box-sizing: border-box;
+
+	margin-right: 8px;
+	padding: 8px 4px;
+	color: white;
+	background: #ccc;
+
+	font-weight: 700;
+	font-family: inherit;
+	text-align: center;
+}
+
+/* answered right and wrong styles */
+.answered { background: #dbdbdb; }
+.answered:before { background: red; }
+.answered.right:before { background: green; }
+
+/* dropdown */
+.dropdown
+{
+	position: relative;
+}
+
+/* dropdown selector (hover and answer area) */
+selector
+{
+	display: inline-block;
+	position: absolute;
+	white-space: nowrap;
+	overflow: visible;
+	width: auto;
+
+	background-color: transparent;
+	color: black;
+	margin: 0;
+	padding: 0;
+	border: none;
+	cursor: pointer;
+}
+
+/* dropdown selector outline */
+selector:before
+{
+	content: '';
+	position: absolute;
+	width: calc(100% + 4px);
+	height: calc(100% + 4px);
+	top: -1px;
+	left: -2px;
+
+	opacity: .5;
+	z-index: 1;
+	
+	box-sizing: border-box;
+
+	outline: black dotted 1px;
+}
+
+/* dropdown selector right and wrong answer */
+selector.right:before { outline: green dotted 1px; }
+selector.wrong:before { outline: red dotted 1px; }
+
+/* dropdown selector selected code */
+selector .CSharp,
+selector .XAML
+{
+	padding:0;
+	margin:0;
+}
+
+/* dropdown list */
+.dropdown > .list
+{
+	display: none;
+	position: absolute;
+	left: 0;
+	top: 0;
+	z-index: 999;
+
+	margin: 0;
+	padding: 5px;
+	list-style: none;
+	white-space: nowrap;
+	
+	background: white;
+	cursor: pointer;
+	
+	box-shadow: 4px 4px 0 0 #eee;
+}
+
+/* list item separator */
+.dropdown > .list li
+{
+	padding: 2px;
+	border-bottom: solid 1px #eee;
+}
+
+/* remove last list item separator */
+.dropdown > .list li:last-child
+{
+	border:none
+}
+
+/* list item highlighter */
+.dropdown > .list li:hover
+{
+	background: #eee;
+}
+
+/* hide tips from screen media */
+.tip { display: block; }
+
+/* hide answers from screen media */
+answer
+{
+	visibility: hidden;
+	display: inline-block;
+}
+
+ul.checklist
+{
+	display: inline-block;
+	font-size: .8125em;
+
+	margin-left: 1em;
+	padding: 4px 4px 4px 0;
+
+	background-color: #2f2f2f;
+	cursor: pointer;
+	list-style-type: none;
+}
+
+ul.checklist > li
+{
+	position: relative;
+	margin: 0 0 4px 2em;
+	padding: 2px;
+	color: white;
+	background: transparent;
+	list-style: none;
+}
+
+/* checklist item highlighter */
+
+ul.checklist > li:hover
+{
+	background: #eee;
+	color: #000;
+}
+
+ul.checklist > li:before
+{
+	content: url('../sitebuilderpictures/checkbox0.png');
+	
+	position: absolute;
+	left: -2em;
+	top: 0;
+	width: 2em;
+
+	box-sizing: border-box;
+
+	margin-right: 8px;
+	padding: 2px 4px;
+	background-color: #323232;
+}
+
+ul.checklist > li.checked:before
+{
+	content: url('../sitebuilderpictures/checkbox1.png');
+}
+
+ul.checklist > li.checked.wrong:before
+{
+	content: url('../sitebuilderpictures/checkbox2.png');
+}
+
+.grid
+{
+	width: 50%;
+	table-layout: auto;
+	padding: 5px;
+}
+
+.grid td
+{
+	border: 1px dotted black;
+}
+
+.decimal
+{
+	margin-left: 1em;
+	padding-left: 0;
+	list-style-type: decimal;
+}
+
+.decimal > li:before
+{
+	content: counter(itemCounter, decimal);
+}
+
+@media print
+{
+	body
+	{
+		margin: 0;
+		padding: 0;
+	}
+	
+	h3
+	{
+		page-break-before: avoid;
+	}
+	
+	.right
+	{
+		background-color: #fafafa !important;
+	}
+
+	.right:before
+	{
+		color: black;
+		background-color: green;
+	}
+	
+	.dropdown
+	{
+		display: none !important;
+	}
+
+	answer
+	{
+		visibility: visible !important;
+		outline: black dotted 1px;
+	}
+	
+	answer > csharp
+	{
+		display: inline-block !important;
+		visibility: visible !important;
+	}
+	
+	.tip { display: block; }
+	
+	ul.checklist > li
+	{
+		color: #000;
+	}
+
+	ul.checklist > li:before,
+	ul.checklist > li.checked.wrong:before
+	{
+		content: url('../sitebuilderpictures/checkbox0.png');
+	}
+
+	ul.checklist > li.right:before
+	{
+		content: url('../sitebuilderpictures/checkbox1.png');
+	}
+}

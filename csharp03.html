@@ -1,0 +1,3742 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Test</title>
+	<style type="text/css" media="all"><!-- media="all": hack to hide stuff from NS 4 --></style>
+	<link rel="stylesheet" href="styles.css">
+	<link rel="stylesheet" href="csharp.css">
+	<script type="text/javascript" src="prototypes.js"></script>
+	<script type="text/javascript" src="DOM.js"></script>
+	<script type="text/javascript" src="utility.js"></script>
+	<script type="text/javascript" src="syntax.js"></script>
+	<script type="text/javascript" src="scripts.js"></script>
+	<script type="text/javascript" src="csharp.js"></script>
+</head>
+<body>
+<h3>Question 1</h3>
+<p>You are developing an application that includes a class named Order. The application will store a collection of Order objects. The collection must meet the following requirements:<br>
+<ul>
+	<li>Use strongly typed members.</li>
+	<li>Process Order objects in first-in-first-out order.</li>
+	<li>Store values for each Order object.</li>
+	<li>Use zero-based indices.</li>
+</ul>
+<p>You need to use a collection type that meets the requirements. Which collection type should you use?</p>
+<ol>
+	<li class="right"><code class="CSharp">Queue&amp;lt;T&amp;gt;</code></li>
+	<li><code class="CSharp">SortedList</code></li>
+	<li><code class="CSharp">LinkedList&amp;lt;T&amp;gt;</code></li>
+	<li><code class="CSharp">HashTable</code></li>
+	<li><code class="CSharp">Array&amp;lt;T&amp;gt;</code></li>
+</ol>
+
+<h3>Question 2</h3>
+<p>You are developing an application. The application calls a method that returns an array of
+integers named <code class="CSharp">employeeIds.</code> You define an integer variable named <code class="CSharp">employeeIdToRemove</code>
+and assign a value to it. You declare an array named <code class="CSharp">filteredEmployeeIds.</code>
+You have the following requirements:
+<ul>
+	<li>Remove duplicate integers from the <code class="CSharp">employeeIds</code> array.</li>
+	<li>Sort the array in order from the highest value to the lowest value.</li>
+	<li>Remove the integer value stored in the <code class="CSharp">employeeIdToRemove</code> variable from the <code class="CSharp">employeeIds</code> array.</li>
+</ul>
+You need to create a LINQ query to meet the requirements.
+Which code segment should you use?<br>
+<ol>
+	<li><code class="CSharp">int[] filteredEmployeeIds = employeeIds.Where(value => value != employeeIdToRemove).OrderBy(x => x).ToArray();</code></li>
+	<li><code class="CSharp">int[] filteredEmployeeIds = employeeIds.Where(value => value != employeeIdToRemove).OrderByDescending(x => x).ToArray();</code></li>
+	<li class="right"><code class="CSharp">int[] filteredEmployeeIds = employeeIds.Distinct().Where(value => value != employeeIdToRemove).OrderByDescending(x => x).ToArray();</code></li>
+	<li><code class="CSharp">int[] filteredEmployeeIds = employeeIds.Distinct().OrderByDescending(x => x).ToArray();</code></li>
+</ol>
+<h3>Question 3</h3>
+<p>You are developing an application that includes the following code segment. The <code class="CSharp">GetAnimals()</code> method must meet the following requirements:
+<ul>
+	<li>Connect to a Microsoft SQL Server database.</li>
+	<li>Create <code class="CSharp">Animal</code> objects and populate them with data from the database.</li>
+	<li>Return a sequence of populated <code class="CSharp">Animal</code> objects.</li>
+</ul>
+You need to meet the requirements. Which two actions should you perform? (Each correct answer presents part of the solution. Choose two.)</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+class Animal
+{
+	public string Color { get; set; }
+	public string Name { get; set; }
+}
+private static IEnumerable<Animal> GetAnimals(string sqlConnectionString)
+{
+	var animals = new List<Animal>();
+	SqlConnection sqlConnection = new SqlConnection(sqlConnectionString);
+	using (sqlConnection)
+	{
+		SqlCommand sqlCommand = new SqlCommand("SELECT Name, ColorName FROM Animals", sqlConnection);
+		
+		<input type="text" value="[code]" class="CSharp" readonly="readonly"/><answerspan>sqlConnection.Open();</answerspan>
+
+		using (SqlDataReader sqlDataReader = sqlCommand.ExecuteReader())
+		{
+			<input type="text" value="[code]" class="CSharp" readonly="readonly"/><answerspan>while (sqlDataReader.Read())</answerspan>
+			{
+				var animal = new Animal();
+				animal.Name = (string)sqlDataReader["Name"];
+				animal.Color = (string)sqlDataReader["ColorName"];
+				animals.Add(animal);
+			}
+		}
+	}
+	return animals;
+}
+</textarea>
+</td>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="3">
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+	<li><code class="CSharp">sqlConnection.BeginTransaction();</code></li>
+	<li class="right"><code class="CSharp">sqlConnection.Open();</code></li>
+	</ul>
+</div>
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+	<li><code class="CSharp">while (sqlDataReader.NextResult())</code></li>
+	<li class="right"><code class="CSharp">while (sqlDataReader.Read())</code></li>
+	<li><code class="CSharp">while (sqlDataReader.GetValues())</code></li>
+	</ul>
+</div>
+</td>
+</tr>
+</table>
+
+<h3>Question 4</h3>
+<p>You are developing a custom collection named <code class="CSharp">LoanCollection</code> for a class named <code class="CSharp">Loan</code>. You need to ensure that you can process each <code class="CSharp">Loan</code> object in the <code class="CSharp">LoanCollection</code> collection by using a <code class="CSharp">foreach</code> loop. How should you complete the relevant code?</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+public class LoanCollection <input type="text" value="[code]" class="CSharp" readonly="readonly"/><answerspan>: IEnumerable</answerspan>
+{
+	private readonly Loan[] _loanCollection;
+	public LoanCollection(Loan[] loanArray)
+	{
+		_loanCollection = new Loan[loanArray.length];
+		
+		for (int i = 0; i &lt; loanArray.length; i++)
+		{
+			_loanCollection[i] = loanArray[i];
+		}
+	}
+	
+	<input type="text" value="[code]" class="CSharp" readonly="readonly"/><answerspan>public IEnumerator GetEnumerator()</answerspan>
+	{
+		<input type="text" value="[code]" class="CSharp" readonly="readonly"/><answerspan>return _loanCollection.GetEnumerator();</answerspan>
+	}
+}
+</textarea>
+</td>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="3">
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li><code class="CSharp">: IComparable</code></li>
+		<li class="right"><code class="CSharp">: IEnumerable</code></li>
+		<li><code class="CSharp">: IDisposable</code></li>
+		<li><code class="CSharp">public IEnumerator GetEnumerator()</code></li>
+		<li><code class="CSharp">return _loanCollection.GetEnumerator();</code></li>
+		<li><code class="CSharp">public int CompareTo(object obj)</code></li>
+		<li><code class="CSharp">public void Dispose()</code></li>
+		<li><code class="CSharp">_loanCollection[0].Amount++;</code></li>
+		<li><code class="CSharp">return obj == null ? 1 : _loanCollection.Length;</code></li>
+	</ul>
+</div>
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li><code class="CSharp">: IComparable</code></li>
+		<li><code class="CSharp">: IEnumerable</code></li>
+		<li><code class="CSharp">: IDisposable</code></li>
+		<li class="right"><code class="CSharp">public IEnumerator GetEnumerator()</code></li>
+		<li><code class="CSharp">return _loanCollection.GetEnumerator();</code></li>
+		<li><code class="CSharp">public int CompareTo(object obj)</code></li>
+		<li><code class="CSharp">public void Dispose()</code></li>
+		<li><code class="CSharp">_loanCollection[0].Amount++;</code></li>
+		<li><code class="CSharp">return obj == null ? 1 : _loanCollection.Length;</code></li>
+	</ul>
+</div>
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li><code class="CSharp">: IComparable</code></li>
+		<li><code class="CSharp">: IEnumerable</code></li>
+		<li><code class="CSharp">: IDisposable</code></li>
+		<li><code class="CSharp">public IEnumerator GetEnumerator()</code></li>
+		<li class="right"><code class="CSharp">return _loanCollection.GetEnumerator();</code></li>
+		<li><code class="CSharp">public int CompareTo(object obj)</code></li>
+		<li><code class="CSharp">public void Dispose()</code></li>
+		<li><code class="CSharp">_loanCollection[0].Amount++;</code></li>
+		<li><code class="CSharp">return obj == null ? 1 : _loanCollection.Length;</code></li>
+	</ul>
+</div>
+</td>
+</tr>
+</table>
+
+<h3>Question 5</h3>
+<p>You are developing an application that uses the Microsoft ADO.NET Entity Framework to retrieve order information from a Microsoft SQL Server database. The application includes the following code, and must meet the following requirements:
+<ul>
+<li>Return only orders that have an <code class="CSharp">OrderDate</code> value other than <code class="CSharp">null</code>.</li>
+<li>Return only orders that were placed in the year specified in the <code class="CSharp">OrderDate</code> property or in a later year.</li>
+</ul>
+You need to ensure that the application meets the requirements. Which code segment should you insert at line 09?</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+public DateTime? OrderDate;
+IQueryable<Order> LookupOrdersForYear(int year)
+{
+	using (var context = new NorthwindEntities())
+	{
+		var orders = 
+			from order in context.orders
+			
+			<input type="text" value="[code]" class="CSharp" readonly="readonly"/><answerspan>where order.OrderDate.Value != null &amp;&amp; order.OrderDate.Value.Year &gt;= year</answerspan>
+			
+			select order;
+			
+		return orders.ToList().AsQueryable();
+	}
+}
+</textarea>
+</td>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="3">
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li class="right"><code class="CSharp">where order.OrderDate.Value != null &amp;&amp; order.OrderDate.Value.Year &gt;= year</code></li>
+		<li><code class="CSharp">where order.OrderDate.Value == null &amp;&amp; order.OrderDate.Value.Year == year</code></li>
+		<li><code class="CSharp">where order.OrderDate.HasValue &amp;&amp; order.OrderDate.Value.Year == year</code></li>
+		<li><code class="CSharp">where order.OrderDate.Value.Year == year</code></li>
+	</ul>
+</div>
+</td>
+</tr>
+</table>
+<h3>Question 6</h3>
+<p>You are developing an application by using C#. The application includes an array of decimal values named loanAmounts. You are developing a LINQ query to return the values from the array. The query must return decimal values that are evenly divisible by two. The values must be sorted from the lowest value to the highest value. You need to ensure that the query correctly returns the decimal values. How should you complete the relevant code?<br>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+decimal[] loanAmounts = { 303m, 1000m, 85579m, 501.51m, 603m, 1200m, 400m, 22m };
+
+IEnumerable<decimal> loanQuery =
+
+	<input type="text" class="CSharp" readonly="readonly"/><answerspan>from&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</answerspan> amount in loanAmounts
+
+	<input type="text" class="CSharp" readonly="readonly"/><answerspan>where&nbsp;&nbsp;&nbsp;&nbsp;</answerspan> amount %2 == 0
+	
+	<input type="text" class="CSharp" readonly="readonly"/><answerspan>orderby&nbsp;&nbsp;</answerspan> amount <input type="text" value="[code]" class="CSharp" readonly="readonly"/><answerspan>ascending</answerspan>
+	
+	<input type="text" class="CSharp" readonly="readonly"/><answerspan>select&nbsp;&nbsp;&nbsp;</answerspan> amount;
+</textarea>
+</td>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="3">
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li><code class="CSharp">where</code></li>
+		<li><code class="CSharp">select</code></li>
+		<li><code class="CSharp">orderby</code></li>
+		<li class="right"><code class="CSharp">from</code></li>
+		<li><code class="CSharp">ascending</code></li>
+	</ul>
+</div>
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li class="right"><code class="CSharp">where</code></li>
+		<li><code class="CSharp">select</code></li>
+		<li><code class="CSharp">orderby</code></li>
+		<li><code class="CSharp">from</code></li>
+		<li><code class="CSharp">ascending</code></li>
+	</ul>
+</div>
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li><code class="CSharp">where</code></li>
+		<li><code class="CSharp">select</code></li>
+		<li class="right"><code class="CSharp">orderby</code></li>
+		<li><code class="CSharp">from</code></li>
+		<li><code class="CSharp">ascending</code></li>
+	</ul>
+</div>
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li><code class="CSharp">where</code></li>
+		<li><code class="CSharp">select</code></li>
+		<li><code class="CSharp">orderby</code></li>
+		<li><code class="CSharp">from</code></li>
+		<li class="right"><code class="CSharp">ascending</code></li>
+	</ul>
+</div>
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li><code class="CSharp">where</code></li>
+		<li class="right"><code class="CSharp">select</code></li>
+		<li><code class="CSharp">orderby</code></li>
+		<li><code class="CSharp">from</code></li>
+		<li><code class="CSharp">ascending</code></li>
+	</ul>
+</div>
+</td>
+</tr>
+</table>
+<h3>Question 7</h3>
+<p>You are developing an application. The application includes a method named <code class="CSharp">ReadFile</code> that reads data from a file and must meet the following requirements:
+<ul>
+	<li>It must not make changes to the data file.</li>
+	<li>It must allow other processes to access the data file.</li>
+	<li>It must not throw an exception if the application attempts to open a data file that does not exist.</li>
+</ul>
+You need to implement the <code class="CSharp">ReadFile</code> method. Which code segment should you use?<br>
+<ol>
+	<li><code class="CSharp">var fs = File.ReadAllBytes(Filename);</code></li>
+	<li class="right"><code class="CSharp">var fs = File.Open(Filename, FileMode.OpenOrCreate, FileAccess.Read, FileShare.ReadWrite);</code></li>
+	<li><code class="CSharp">var fs = File.ReadAllLines(Filename);</code></li>
+	<li><code class="CSharp">var fs = File.Open(Filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);</code></li>
+	<li><code class="CSharp">var fs = File.Open(Filename, FileMode.OpenOrCreate, FileAccess.Read, FileShare.Write);</code></li>
+</ol>
+<h3>Question 8</h3>
+<p>An application receives JSON data in the format shown and it includes the following code segment. You need to ensure that the ConvertToName() method returns the JSON input string as a Name object. Which code segment should you insert at line 16?</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+{ "FirstName" : "David",
+  "LastName" : "Jones",
+  "Values" : [0, 1, 2] }
+
+public class Name 
+{
+	public int[] Values { get; set; }
+	public string FirstName { get; set; }
+	public string LastNane { get; set; }
+}
+
+public static Name ConvertToName(string json) 
+{
+	var sr = new JavaScriptSerializer();
+
+	<input type="text" class="CSharp" readonly="readonly"/><answerspan>return ser.Deserialize&amp;lt;Name&amp;gt;(json);</answerspan>
+}
+</textarea>
+</td>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+</tr>
+<tr>
+<td valign="top">
+	<div class="dropdown">
+		<span class="CSharp">[code]</span>
+		<ul class="list">
+			<li><code class="CSharp">return ser.ConvertToType&amp;lt;Name&amp;gt;(json);</code></li>
+			<li><code class="CSharp">return ser.DeserializeObject(json);</code></li>
+			<li class="right"><code class="CSharp">return ser.Deserialize&amp;lt;Name&amp;gt;(json);</code></li>
+			<li><code class="CSharp">return (Name)ser.Serialize(json);</code></li>
+		</ul>
+	</div>
+</td>
+</tr>
+</table>
+
+<h3>Question 9</h3>
+<p>An application serializes and deserializes XML from streams in the following format:
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="XML" style="visibility: hidden;"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+&amp;lt;Name xmlns="http://www.contoso.com/2012/06"&amp;gt;
+	&amp;lt;LastName&amp;gt;Jones&amp;lt;/LastName&amp;gt;
+	&amp;lt;FirstName&amp;gt;David&amp;lt;/FirstName&amp;gt;
+&amp;lt;/Name&amp;gt;
+</textarea>
+</td>
+<td valign="top">
+<pre class="XML"></pre>
+</td>
+</tr>
+</table>
+
+<p>The application reads the XML streams by using a <code class="CSharp">DataContractSerializer</code> object that is declared by the following code segment:</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="CSharp" style="visibility: hidden;"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+var ser = new DataContractSerializer(typeof(Name));
+</textarea>
+</td>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+</tr>
+</table>
+<p>You need to ensure that the application preserves the element ordering as provided in the XML stream. How should you complete the relevant code?</p>
+<!--<img src="../sitebuilderpictures/70483/12.jpg">-->
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+<input type="text" class="CSharp" readonly="readonly"/><answerspan>[DataContract(Namespace="http:&amp;#47;&amp;#47;www.contoso.com&amp;#47;2012&amp;#47;06")]</answerspan>
+class Name
+{
+	<input type="text" class="CSharp" readonly="readonly"/><answerspan>[DataMember&#40;Order=10&#41;]</answerspan>
+	public string FirstName { get; set; }
+
+	<input type="text" class="CSharp" readonly="readonly"/><answerspan>[DataMember]</answerspan>
+	public string LastName { get; set; }
+}
+</textarea>
+</td>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li class="right"><code class="CSharp">[DataContract(Namespace="http:&amp;#47;&amp;#47;www.contoso.com&amp;#47;2012&amp;#47;06")]</code></li>
+		<li><code class="CSharp">[DataMember(Name="http:&amp;#47;&amp;#47;www.contoso.com&amp;#47;2012&amp;#47;06", Order=10)]</code></li>
+		<li><code class="CSharp">[DataContract]</code></li>
+		<li><code class="CSharp">[DataMember(Name="http:&amp;#47;&amp;#47;www.contoso.com&amp;#47;2012&amp;#47;06")]</code></li>
+		<li><code class="CSharp">[DataMember&#40;Order=10&#41;]</code></li>
+		<li><code class="CSharp">[DataMember]</code></li>
+	</ul>
+</div>
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li><code class="CSharp">[DataContract(Namespace="http:&amp;#47;&amp;#47;www.contoso.com&amp;#47;2012&amp;#47;06")]</code></li>
+		<li><code class="CSharp">[DataMember(Name="http:&amp;#47;&amp;#47;www.contoso.com&amp;#47;2012&amp;#47;06", Order=10)]</code></li>
+		<li><code class="CSharp">[DataContract]</code></li>
+		<li><code class="CSharp">[DataMember(Name="http:&amp;#47;&amp;#47;www.contoso.com&amp;#47;2012&amp;#47;06")]</code></li>
+		<li class="right"><code class="CSharp">[DataMember&#40;Order=10&#41;]</code></li>
+		<li><code class="CSharp">[DataMember]</code></li>
+	</ul>
+</div>
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li><code class="CSharp">[DataContract(Namespace="http:&amp;#47;&amp;#47;www.contoso.com&amp;#47;2012&amp;#47;06")]</code></li>
+		<li><code class="CSharp">[DataMember(Name="http:&amp;#47;&amp;#47;www.contoso.com&amp;#47;2012&amp;#47;06", Order=10)]</code></li>
+		<li><code class="CSharp">[DataContract]</code></li>
+		<li><code class="CSharp">[DataMember(Name="http:&amp;#47;&amp;#47;www.contoso.com&amp;#47;2012&amp;#47;06")]</code></li>
+		<li><code class="CSharp">[DataMember&#40;Order=10&#41;]</code></li>
+		<li class="right"><code class="CSharp">[DataMember]</code></li>
+	</ul>
+</div>
+</td>
+</tr>
+</table>
+
+<h3>Question 10</h3>
+<p>You are developing an application. The application converts a <code class="CSharp">Location</code> object to a string by using a method named <code class="CSharp">WriteObject</code>, which accepts two parameters, a <code class="CSharp">Location</code> object and an <code class="CSharp">XmlObjectSerializer</code> object. The application includes the following code. You need to serialize the <code class="CSharp">Location</code> object as a JSON object. Which code segment should you insert at line 24?</p>
+</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+public enum Compass
+{
+	North,
+	South,
+	East,
+	West
+}
+
+[DataContract]
+public class Location
+{
+	[DataMember]
+	public string Label { get; set; }
+
+	[DataMember]
+	public Compass Direction { get; set; }
+}
+
+void DoWork()
+{
+	var location = new Location { Label = "Test", Direction = Compass.West };
+	
+	Console.WriteLine(WriteObject(location,
+		<input type="text" class="CSharp" readonly="readonly"/><answerspan>New DataContractJsonSerializer(typeof(Location))</answerspan>
+	));
+}
+</textarea>
+</td>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li><code class="CSharp">new DataContractSerializer(typeof(Location))</code></li>
+		<li><code class="CSharp">new XmlSerializer(typeof(Location))</code></li>
+		<li><code class="CSharp">new NetDataContractSenalizer()</code></li>
+		<li class="right"><code class="CSharp">new DataContractJsonSerializer(typeof(Location))</code></li>
+	</ul>
+</div></td>
+</tr>
+</table>
+<p class="tip"><code class="CSharp">DataContractJsonSerializer</code>inherits from<code class="CSharp">XmlObjectSerializer.</code></p>
+
+<h3>Question 11</h3>
+<p>An application includes a class named <code class="CSharp">Person</code> which includes a method named <code class="CSharp">GetData</code>. You need to ensure that the method can be used only by the <code class="CSharp">Person</code> class or a class derived from it. Which access modifier should you use for the method?</p>
+<ol>
+	<li><code class="CSharp">internal</code></li>
+	<li class="right"><code class="CSharp">protected</code></li>
+	<li><code class="CSharp">private</code></li>
+	<li><code class="CSharp">protected internal</code></li>
+	<li><code class="CSharp">public</code></li>
+</ol>
+<p class="tip">The <code class="CSharp">protected</code> keyword is a member access modifier. A protected member is accessible within its class and by derived class instances.</p>
+
+<h3>Question 12</h3>
+<p>You are developing an application by using C#. The application includes the following code segment. The <code class="CSharp">DoWork()</code> method must not throw any exceptions when converting the <code class="CSharp">obj</code> object to the <code class="CSharp">IDataContainer</code> interface or when accessing the <code class="CSharp">Data</code> property. You need to meet the requirements. Which code segment should you insert at line 08?</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+public interface IDataContainer
+{
+	string Data { get; set; }
+}
+
+void DoWork(object obj)
+{
+	<input type="text" class="CSharp" readonly="readonly"/><answerspan>var dataContainer = obj as IDataContainer;</answerspan>
+	
+	if (dataContainer != null)
+	{
+		Console.WriteLine(dataContainer.Data);
+	}
+}
+</textarea>
+</td>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li><code class="CSharp">var dataContainer = (IDataContainer)obj;</code></li>
+		<li><code class="CSharp">dynamic dataContainer = obj;</code></li>
+		<li><code class="CSharp">var dataContainer = obj is IDataContainer;</code></li>
+		<li class="right"><code class="CSharp">var dataContainer = obj as IDataContainer;</code></li>
+	</ul>
+</div>
+</td>
+</tr>
+</table>
+
+<h3>Question 13</h3>
+<p>You are creating an application that manages information about zoo animals. The application includes a class named <code class="CSharp">Animal</code> and a method named <code class="CSharp">Save()</code>, which must be strongly typed, must allow only types inherited from the <code class="CSharp">Animal</code> class that uses a constructor that accepts no parameters. You need to implement the <code class="CSharp">Save()</code> method. Which code segment should you use?</p>
+<ol>
+	<li><code class="CSharp">public static void Save&amp;lt;T&amp;gt;(T target) where T : new(), Animal { ... }</code></li>
+	<li><code class="CSharp">public static void Save&amp;lt;T&amp;gt;(T target) where T : Animal { ... }</code></li>
+	<li class="right"><code class="CSharp">public static void Save&amp;lt;T&amp;gt;(T target) where T : Animal, new() { ... }</code></li>
+	<li><code class="CSharp">public static void Save(Animal target) { ... }</code></li>
+</ol>
+
+<h3>Question 14</h3>
+<p>You are developing a class named <code class="CSharp">ExtensionMethods</code> You need to ensure that the <code class="CSharp">ExtensionMethods</code> class implements the <code class="CSharp">IsUrl()</code> method on string objects. How should you complete the relevant code?</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+<input type="text" class="CSharp" readonly="readonly"/><answerspan>public static class ExtensionMethods</answerspan>
+{
+	public static bool IsUrl<input type="text" class="CSharp" readonly="readonly"/><answerspan>this String str</answerspan>
+	{
+		var regex = new Regex(
+			"(https?:&amp;#47;&amp;#47;)?([A-Za-z9-0-]*\\.)?([A-Za-z9-0-]*)" +
+			"\\.[A-Za-z9-0-]*&amp;#47;?.*");
+			
+		return regex.IsMatch(str);
+	}
+}
+</textarea>
+</td>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li class="right"><code class="CSharp">public static class ExtensionMethods</code></li>
+		<li><code class="CSharp">public class ExtensionMethods</code></li>
+		<li><code class="CSharp">(this String str)</code></li>
+		<li><code class="CSharp">(String str)</code></li>
+		<li><code class="CSharp">protected static class ExtensionMethods</code></li>
+	</ul>
+</div>
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li><code class="CSharp">public static class ExtensionMethods</code></li>
+		<li><code class="CSharp">public class ExtensionMethods</code></li>
+		<li class="right"><code class="CSharp">(this String str)</code></li>
+		<li><code class="CSharp">(String str)</code></li>
+		<li><code class="CSharp">protected static class ExtensionMethods</code></li>
+	</ul>
+</div>
+</td>
+</tr>
+</table>
+
+<h3>Question 15</h3>
+<p>You are developing an application. The application includes classes named <code class="CSharp">Employee</code> and <code class="CSharp">Person</code> and an interface named <code class="CSharp">IPerson</code>. The <code class="CSharp">Employee</code> class must meet the following requirements:</p>
+<ul>
+	<li>It must either inherit from the <code class="CSharp">Person</code> class or implement the <code class="CSharp">IPerson</code> interface.</li>
+	<li>It must be inheritable by other classes in the application.</li>
+</ul>
+<p>You need to ensure that the Employee class meets the requirements. Which two code segments can you use to achieve this goal?</p>
+<ol>
+	<li><code class="CSharp">sealed class Employee : Person { ... }</code></li>
+	<li class="right"><code class="CSharp">abstract class Employee : Person { ... }</code></li>
+	<li><code class="CSharp">sealed class Employee : IPerson { ... }</code></li>
+	<li class="right"><code class="CSharp">abstract class Employee : IPerson { ... }</code></li>
+</ol>
+
+<h3>Question 16</h3>
+<p>You are developing an application that will convert data into multiple output formats. All output routines implement the <code class="CSharp">IOutputFormatter</code> interface. You are developing a code segment that will produce tab-delimited output, and you need to minimize the completion time of the <code class="CSharp">GetOutput()</code> method. Which code segment should you insert at line 07?</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+public class TabDelimitedFormatter : IOutputFormatter<string>
+{
+	readonly Func<int, char> suffix = col => col % 2 == 0 ? '\n' : '\t';
+	
+	public string GetOutput(IEnumerator<string> iterator, int recordSize)
+	{
+	<input type="text" class="CSharp" readonly="readonly"/><answerspan>	var output = new StringBuilder();
+	for (int i = 1; iterator.MoveNext(); i++)
+	{
+		output.Append(iterator.Current);
+		output.Append(suffix(i));
+	}
+	return output.ToString();</answerspan>
+	}
+}
+</textarea>
+</td>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<div class="dropdown">
+	<span class="CSharp"  style="white-space: pre;">[code]</span>
+	<ul class="list">
+		<li><code class="CSharp" style="white-space: pre;">	string output = null
+	for (int i = 1; iterator.MoveNext(); i++)
+	{
+		output = string.Concat(output, iterator.Current, suffix(i));
+	}
+	return output;</code></li>
+		<li class="right"><code class="CSharp" style="white-space: pre;">	var output = new StringBuilder();
+	for (int i = 1; iterator.MoveNext(); i++)
+	{
+		output.Append(iterator.Current);
+		output.Append(suffix(i));
+	}
+	return output.ToString();</code></li>
+		<li><code class="CSharp" style="white-space: pre;">	string output = null;
+	for (int i = 1; iterator.MoveNext(); i++)
+	{
+		output = output + iterator.Current + suffix(i);
+	}
+	return output;</code></li>
+		<li><code class="CSharp" style="white-space: pre;">	string output = null;
+	for (int i = 1; iterator.MoveNext(); i++)
+	{
+		output += iterator.Current + suffix(i);
+	}
+	return output;</code></li>
+	</ul>
+</div>
+</td>
+</tr>
+</table>
+
+<h3>Question 17</h3>
+<p>You are developing an application by using C#. The application includes an object that performs a long running process. You need to ensure that the garbage collector does not release the object’s resources until the process completes. Which garbage collector method should you use?</p>
+<ol>
+	<li><code class="CSharp">ReRegisterForFinalize()</code></li>
+	<li class="right"><code class="CSharp">SuppressFinalize()</code></li>
+	<li><code class="CSharp">Collect()</code></li>
+	<li><code class="CSharp">WaitForFullGCApproach()</code></li>
+</ol>
+
+<h3>Question 18</h3>
+<p>You are creating a class named <code class="CSharp">Employee</code>. The class exposes a string property named <code class="CSharp">EmployeeType</code>. The following code segment defines the <code class="CSharp">Employee</code> class.</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+public class Employee
+{
+	internal string EmployeeType
+	{
+		get;
+		set;
+	}
+}
+</textarea>
+</td>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+</tr>
+<tr>
+<td valign="top">
+</td>
+</tr>
+</table>
+<p>The <code class="CSharp">EmployeeType</code> property value must be accessed and modified only by code within the <code class="CSharp">Employee</code> class or within a class derived from the <code class="CSharp">Employee</code> class. You need to ensure that the implementation of the <code class="CSharp">EmployeeType</code> property meets the requirements. Which two actions should you perform?</p>
+
+<ol>
+	<li class="right">Replace line 05 with the following code segment: <code class="CSharp">protected get;</code></li>
+	<li>Replace line 06 with the following code segment: <code class="CSharp">private set;</code></li>
+	<li>Replace line 03 with the following code segment: <code class="CSharp">public string EmployeeType</code></li>
+	<li>Replace line 05 with the following code segment: <code class="CSharp">private get;</code></li>
+	<li>Replace line 03 with the following code segment: <code class="CSharp">protected string EmployeeType</code></li>
+	<li class="right">Replace line 06 with the following code segment: <code class="CSharp">protected set;</code></li>
+</ol>
+
+<h3>Question 19</h3>
+<p>You are implementing a method named <code class="CSharp">Calculate</code> that performs conversions between value types and reference types. The following code segment implements the method. You need to ensure that the application does not throw exceptions on invalid conversions. Which code segment should you insert at line 05?</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+public static void Calculate(float amount)
+{
+	object amountRef = amount;
+	
+	<input type="text" class="CSharp" readonly="readonly"/><answerspan>int balance = (int)(float)amountRef;</answerspan>
+
+	Console.WriteLine(balance);
+}
+</textarea>
+</td>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li class="right"><code class="CSharp">int balance = (int)(float)amountRef;</code></li>
+		<li><code class="CSharp">int balance = (int)amountRef;</code></li>
+		<li><code class="CSharp">int balance = amountRef;</code></li>
+		<li><code class="CSharp">int balance = (int) (double) amountRef;</code></li>
+	</ul>
+</div></td>
+</tr>
+</table>
+
+<h3>Question 20</h3>
+<p>You are creating a console application by using C#. You need to access the application assembly. Which code segment should you use?</p>
+<ol>
+	<li><code class="CSharp">Assembly.GetAssembly(this);</code></li>
+	<li><code class="CSharp">this.GetType();</code></li>
+	<li><code class="CSharp">Assembly.Load();</code></li>
+	<li class="right"><code class="CSharp">Assembly.GetExecutingAssembly();</code></li>
+</ol>
+
+<h3>Question 21</h3>
+<p>You are implementing a library method that accepts a character parameter and returns a string. If the lookup succeeds, the method must return the corresponding string value. If the lookup fails, the method must return the value "invalid choice." You need to implement the lookup algorithm. How should you complete the relevant code?</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+public string GetResponse(char letter)
+{
+	string response;
+	
+	<input type="text" class="CSharp" readonly="readonly"/><answerspan>switch&nbsp;</answerspan>(letter)
+	{
+		<input type="text" class="CSharp" readonly="readonly"/><answerspan>case&nbsp;&nbsp;&nbsp;</answerspan> 'a':
+			response = "animal";
+			break;
+		<input type="text" class="CSharp" readonly="readonly"/><answerspan>case&nbsp;&nbsp;&nbsp;</answerspan> 'm':
+			response = "mineral";
+			break;
+		<input type="text" class="CSharp" readonly="readonly"/><answerspan>default</answerspan>:
+			response = "invalid choice";
+			break;
+	}
+	return response;
+}
+</textarea>
+</td>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li><code class="CSharp">case</code></li>
+		<li><code class="CSharp">if</code></li>
+		<li><code class="CSharp">default</code></li>
+		<li class="right"><code class="CSharp">switch</code></li>
+		<li><code class="CSharp">else</code></li>
+	</ul>
+</div>
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li class="right"><code class="CSharp">case</code></li>
+		<li><code class="CSharp">if</code></li>
+		<li><code class="CSharp">default</code></li>
+		<li><code class="CSharp">switch</code></li>
+		<li><code class="CSharp">else</code></li>
+	</ul>
+</div>
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li class="right"><code class="CSharp">case</code></li>
+		<li><code class="CSharp">if</code></li>
+		<li><code class="CSharp">default</code></li>
+		<li><code class="CSharp">switch</code></li>
+		<li><code class="CSharp">else</code></li>
+	</ul>
+</div>
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li><code class="CSharp">case</code></li>
+		<li><code class="CSharp">if</code></li>
+		<li class="right"><code class="CSharp">default</code></li>
+		<li><code class="CSharp">switch</code></li>
+		<li><code class="CSharp">else</code></li>
+	</ul>
+</div>
+</td>
+</tr>
+</table>
+<h3>Question 22</h3>
+<p>You use the <code class="CSharp">Task.Run()</code> method to launch a long-running data processing operation. The data processing operation often fails in times of heavy network congestion. If the data processing operation fails, a second operation must clean up any results of the first operation. You need to ensure that the second operation is invoked only if the data processing operation throws an unhandled exception. What should you do?</p>
+<ol>
+	<li>Create a <code class="CSharp">TaskCompletionSource&lt;T&gt;</code> object and call the <code class="CSharp">TrySetException()</code> method of the object.</li>
+	<li class="right">Create a task by calling the <code class="CSharp">Task.ContinueWith()</code> method.</li>
+	<li>Examine the <code class="CSharp">Task.Status</code> property immediately after the call to the <code class="CSharp">Task.Run()</code> method.</li>
+	<li>Create a task inside the existing <code class="CSharp">Task.Run()</code> method by using the <code class="CSharp">AttachedToParent option.</code></li>
+</ol>
+
+<h3>Question 23</h3>
+<p>You are modifying an application that processes leases. The following code defines the <code class="CSharp">Lease</code> class. Leases are restricted to a maximum term of 5 years. The application must send a notification message if a lease request exceeds 5 years. You need to implement the notification mechanism. Which two actions should you perform?</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+public class Lease
+{
+	<input type="text" class="CSharp" readonly="readonly"/><answerspan>public event MaximumTermReachedHandler OnMaximumTermReached;</answerspan>
+	private int _term;
+	private const int MaximumTerm = 5;
+	private const decimal Rate = 0.034m;
+	
+	public int Term
+	{
+		get
+		{
+			return _term;
+		}
+		set
+		{
+			if (value <= MaximumTerm)
+			{
+				_term = value;
+			}
+			else
+			{
+				<input type="text" class="CSharp" readonly="readonly"/><answerspan>if (OnMaximumTermReached != null)
+					OnMaximumTermReached(this, new EventArgs());</answerspan>
+			}
+		}
+	}
+	
+	public delegate void MaximumTermReachedHandler(object source, EventArgs e);
+</textarea>
+</td>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li class="right"><code class="CSharp">public event MaximumTermReachedHandler OnMaximumTermReached;</code></li>
+		<li><code class="CSharp">public string MaximumTermReachedEvent { get; set; }</code></li>
+		<li><code class="CSharp">private string MaximumTermReachedEvent;</code></li>
+	</ul>
+</div>
+<div class="dropdown">
+	<span class="CSharp" style="white-space: pre;">[code]</span>
+	<ul class="list">
+		<li class="right"><code class="CSharp">if (OnMaximumTermReached != null) OnMaximumTermReached(this, new EventArgs());</code></li>
+		<li><code class="CSharp">value = MaximumTerm;</code></li>
+		<li><code class="CSharp">value = 4;</code></li>
+	</ul>
+</div>
+</td>
+</tr>
+</table>
+
+<h3>Question 24</h3>
+<p>You are developing an application that uses structured exception handling. The application includes a class named <code class="CSharp">ExceptionLogger</code> which implements a method named <code class="CSharp">LogException</code> by using the following code segment:</p>
+<code class="CSharp">public static void LogException(Exception ex)</code>
+<p>
+You have the following requirements:
+<ul>
+	<li>Log all exceptions by using the <code class="CSharp">LogException()</code> method of the <code class="CSharp">ExceptionLogger</code> class.</li>
+	<li>Rethrow the original exception, including the entire exception stack.</li>
+</ul>
+You need to meet the requirements. Which code segment should you use?</p>
+<ol>
+	<li class="right"><code class="CSharp">catch(Exception ex) { ExceptionLogger.LogException(ex); throw; }</code></li>
+	<li><code class="CSharp">catch(Exception ex) { ExceptionLogger.LogException(ex); throw ex; }</code></li>
+	<li><code class="CSharp">catch(Exception ex) { ExceptionLogger.LogException(new Exception()); throw; }</code></li>
+	<li><code class="CSharp">catch { var ex = new Exception(); throw ex; }</code></li>
+</ol>
+
+<h3>Question 25</h3>
+<p>You are developing an application that includes a class named <code class="CSharp">UserTracker</code>. The application includes the following code segment.</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+public delegate void AddUserCallback(int i);
+public class UserTracker
+{
+	List<User> users = new List<User>();
+	public void AddUser(string name, AddUserCallback callback)
+	{
+		users.Add(new User(name));
+		callback(users.Count);
+	}
+}
+
+public class Runner
+{
+	
+	UserTracker tracker = new UserTracker();
+	public void Add(string name)
+	{
+		
+	}
+}
+</textarea>
+</td>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+</tr>
+</table>
+<p> You need to add a user to the <code class="CSharp">UserTracker</code> instance. What should you do?</p>
+<ol>
+	<li>Insert the following code segment at line 14: <code class="CSharp">private static void PrintUserCount(int i) { ... }</code><br/>Insert the following code segment at line 18: <code class="CSharp">AddUserCallback callback = PrintUserCount;</code></li>
+	<li>Insert the following code segment at line 11: <code class="CSharp">delegate void AddUserDelegate(UserTracker userTracker);</code><br/>Insert the following code segment at line 18: <code class="CSharp">AddUserDelegate addDelegate = (userTracker) => { ... }; addDelegate(tracker);</code></li>
+	<li>Insert the following code segment at line 11: <code class="CSharp">delegate void AddUserDelegate(string name, AddUserCallback callback);</code><br/>Insert the following code Segment at line 18: <code class="CSharp">AddUserDelegate adder = (i, callback) => { ... };</code></li>
+	<li class="right">Insert the following code Segment at line 18: <code class="CSharp">tracker.AddUser(name, delegate(int i) => { ... };</code></li>
+</ol>
+
+<h3>Question 26</h3>
+<p>You develop an application that displays information from log files when errors occur. Thea pplication will prompt the user to create an error report that sends details about the error and the session to the administrator. When a user opens a log file by using the application, the application throws an exception and closes. The application must preserve the original stack trace information when an exception occurs during this process. You need to implement the method that reads the log files. How should you complete the relevant code?</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+<input type="text" class="CSharp" readonly="readonly"/><answerspan>using (StreamReader sr = new StreamReader("log.txt")</answerspan>
+{
+	try
+	{
+		string line;
+		
+		while ((line = sr.ReadLine()) != null)
+		{
+			Console.WriteLine(line);
+		}
+	}
+	catch(FileNotFoundException e)
+	{
+		Console.WriteLine(e.ToString());
+		<input type="text" class="CSharp" readonly="readonly"/><answerspan>throw;</answerspan>
+	}
+}
+</textarea>
+</td>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li><code class="CSharp">using (StringReader sr = new StringReader("log.txt")</code></li>
+		<li class="right"><code class="CSharp">using (StreamReader sr = new StreamReader("log.txt")</code></li>
+		<li><code class="CSharp">throw new FileNotFoundException();</code></li>
+		<li><code class="CSharp">throw;</code></li>
+	</ul>
+</div>
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li><code class="CSharp">using (StringReader sr = new StreamReader("log.txt")</code></li>
+		<li><code class="CSharp">using (StreamReader sr = new StreamReader("log.txt")</code></li>
+		<li><code class="CSharp">throw new FileNotFoundException();</code></li>
+		<li class="right"><code class="CSharp">throw;</code></li>
+	</ul>
+</div>
+</td>
+</tr>
+</table>
+
+<h3>Question 27</h3>
+<p>You are developing an application that includes a class named <code class="CSharp">Kiosk</code> which includes a static property named <code class="CSharp">Catalog</code>. You have the following requirements:</p>
+<ul>
+	<li>Initialize the <code class="CSharp">_catalog</code> field to a <code class="CSharp">Catalog</code> instance.</li>
+	<li>Initialize the <code class="CSharp">_catalog</code> field only once.</li>
+	<li>Ensure that the application code acquires a lock only when the <code class="CSharp">_catalog</code> object must be instantiated.</li>
+</ul>
+<p>Which code segments should you insert in sequence?</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+public class Kiosk
+{
+	static object _lock = new object();
+	
+	static Catalog _catalog = null;
+	public static Catalog Catalog
+	{
+		get
+		{
+			<input type="text" class="CSharp" readonly="readonly"/><answerspan>if (_catalog == null)</answerspan>
+				<input type="text" class="CSharp" readonly="readonly"/><answerspan>lock (_lock)</answerspan>
+					<input type="text" class="CSharp" readonly="readonly"/><answerspan>if (_catalog == null)</answerspan>
+						<input type="text" class="CSharp" readonly="readonly"/><answerspan>_catalog = new Catalog();</answerspan>
+			
+			return _catalog;
+		}
+	}
+}	
+</textarea>
+</td>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li><code class="CSharp">if (_catalog != null)</code></li>
+		<li><code class="CSharp">lock (_lock)</code></li>
+		<li><code class="CSharp">_catalog = new Catalog();</code></li>
+		<li class="right"><code class="CSharp">if (_catalog == null)</code></li>
+	</ul>
+</div>
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li><code class="CSharp">if (_catalog != null)</code></li>
+		<li class="right"><code class="CSharp">lock (_lock)</code></li>
+		<li><code class="CSharp">_catalog = new Catalog();</code></li>
+		<li><code class="CSharp">if (_catalog == null)</code></li>
+	</ul>
+</div>
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li><code class="CSharp">if (_catalog != null)</code></li>
+		<li><code class="CSharp">lock (_lock)</code></li>
+		<li><code class="CSharp">_catalog = new Catalog();</code></li>
+		<li class="right"><code class="CSharp">if (_catalog == null)</code></li>
+	</ul>
+</div>
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li><code class="CSharp">if (_catalog != null)</code></li>
+		<li><code class="CSharp">lock (_lock)</code></li>
+		<li class="right"><code class="CSharp">_catalog = new Catalog();</code></li>
+		<li><code class="CSharp">if (_catalog == null)</code></li>
+	</ul>
+</div>
+</td>
+</tr>
+</table>
+ 
+<h3>Question 28</h3>
+<p>
+<p>You are developing an application that will include a method named <code class="CSharp">GetData</code> that will retrieve several lines of data from a web service by using a <code class="CSharp">System.IO.StreamReader</code> object. You have the following requirements:</p>
+<ul>
+	<li>The method must return a string value that contains the first line of the response from the web service.</li>
+	<li>The application must remain responsive while the method runs.</li>
+</ul>
+<p>How should you complete the relevant code?</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+private <input type="text" class="CSharp" readonly="readonly"/><answerspan>async</answerspan>
+	void GetData(WebResponse response)
+{
+	var streamReader = new StreamReader(response.GetResponseStream());
+	
+	urlText.Text = <input type="text" class="CSharp" readonly="readonly"/><answerspan>await</answerspan>
+		streamReader.<input type="text" class="CSharp" readonly="readonly"/><answerspan>ReadLineAsync();</answerspan>
+}
+</textarea>
+</td>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li class="right"><code class="CSharp">async</code></li>
+		<li><code class="CSharp">await</code></li>
+		<li><code class="CSharp">ReadToEndAsync();</code></li>
+		<li><code class="CSharp">ReadLineAsync();</code></li>
+		<li><code class="CSharp">ReadToEnd();</code></li>
+		<li><code class="CSharp">ToString();</code></li>
+		<li><code class="CSharp">ReadLine();</code></li>
+	</ul>
+</div>
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li><code class="CSharp">async</code></li>
+		<li class="right"><code class="CSharp">await</code></li>
+		<li><code class="CSharp">ReadToEndAsync();</code></li>
+		<li><code class="CSharp">ReadLineAsync();</code></li>
+		<li><code class="CSharp">ReadToEnd();</code></li>
+		<li><code class="CSharp">ToString();</code></li>
+		<li><code class="CSharp">ReadLine();</code></li>
+	</ul>
+</div>
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li><code class="CSharp">async</code></li>
+		<li><code class="CSharp">await</code></li>
+		<li><code class="CSharp">ReadToEndAsync();</code></li>
+		<li class="right"><code class="CSharp">ReadLineAsync();</code></li>
+		<li><code class="CSharp">ReadToEnd();</code></li>
+		<li><code class="CSharp">ToString();</code></li>
+		<li><code class="CSharp">ReadLine();</code></li>
+	</ul>
+</div>
+</td>
+</tr>
+</table>
+
+<h3>Question 29</h3>
+<p>You are adding a public method named <code class="CSharp">UpdateScore</code> to a public class named <code class="CSharp">ScoreCard</code>. The code region that updates the score field must meet the following requirements:</p>
+<ul>
+	<li>It must be accessed by only one thread at a time.</li>
+	<li>It must not be vulnerable to a deadlock situation.</li>
+</ul>
+<p>What should you do?</p>
+<ol>
+	<li>Place the code region inside the following statement: <code class="CSharp">lock(this) { ... }</code></li>
+	<li class="right">Add a private object named <code class="CSharp">lockObject</code> to the <code class="CSharp">ScoreCard</code> class and place the code region inside the following statement: <code class="CSharp">lock(lockObject) { ... }</code></li>
+	<li>Apply the following attribute to the method's signature: <code class="CSharp">[MethodImpl(MethodImplOptions.Synchronized)]</code></li>
+	<li>Add a public static object named <code class="CSharp">lockObject</code> to the <code class="CSharp">ScoreCard</code> class and place the code region inside the following statement: <code class="CSharp">lock(typeof(ScoreCard)) { ... }</code></li>
+</ol>
+<p class="tip">The implementation attribute is equivalent to putting a lock on <code class="CSharp">this</code>.</p>
+
+<h3>Question 30</h3>
+<p> You are developing an application that implements a set of custom exception types declared in the following code segment. The application includes a function named <code class="CSharp">DoWork</code> that throws .NET Framework exceptions and custom exceptions. The application contains only the logging methods shown. The application must meet the following requirements:</p>
+<ul>
+	<li>When <code class="CSharp">AdventureWorksValidationException</code> exceptions are caught, log the information by using the <code class="CSharp">static void Log(AdventureWorksValidationException ex)</code> method.</li>
+	<li>When <code class="CSharp">AdventureWorksDbException</code> or other <code class="CSharp">AdventureWorksException</code> exceptions are caught, log the information by using the <code class="CSharp">static void Log(AdventureWorksException ex)</code> method.</li>
+</ul>
+<p>How should you complete the relevant code?</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+public class AdventureWorksException : System.Exception { ... }
+public class AdventureWorksDbException : AdventureWorksException { ... }
+public class AdventureWorksValidationException : AdventureWorksException { ... }
+
+...
+
+static void Log(Exception ex) { ... }
+static void Log(AdventureWorksException ex) { ... }
+static void Log(AdventureWorksValidationException ex) { ... }
+
+...
+
+try
+{
+	DoWork();
+}
+catch<input type="text" class="CSharp" readonly="readonly"/><answerspan>(AdventureWorksValidationException ex)</answerspan>
+{
+	Log(ex);
+}
+catch<input type="text" class="CSharp" readonly="readonly"/><answerspan>(AdventureWorksException ex)</answerspan>
+{
+	Log(ex);
+}
+catch<input type="text" class="CSharp" readonly="readonly"/><answerspan>(Exception ex)</answerspan>
+{
+	Log(ex);
+}
+</textarea>
+</td>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li><code class="CSharp">(Exception ex)</code></li>
+		<li><code class="CSharp">(AdventureWorksException ex)</code></li>
+		<li><code class="CSharp">(AdventureWorksDbException ex)</code></li>
+		<li class="right"><code class="CSharp">(AdventureWorksValidationException ex)</code></li>
+	</ul>
+</div>
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li><code class="CSharp">(Exception ex)</code></li>
+		<li class="right"><code class="CSharp">(AdventureWorksException ex)</code></li>
+		<li><code class="CSharp">(AdventureWorksDbException ex)</code></li>
+		<li><code class="CSharp">(AdventureWorksValidationException ex)</code></li>
+	</ul>
+</div>
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li class="right"><code class="CSharp">(Exception ex)</code></li>
+		<li><code class="CSharp">(AdventureWorksException ex)</code></li>
+		<li><code class="CSharp">(AdventureWorksDbException ex)</code></li>
+		<li><code class="CSharp">(AdventureWorksValidationException ex)</code></li>
+	</ul>
+</div>
+</td>
+</tr>
+</table>
+
+<h3>Question 31</h3>
+<p>You are developing a C# application that has a requirement to validate some string input
+data by using the <code class="CSharp">Regex</code> class. The application includes a method named <code class="CSharp">ContainsHyperlink</code> which will verify the presence of a URI and surrounding markup. The following code segment defines the method. The expression patterns used for each validation function are constant. You need to ensure that the expression syntax is evaluated only once when the <code class="CSharp">Regex</code> object is initially instantiated.  Which code segment should you insert at line 05?</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+bool ContainsHyperlink(string inputData)
+{
+	string regExPattern = "href\\s*=\\s*(?:\"(?<1>[^\"]*)\"|(?<1>\\S+))";
+	
+	<input type="text" class="CSharp" readonly="readonly"/><answerspan>var evaluator = new Regex(regExpattern, Regexoptions.Compiled);</answerspan>
+	
+	return evaluator.IsMatch(inputData);
+}
+</textarea>
+</td>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<div class="dropdown">
+	<span class="CSharp"  style="white-space: pre">[code]</span>
+	<ul class="list">
+		<li><code class="CSharp">var evaluator = new Regex(inputData);</code></li>
+		<li><code class="CSharp">var evaluator = new Regex(regExpattern);</code></li>
+		<li style="white-space: pre"><code class="CSharp">var assemblyName = "Validation";
+var compilationInfo = new RegexCompilationInfo(inputData, RegexOptions.IgnoreCase, "Href", assemblyName, true);
+Regex.CompileToAssembly(new[] { compilationInfo }, new AssemblyName(assemblyName));
+var evaluator = new Regex(regExpattern, RegexOptions.CultureInvariant);</code></li>
+		<li class="right"><code class="CSharp">var evaluator = new Regex(regExpattern, Regexoptions.Compiled);</code></li>
+	</ul>
+</div>
+</td>
+</tr>
+</table>
+<p class="tip">
+Regular expressions are compiled to a high-level sequence of internal instructions (different from Microsoft Intermediate language, or MSIL) interpreted when the engine executes them. With the <code class="CSharp">RegexOptions.Compiled</code> option, regular expressions are explicitily compiled into MSIL code, allowing the.NET Framework's just-in-time (JIT) compiler to convert them to native machine code for higher performance. The generated MSIL however, cannot be unloaded without unloading all of your application's code&mdash;effectively, resources used by a compiled regular expression are never released, even if the <code class="CSharp">Regex</code> object that created it is itself released to garbage collection. You should avoid compiling a large or unbounded number of regular expressions, but if the number is small and they are used repeatedly, they should be compiled for better performance or pre-compile them into a reusable DLL by using the <code class="CSharp">CompileToAssembly</code> method.
+</p>
+
+<h3>Question 32</h3>
+<p>You are developing an application by using C#. You have the following requirements:</p>
+<ul>
+	<li>Support 32-bit and 64-bit system configurations.</li>
+	<li>Include pre-processor directives that are specific to the system configuration.</li>
+	<li>Deploy an application version that includes both system configurations to testers.</li>
+	<li>Ensure that stack traces include accurate line numbers.</li>
+	<li>You need to configure the project to avoid changing individual configuration settings everytime you deploy the application to testers.</li>
+</ul>
+<p> Which two actions should you perform?</p>
+<ol class="plain">
+	<li>Update the platform target and conditional compilation symbols for each application configuration.</li>
+	<li class="right">Create two application configurations based on the default Release configuration.</li>
+	<li>Optimize the application through address rebasing in the 64-bit configuration.</li>
+	<li class="right">Create two application configurations based on the default Debug configuration.</li>
+</ol>
+
+<h3>Question 33</h3>
+<p>You are developing a method named CreateCounters that will create performance counters for an application. The method includes the following code. You need to ensure that <code class="CSharp">Counter1</code> is available for use in Windows Performance Monitor (PerfMon). Which code segment should you insert at line 16? </p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+void CreateCounters()
+{
+	if (!PerformanceCounterCategory.Exists("contoso"))
+	{
+		var counters = new CounterCreationDataCollection();
+		
+		var ccdCounter1 = new CounterCreationData
+		{
+			CounterName = "Counter1";
+			CounterType = PerformanceCounterType.SampleFraction;
+		}
+		
+		counters.Add(ccdCounter1);
+
+		var ccdCounter2 = new CounterCreationData
+		{
+			CounterName = "Counter2";
+			<input type="text" class="CSharp" readonly="readonly"/><answerspan>CounterType = PerformanceCounterType.SampleBase</answerspan>
+		}
+		
+		counters.Add(ccdCounter2);
+
+		PerformanceCounterCategory.Create("Contoso", "Help string",
+			PerformanceCounterCategoryType.MultiInstance, counters);
+}
+</textarea>
+</td>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li><code class="CSharp">CounterType = PerformanccCounterType.RawBase</code></li>
+		<li><code class="CSharp">CounterType = PerformanceCounterType.AverageBase</code></li>
+		<li class="right"><code class="CSharp">CounterType = PerformanceCounterType.SampleBase</code></li>
+		<li><code class="CSharp">CounterType = PerformanceCounterType.CounterMultiBase</code></li>
+	</ul>
+</div></td>
+</tr>
+</table>
+
+<h3>Question 34</h3>
+<p>You are developing an application that will transmit large amounts of data between a client computer and a server. You need to ensure the validity of the data by using a cryptographic hashing algorithm. Which algorithm should you use?</p>
+<ol class="plain">
+	<li class="right">HMACSHA256</li>
+	<li>RNGCryptoServiceProvider</li>
+	<li>DES</li>
+	<li>Aes</li>
+</ol>
+
+<h3>Question 35</h3>
+<p> You are testing an application. The application includes methods named <code class="CSharp">CalculateInterest()</code> and <code class="CSharp">LogLine()</code>. The first method calculates loan interest, and the second sends diagnostic messages to a console window. You have the following requirements:</p>
+<ul>
+	<li>The <code class="CSharp">CalculateInterest()</code> method must run for all build configurations.</li>
+	<li>The <code class="CSharp">LogLine()</code> method must be called only for debug builds.</li>
+</ul>
+<p>You need to ensure that the methods run correctly. How should you complete the relevant code?</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+private static decimal CalculateInterest(decimal loanAmount, int loanTerm, decimal loanRate)
+{
+	decimal interestAmount = loanAmount * loanRate * loanTerm;
+	
+	<input type="text" class="CSharp" readonly="readonly"/><answerspan>#if DEBUG</answerspan>
+	
+	LogLine("Interest Amount : ", interestAmount.ToString("c"));
+	
+	<input type="text" class="CSharp" readonly="readonly"/><answerspan>#endif</answerspan>
+	
+	return interestAmount;
+}
+public static void LogLine(string message, string detail)
+{
+	Console.WriteLine("Log: {0} = {1}", message, detail);
+}
+</textarea>
+</td>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li><code class="CSharp">[Conditional("DEBUG")]</code></li>
+		<li><code class="CSharp">[Conditional("RELEASE")]</code></li>
+		<li><code class="CSharp">#endif</code></li>
+		<li><code class="CSharp">#region DEBUG</code></li>
+		<li class="right"><code class="CSharp">#if DEBUG</code></li>
+	</ul>
+</div>
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li><code class="CSharp">[Conditional("DEBUG")]</code></li>
+		<li><code class="CSharp">[Conditional("RELEASE")]</code></li>
+		<li class="right"><code class="CSharp">#endif</code></li>
+		<li><code class="CSharp">#region DEBUG</code></li>
+		<li><code class="CSharp">#if DEBUG</code></li>
+	</ul>
+</div>
+</td>
+</tr>
+</table>
+<p class="tip">Whereas <code class="CSharp">#if DEBUG-#endif</code> code will not reach the MSIL on release, <code class="CSharp">[Conditional("DEBUG")]</code> code will, but calls to the method will not execute unless DEBUG is on.</p>
+
+<h3>Question 36</h3>
+<p>You are developing an assembly that will be used by multiple applications. You need to install the assembly in the Global Assembly Cache (GAC). Which two actions can you perform to achieve this goal? (Each correct answer presents acomplete solution. Choose two.)</p>
+<ol class="plain">
+	<li>Use the Assembly Registration tool (regasm.exe) to register the assembly and to copy the assembly to the GAC.</li>
+	<li class="right">Use the Strong Name tool (sn.exe) to copy the assembly into the GAC.</li>
+	<li>Use Microsoft Register Server (regsvr32.exe) to add the assembly to the GAC.</li>
+	<li class="right">Use the Global Assembly Cache tool (gacutil.exe) to add the assembly to the GAC.</li>
+	<li>Use Windows Installer 2.0 to add the assembly to the GAC.</li>
+</ol>
+
+<h3>Question 37</h3>
+<p>You are debugging an application that calculates loan interest. The application includes the following code. You need to ensure that the debugger breaks execution within the <code class="CSharp">CalculateInterest()</code> method when the <code class="CSharp">loanAmount</code> variable is less than or equal to zero in all builds of theapplication. What should you do?</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+private static decimal CalculateInterest(decimal loanAmount, int loanTerm, decimal loanRate)
+{
+	
+	decimal interestAmount = loanAmount * loanRate * loanTerm;
+
+	
+	return interestAmount;
+}
+</textarea>
+</td>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+</tr>
+</table>
+<ol>
+	<li class="right">Insert the following code segment at line 03: <code class="CSharp">Trace.Assert(loanAmount &gt; 0);</code></li>
+	<li>Insert the following code segment at line 03: <code class="CSharp">Debug.Assert(loanAmount &gt; 0);</code></li>
+	<li>Insert the following code segment at line 05: <code class="CSharp">Debug.Write(loanAmount &gt; 0);</code></li>
+	<li>Insert the following code segment at line 05: <code class="CSharp">Trace.Write(loanAmount &gt; 0);</code></li>
+</ol>
+
+<h3>Question 38</h3>
+<p>You are developing an application that accepts the input of dates from the user. Users enter the date in their local format. The date entered by the user is stored in a string variable named <code class="CSharp">inputDate</code>. The valid date value must be placed in a <code class="CSharp">DateTime</code> variable named <code class="CSharp">validatedDate</code>. You need to validate the entered date and convert it to Coordinated Universal Time (UTC). The code must not cause an exception to be thrown. Which code segment should you use?</p>
+<ol>
+	<li class="right"><code class="CSharp">bool validDate = DateTime.TryParse(inputDate, CultureInfo.CurrentCulture, DateTimeStyles.AdjustToUniversal, DateTimeStyles.Assumelocal, out validatedDate);</code></li>
+	<li><code class="CSharp">bool validDate = DateTime.TryParse(inputDate, CultureInfo.CurrentCulture, DateTimeStyles.AssumeUniversal, out validatedDate);</code></li>
+	<li><code class="CSharp">bool validDate = true; try { validDate = DateTime.Parse(inputDate); | catch { validDate = false; }</code></li>
+	<li><code class="CSharp">bool validDate = DateTime.ParseExact(inputDate, "g", CultureInfo.CurrentCulture, DateTimeStyles.AdjustToUniversal| DateTimeStyles.AssumeUniversal);</code></li>
+</ol>
+
+<p class="tip"><code class="CSharp">AdjustToUniversal</code> parses and if necessary, converts to UTC. The <code class="CSharp">TryParse</code> method converts the specified string representation of a date and time to its <code class="CSharp">DateTime</code> equivalent using the specified culture  information and formatting style, and returns a value that indicates whether the conversion succeeded.</p>
+
+<h3>Question 39</h3>
+<p> You are developing an application by using C#. The application will process several objects per second. You need to create a performance counter to analyze the object processing. Which three actions should you perform in sequence?</p>
+<table border="0" cellpadding="5" cellspacing="5" id="tbcode" name="tbcode">
+<tr>
+<td valign="top" class="number">1</td>
+<td valign="top">
+	<input type="text" class="CSharp" readonly="readonly"/><answerspan>Create a <b>CounterCreationDataCollection</b> collection. Then create the counters as <b>CounterCreationData</b> object and set necessary properties.</answerspan>
+</td>
+</tr>
+<tr>
+<td valign="top" class="number">2</td>
+<td valign="top">
+	<input type="text" class="CSharp" readonly="readonly"/><answerspan>Add <b>CounterCreationData</b> to the collection by calling the <b>Add()</b> method of the collection.</answerspan>
+</td>
+</tr>
+<tr>
+<td valign="top" class="number">3</td>
+<td valign="top">
+	<input type="text" class="CSharp" readonly="readonly"/><answerspan>Call the <b>Create()</b> method of the <b>PerformanceCounterCategory</b> and pass the collection to the method.</answerspan>
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<div class="dropdown">
+	<span class="Text">[Action]</span>
+	<ul class="list">
+		<li>Add <b>CounterCreationData</b> to the collection by calling
+		the <b>Add()</b> method of the collection.</li>
+		<li>Call the <b>Create()</b> method of the <b>PerformanceCounterCategory</b> and pass the collection to the method.</li>
+		<li class="right">Create a <b>CounterCreationDataCollection</b> collection. Then create the counters as <b>CounterCreationData</b> object and set necessary properties.</li>
+		<li>Create a <b>PerformanceCounterPermissionEntryCollection</b>.</li>
+		<li>Get the CategoryName property of a <b>PerformanceCounterPermissionEntry class</b>.</li>
+	</ul>
+</div>
+<div class="dropdown">
+	<span class="Text">[Action]</span>
+	<ul class="list">
+		<li class="right">Add <b>CounterCreationData</b> to the collection by calling
+		the <b>Add()</b> method of the collection.</li>
+		<li>Call the <b>Create()</b> method of the <b>PerformanceCounterCategory</b> and pass the collection to the method.</li>
+		<li>Create a <b>CounterCreationDataCollection</b> collection. Then create the counters as <b>CounterCreationData</b> object and set necessary properties.</li>
+		<li>Create a <b>PerformanceCounterPermissionEntryCollection</b>.</li>
+		<li>Get the CategoryName property of a <b>PerformanceCounterPermissionEntry class</b>.</li>
+	</ul>
+</div>
+<div class="dropdown">
+	<span class="Text">[Action]</span>
+	<ul class="list">
+		<li>Add <b>CounterCreationData</b> to the collection by calling
+		the <b>Add()</b> method of the collection.</li>
+		<li class="right">Call the <b>Create()</b> method of the <b>PerformanceCounterCategory</b> and pass the collection to the method.</li>
+		<li>Create a <b>CounterCreationDataCollection</b> collection. Then create the counters as <b>CounterCreationData</b> object and set necessary properties.</li>
+		<li>Create a <b>PerformanceCounterPermissionEntryCollection</b>.</li>
+		<li>Get the CategoryName property of a <b>PerformanceCounterPermissionEntry class</b>.</li>
+	</ul>
+</div>
+</td>
+</tr>
+</table>
+
+<h3>Question 40</h3>
+<p>You are developing an application by using C#. You provide a public key to the development team during development. You need to specify that the assembly is not fully signed when it is built. Which two assembly attributes should you include in the source code?</p>
+<ol>
+	<li><code class="CSharp">AssemblyKeyNameAttribute</code></li>
+	<li><code class="CSharp">ObfuscateAssemblyAttribute</code></li>
+	<li class="right"><code class="CSharp">AssemblyDelaySignAttribute</code></li>
+	<li class="right"><code class="CSharp">AssemblyKeyFileAttribute</code></li>
+</ol>
+<p class="tip"><code class="CSharp">AssemblyDelaySignAttribute</code> specifies that the assembly is not fully signed when created. The following code example shows how to use it with the <code class="CSharp">AssemblyKeyFileAttribute</code>:
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode" class="tip">
+<tr>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+using System;
+using System.Reflection;
+
+[assembly:AssemblyKeyFileAttribute("TestPublicKey.snk")]
+[assembly:AssemblyDelaySignAttribute(true)]
+namespace DelaySign
+{
+	public class Test { }
+}
+</textarea>
+</td>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+</tr>
+</table>
+</p>
+
+<h3>Question 41 == 27</h3>
+<p>You are developing an application that includes a class named <code class="CSharp">Inventory</code> which includes a static property named <code class="CSharp">Inventory</code>. You have the following requirements:</p>
+<ul>
+	<li>Initialize the <code class="CSharp">_inventory</code> field to an <code class="CSharp">Inventory</code> instance.</li>
+	<li>Initialize the <code class="CSharp">_inventory</code> field only once.</li>
+	<li>Ensure that the application code acquires a lock only when the <code class="CSharp">_inventory</code> object must be instantiated.</li>
+</ul>
+<p>Which code segments should you insert in sequence?</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+public class Warehouse
+{
+	static object _lock = new object();
+	
+	static Inventory _inventory = null;
+	public static Inventory Inventory
+	{
+		get
+		{
+			<input type="text" class="CSharp" readonly="readonly"/><answerspan>if (_inventory == null)</answerspan>
+				<input type="text" class="CSharp" readonly="readonly"/><answerspan>lock (_lock)</answerspan>
+					<input type="text" class="CSharp" readonly="readonly"/><answerspan>if (_inventory == null)</answerspan>
+						<input type="text" class="CSharp" readonly="readonly"/><answerspan>_inventory = new Inventory();</answerspan>
+			
+			return _inventory;
+		}
+	}
+}	
+</textarea>
+</td>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li><code class="CSharp">if (_inventory != null)</code></li>
+		<li><code class="CSharp">lock (_lock)</code></li>
+		<li><code class="CSharp">_inventory = new Inventory();</code></li>
+		<li class="right"><code class="CSharp">if (_inventory == null)</code></li>
+	</ul>
+</div>
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li><code class="CSharp">if (_inventory != null)</code></li>
+		<li class="right"><code class="CSharp">lock (_lock)</code></li>
+		<li><code class="CSharp">_inventory = new Inventory();</code></li>
+		<li><code class="CSharp">if (_inventory == null)</code></li>
+	</ul>
+</div>
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li><code class="CSharp">if (_inventory != null)</code></li>
+		<li><code class="CSharp">lock (_lock)</code></li>
+		<li><code class="CSharp">_inventory = new Inventory();</code></li>
+		<li class="right"><code class="CSharp">if (_inventory == null)</code></li>
+	</ul>
+</div>
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li><code class="CSharp">if (_inventory != null)</code></li>
+		<li><code class="CSharp">lock (_lock)</code></li>
+		<li class="right"><code class="CSharp">_inventory = new Inventory();</code></li>
+		<li><code class="CSharp">if (_inventory == null)</code></li>
+	</ul>
+</div>
+</td>
+</tr>
+</table>
+
+<h3>Question 42 == 29</h3>
+<p>You are adding a public method named <code class="CSharp">UpdateGrade</code> to a public class named <code class="CSharp">ReportCard</code>. The code region that updates the score field must meet the following requirements:</p>
+<ul>
+	<li>It must be accessed by only one thread at a time.</li>
+	<li>It must not be vulnerable to a deadlock situation.</li>
+</ul>
+<p>What should you do?</p>
+<ol>
+	<li>Place the code region inside the following statement: <code class="CSharp">lock(this) { ... }</code></li>
+	<li>Apply the following attribute to the method's signature: <code class="CSharp">[MethodImpl(MethodImplOptions.Synchronized)]</code></li>
+	<li>Add a public static object named <code class="CSharp">lockObject</code> to the <code class="CSharp">ReportCard</code> class and place the code region inside the following statement: <code class="CSharp">lock(typeof(ReportCard)) { ... }</code></li>
+	<li class="right">Add a private object named <code class="CSharp">lockObject</code> to the <code class="CSharp">ReportCard</code> class and place the code region inside the following statement: <code class="CSharp">lock(lockObject) { ... }</code></li>
+</ol>
+
+<h3>Question 43 == 25</h3>
+<p>You are developing an application that includes a class named <code class="CSharp">BookTracker</code>. The application includes the following code segment.</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+public delegate void AddBookCallback(int i);
+public class BookTracker
+{
+	List<Book> users = new List<Book>();
+	public void AddBook(string name, AddBookCallback callback)
+	{
+		users.Add(new Book(name));
+		callback(users.Count);
+	}
+}
+
+public class Runner
+{
+	
+	BookTracker tracker = new BookTracker();
+	public void Add(string name)
+	{
+		
+	}
+}
+</textarea>
+</td>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+</tr>
+</table>
+<p> You need to add a user to the <code class="CSharp">BookTracker</code> instance. What should you do?</p>
+<ol>
+	<li>Insert the following code segment at line 14: <code class="CSharp">private static void PrintBookCount(int i) { ... }</code><br/>Insert the following code segment at line 18: <code class="CSharp">AddBookCallback callback = PrintBookCount;</code></li>
+	<li class="right">Insert the following code Segment at line 18: <code class="CSharp">tracker.AddBook(name, delegate(int i) => { ... };</code></li>
+	<li>Insert the following code segment at line 11: <code class="CSharp">delegate void AddBookDelegate(string name, AddBookCallback callback);</code><br/>Insert the following code Segment at line 18: <code class="CSharp">AddBookDelegate adder = (i, callback) => { ... };</code></li>
+	<li>Insert the following code segment at line 11: <code class="CSharp">delegate void AddBookDelegate(BookTracker userTracker);</code><br/>Insert the following code segment at line 18: <code class="CSharp">AddBookDelegate addDelegate = (userTracker) => { ... }; addDelegate(tracker);</code></li>
+</ol>
+
+<h3>Question 44</h3>
+<p>You are implementing a method that creates an instance of a class named <code class="CSharp">User</code> which contains a public event named <code class="CSharp">Renamed</code>, defined in the following code segment. You need to create an event handler for the event by using a lambda expression. How should you complete the relevant code?</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+Public event EventHandler&lt;RenameEventArgs&gt; Renamed;
+...
+List<User> users = new List<User>();
+
+public void AddUser(string name)
+{
+	User user = new User(name);
+	
+	<input type="text" class="CSharp" readonly="readonly"/><answerspan>user.Renamed += (sender, e) =></answerspan>
+	{
+		Log("User {0} was renamed to {1}", e.Oldname, e.Name);
+	};
+	
+	<input type="text" class="CSharp" readonly="readonly"/><answerspan>users.Add(user);</answerspan>
+}
+</textarea>
+</td>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li><code class="CSharp">user.Renamed -= delegate(object sender, RenamedEventArgs e) =></code></li>
+		<li><code class="CSharp">user.Renamed -= (sender, e) =></code></li>
+		<li><code class="CSharp">user.Renamed += delegate(object sender, RenamedEventArgs e) =></code></li>
+		<li class="right"><code class="CSharp">user.Renamed += (sender, e) =></code></li>
+		<li><code class="CSharp">users[0] = user;</code></li>
+		<li><code class="CSharp">users.Add(user);</code></li>
+		<li><code class="CSharp">users.Insert(user);</code></li>
+	</ul>
+</div>
+<div class="dropdown">
+	<span class="CSharp">[code]</span>
+	<ul class="list">
+		<li><code class="CSharp">user.Renamed -= delegate(object sender, RenamedEventArgs e) =></code></li>
+		<li><code class="CSharp">user.Renamed -= (sender, e) =></code></li>
+		<li><code class="CSharp">user.Renamed += delegate(object sender, RenamedEventArgs e) =></code></li>
+		<li><code class="CSharp">user.Renamed += (sender, e) =></code></li>
+		<li><code class="CSharp">users[0] = user;</code></li>
+		<li class="right"><code class="CSharp">users.Add(user);</code></li>
+		<li><code class="CSharp">users.Insert(user);</code></li>
+	</ul>
+</div>
+</td>
+</tr>
+</table>
+
+<h3>Question 45</h3>
+<p>You are creating a console application by using C#. You need to access the assembly found in the file named <b>car.dll</b>. Which code segment should you use?</p>
+<ol>
+	<li><code class="CSharp">Assembly.Load();</code></li>
+	<li><code class="CSharp">Assembly.GetExecutingAssembly();</code></li>
+	<li><code class="CSharp">this.GetType();</code></li>
+	<li class="right"><code class="CSharp">Assembly.LoadFile("car.dll");</code></li>
+</ol>
+
+<h3>Question 46</h3>
+<p>An application includes a class named <code class="CSharp">Person</code>. The Person class includes a method named <code class="CSharp">GetData</code>. You need to ensure that the GetData() method can be used only by the <code class="CSharp">Person</code> class and not by any class derived from it. Which access modifier should you use for the <code class="CSharp">GetData()</code> method?</p>
+<ol>
+	<li><code class="CSharp">public</code></li>
+	<li><code class="CSharp">protected internal</code></li>
+	<li><code class="CSharp">internal</code></li>
+	<li class="right"><code class="CSharp">private</code></li>
+	<li><code class="CSharp">protected</code></li>
+</ol>
+
+<h3>Question 47</h3>
+<p>You are creating an application that manages information about your company’s products. The application includes a class named <code class="CSharp">Product</code> and a method named <code class="CSharp">Save()</code>. The method must be strongly typed, it must allow only types inherited from the <code class="CSharp">Product</code> class that use a constructor that accepts no parameters. You need to implement the method. Which code segment should you use?</p>
+<ol>
+	<li><code class="CSharp">public static void Save(Product target) { ... }</code></li>
+	<li><code class="CSharp">public static void Save<T>(T target) where T: new(), Product { ... }</code></li>
+	<li><code class="CSharp">public static void Save<T>(T target) where T: Product { ... }</code></li>
+	<li class="right"><code class="CSharp">public static void Save<T>(T target) where T: Product, new() { ... }</code></li>
+</ol>
+
+<h3>Question 48</h3>
+<p> You are developing an application by using C#. The application will output the text string "First Line" followed by the text string "Second Line".You need to ensure that an empty line separates the text strings. Which four code segments should you use in sequence?</p>
+<img src="../sitebuilderpictures/70483/64.jpg">
+<p>
+Box 1: First we create the StringBuilder variable.<br>
+Box 2: We append the first text line.<br>
+Box 3: We append add a blank line--the StringBuilder.AppendLine method appends the default line terminator to the end of the current StringBuilder object.<br>
+Box 4: Finally we append the second line.
+</p>
+<h3>Question 49</h3>
+<p>You are developing an application. The application includes classes named Mammal and Animal and an interface named IAnimal. The Mammal class must meet the following requirements:</p>
+<ul>
+	<li>It must either inherit from the Animal class or implement the IAnimal interface.</li>
+	<li>It must be inheritable by other classes in the application.</li>
+</ul>
+<p>You need to ensure that the Mammal class meets the requirements. Which two code segments can you use to achieve this goal?</p>
+<img src="../sitebuilderpictures/70483/69.jpg">
+<ol>
+	<li class="right">Option A</li>
+	<li>Option B</li>
+	<li class="right">Option C</li>
+	<li>Option D</li>
+</ol>
+
+<h3>Question 50</h3>
+<p>You are developing a class named ExtensionMethods. You need to ensure that the ExtensionMethods class implements the IsEmail() extensionmethod on string objects. How should you complete the relevant code?</p>
+<img src="../sitebuilderpictures/70483/71.jpg">
+
+<h3>Question 51</h3>
+<p>You are developing an application by using C#. The application includes the following code segment.</p>
+<img src="../sitebuilderpictures/70483/72.jpg">
+<p> The DoWork() method must throw an InvalidCastException exception if the obj object is not of type IDataContainer when accessing the Data property. You need to meet the requirements. Which code segment should you insert at line 07?</p>
+<ol>
+	<li class="right">var dataContainer = (IDataContainer) obj;</li>
+	<li>var dataContainer = obj as IDataContamer;</li>
+	<li>var dataContainer = obj is IDataContainer;</li>
+	<li>dynamic dataContainer = obj;</li>
+</ol>
+
+<h3>Question 52</h3>
+<p>An application receives JSON data in the following format:</p>
+<img src="../sitebuilderpictures/70483/73.jpg">
+<p> The application includes the following code segment.</p>
+<img src="../sitebuilderpictures/70483/74.jpg">
+<p> You need to ensure that the ConvertToName() method returns the JSON input string as a Name object. Which code segment should you insert at line 10?</p>
+<ol>
+	<li>Return ser.Desenalize (json, typeof(Name));</li>
+	<li>Return ser.ConvertToType&lt;Name&gt;(json);</li>
+	<li class="right">Return ser.Deserialize&lt;Name&gt;(json);</li>
+	<li>Return ser.ConvertToType (json, typeof (Name));</li>
+</ol>
+
+<h3>Question 53</h3>
+<p>You are developing an application that includes the following code segment.</p>
+<img src="../sitebuilderpictures/70483/75.jpg">
+<p> The GetCustomers() method must meet the following requirements:</p>
+<ul>
+	<li>Connect to a Microsoft SQL Server database.</li>
+	<li>Populate Customer objects with data from the database.</li>
+	<li>Return an IEnumerable&lt;Customer&gt; collection that contains the populated Customer objects.</li>
+	<li></li>
+</ul>
+<p>You need to meet the requirements. Which two actions should you perform? </p>
+<ol>
+	<li>Insert the following code segment at line 17: while (sqlDataReader.GetValues())</li>
+	<li class="right">Insert the following code segment at line 14: sqlConnection.Open();</li>
+	<li>Insert the following code segment at line 14: sqlConnection.BeginTransaction();</li>
+	<li class="right">Insert the following code segment at line 17: while (sqlDataReader.Read())</li>
+	<li>Insert the following code segment at line 17: while (sqlDataReader.NextResult())</li>
+</ol>
+<p>The SqlConnection.Open method opens a database connection with the property settings specified by the ConnectionString. The SqlDataReader.Read method Advances the SqlDataReader to the next record. The value is true if there are more rows; otherwise false.</p>
+
+<h3>Question 54</h3>
+<p> You are developing an application that includes a class named Customer. The application will output the Customer class as a structured XML document by using thefollowing code segment:</p>
+<img src="../sitebuilderpictures/70483/76.jpg">
+<p> You need to ensure that the Customer class will serialize to XML. How should you complete the relevant code?</p>
+<img src="../sitebuilderpictures/70483/78.jpg">
+
+<h3>Question 55</h3>
+<p>An application will upload data by using HTML form-based encoding. The application uses a method named SendMessage. The SendMessage() method includes the following code.</p>
+<img src="../sitebuilderpictures/70483/79.jpg">
+<p> The receiving URL accepts parameters as form-encoded values. You need to send the values intA and intB as form-encoded values named a and b,respectively. Which code segment should you insert at line 04?</p>
+<img src="../sitebuilderpictures/70483/80.jpg">
+<ol>
+	<li>Option A</li>
+	<li>Option B</li>
+	<li>Option C</li>
+	<li class="right">Option D</li>
+</ol>
+<h3>Question 56</h3>
+<p>You are developing an application. The application converts a Location object to a string by using a method named WriteObject. The WriteObject() method accepts two parameters, a Location object and an XmlObjectSerializer object. The application includes the following code.</p>
+<img src="../sitebuilderpictures/70483/81.jpg">
+<p> You need to serialize the Location object as XML. Which code segment should you insert at line 20? </p>
+<ol>
+	<li>New XmlSerializer(typeof(Location))</li>
+	<li>New NetDataContractSerializer()</li>
+	<li>New DataContractJsonSerializer (typeof (Location))</li>
+	<li class="right">New DataContractSerializer(typeof(Location))</li>
+</ol>
+
+<h3>Question 57</h3>
+<p>You are developing an application that includes a class named Order. The application will store a collection of Order objects. The collection must meet the following requirements:</p>
+<ul>
+	<li>Internally store a key and a value for each collection item.</li>
+	<li>Provide objects to iterators in ascending order based on the key.</li>
+	<li>Ensure that item are accessible by zero-based index or by key.</li>
+</ul>
+<p>You need to use a collection type that meets the requirements. Which collection type should you use? </p>
+<ol>
+	<li>LinkedList</li>
+	<li>Queue</li>
+	<li>Array</li>
+	<li>HashTable</li>
+	<li class="right">SortedList</li>
+</ol>
+
+<h3>Question 58</h3>
+<p>You are developing an application that includes the following code segment.</p>
+<img src="../sitebuilderpictures/70483/82.jpg">
+<p>You need to ensure that the application accepts only integer input and prompts the user each time non-integer input is entered. Which code segment should you add at line 19? </p>
+<ol>
+	<li class="right">If (!int.TryParse(sLine, out number))</li>
+	<li>If ((number = Int32.Parse(sLine)) = = Single.NaN)</li>
+	<li>If ((number = int.Parse (sLine)) &gt; Int32.MaxValue)</li>
+	<li>If (Int32.TryParse(sLine, out number))</li>
+</ol>
+
+<h3>Question 59</h3>
+<p>You are debugging an application that calculates loan interest. The application includes the following code.</p>
+<img src="../sitebuilderpictures/70483/83.jpg">
+<p>You have the following requirements:</p>
+<ul>
+	<li>The debugger must break execution within the Calculatelnterest() method when the loanAmount variable is less than or equal to zero.</li>
+	<li>The release version of the code must not be impacted by any changes.</li>
+</ul>
+<p>You need to meet the requirements. What should you do?</p>
+<ol>
+	<li>Insert the following code segment at tine 05: Debug.Write(loanAmount &gt; 0);</li>
+	<li>Insert the following code segment at line 05: Trace.Write(loanAmount &gt; 0);</li>
+	<li class="right">Insert the following code segment at line 03: Debug.Assert(loanAmount &gt; 0);</li>
+	<li>Insert the following code segment at line 03: Trace.Assert(loanAmount &gt; 0);</li>
+</ol>
+
+<h3>Question 60</h3>
+<p>You are developing an application that will process orders. The debug and release versions of the application will display different logo images. You need to ensure that the correct image path is set based on the build configuration. Which code segment should you use?</p>
+<img src="../sitebuilderpictures/70483/84.jpg">
+<ol>
+	<li>Option A</li>
+	<li>Option B</li>
+	<li class="right">Option C</li>
+	<li>Option D</li>
+</ol>
+
+<h3>Question 61</h3>
+<p>You are testing an application. The application includes methods named CalculateInterest aid LogLine. The CalculateInterest () method calculates loan interest. The LogLine() method sends diagnostic messages to a console window. The following code implements the methods.</p>
+<img src="../sitebuilderpictures/70483/85.jpg">
+<p>You have the following requirements:</p>
+<ul>
+	<li>The Calculatelnterest() method must run for all build configurations.</li>
+	<li>The LogLine() method must run only for debug builds.</li>
+</ul>
+<p>You need to ensure that the methods run correctly. What are two possible ways to achieve this goal?</p>
+<ol>
+	<li>Insert the following code segment at line 01: #region DEBUG Insert the following code segment at line 10: #endregion</li>
+	<li class="right">Insert the following code segment at line 10: [Conditional(MDEBUG")]</li>
+	<li>Insert the following code segment at line 05: #region DEBUG Insert the following code segment at line 07: #endregion</li>
+	<li>Insert the following code segment at line 01: #if DE30G Insert the following code segment at line 10: #endif</li>
+	<li>Insert the following code segment at line 01: [Conditional(MDEBUG")]</li>
+	<li class="right">Insert the following code segment at line 05: #if DEBUG; Insert the following code segment at line 07: #endif</li>
+	<li>Insert the following code segment at line 10: [Conditional("RELEASE")]</li>
+</ol>
+
+<h3>Question 62</h3>
+<p>You are developing a method named CreateCounters that will create performance counters for an application. The method includes the following code.</p>
+<img src="../sitebuilderpictures/70483/86.jpg">
+<p>You need to ensure that Counter2 is available for use in Windows Performance Monitor (PerfMon). Which code segment should you insert at line 16?</p>
+<ol>
+	<li>CounterType = PerformanccCounterType.RawBase</li>
+	<li>CounterType = PerformanceCounterType.AverageBase</li>
+	<li>CounterType = PerformanceCounterType.SampleBase</li>
+	<li class="right">CounterType = PerformanceCounterType.CounterMultiBase</li>
+</ol>
+
+<h3>Question 63</h3>
+<p>You are developing an application that will transmit large amounts of data between a client computer and a server. You need to ensure the validity of the data by using a cryptographic hashing algorithm. Which algorithm should you use?</p>
+<ol>
+	<li>ECDsa</li>
+	<li>RNGCryptoServiceProvider</li>
+	<li>Rfc2898DeriveBytes</li>
+	<li class="right">HMACSHA512</li>
+</ol>
+
+<h3>Question 64</h3>
+<p>You are developing an application by using C#. The application includes an object that performs a long running process. You need to ensure that the garbage collector does not release the object’s resources until the process completes. Which garbage collector method should you use?</p>
+<ol>
+	<li>WaitForFullGCComplete()</li>
+	<li class="right">SuppressFinalize()</li>
+	<li>collect()</li>
+	<li>RemoveMemoryPressure()</li>
+</ol>
+
+<h3>Question 65</h3>
+<p>You are implementing a method named FloorTemperature that performs conversions between value types and reference types. The following code segment implements the method.</p>
+<img src="../sitebuilderpictures/70483/87.jpg">
+<p>You need to ensure that the application does not throw exceptions on invalid conversions. Which code segment should you insert at line 04?</p>
+<ol>
+	<li>int result = (int)degreesRef;</li>
+	<li>int result = (int)(double)degreesRef;</li>
+	<li>int result = degreesRef;</li>
+	<li class="right">int result = (int)(float)degreesRef;</li>
+</ol>
+
+<h3>Question 66</h3>
+<p>You are developing an application that implements a set of custom exception types. You declare the custom exception types by using the following code segments:</p>
+<img src="../sitebuilderpictures/70483/88.jpg">
+<p>The application includes a function named DoWork that throws .NET Framework exceptions and custom exceptions. The application contains only the following logging methods:</p>
+<img src="../sitebuilderpictures/70483/89.jpg">
+<p>The application must meet the following requirements:</p>
+<ul>
+	<li>When ContosoValidationException exceptions are caught, log the information by using the static void Log (ContosoValidationException ex) method.</li>
+	<li>When ContosoDbException or other ContosoException exceptions are caught, log the information by using the static void Log(ContosoException ex) method.</li>
+</ul>
+<p>You need to meet the requirements. How should you complete the relevant code?</p>
+<img src="../sitebuilderpictures/70483/91.jpg">
+
+<h3>Question 67</h3>
+<p>You are developing an application that uses structured exception handling. The application includes a class named Logger. The Logger class implements a method named Log by using the following code segment:</p>
+<p><code>public static void Log(Exception ex) { }</code></p>
+<p>You have the following requirements:</p>
+<ul>
+	<li>Log all exceptions by using the Log() method of the Logger class.</li>
+	<li>Rethrow the original exception, including the entire exception stack.</li>
+</ul>
+<p>You need to meet the requirements. Which code segment should you use?</p>
+<img src="../sitebuilderpictures/70483/92.jpg">
+<ol>
+	<li>Option A</li>
+	<li>Option B</li>
+	<li>Option C</li>
+	<li class="right">Option D</li>
+</ol>
+
+<h3>Question 68</h3>
+<p>You are developing an application that will include a method named GetData. The GetData() method will retrieve several lines of data from a web service by using a System.IO.StreamReader object. You have the following requirements:</p>
+<ul>
+	<li>The GetData() method must return a string value that contains the entire response from the web service.</li>
+	<li>The application must remain responsive while the GetData() method runs.</li>
+</ul>
+<p>You need to implement the GetData() method. How should you complete the relevant code?</p>
+<img src="../sitebuilderpictures/70483/94.jpg">
+
+<h3>Question 69</h3>
+<p>You are developing an application that includes a class named BookTracker for tracking library books. The application includes the following code segment.</p>
+<img src="../sitebuilderpictures/70483/95.jpg">
+<p>You need to add a book to the BookTracker instance. What should you do?</p>
+<img src="../sitebuilderpictures/70483/96.jpg">
+<ol>
+	<li class="right">Option A</li>
+	<li>Option B</li>
+	<li>Option C</li>
+	<li>Option D</li>
+</ol>
+
+<h3>Question 70</h3>
+<p>You are developing an application by using G#. You provide a public key to the development team during development. You need to specify that the assembly is not fully signed when it is built. Which two assembly attributes should you include in the source code?</p>
+<ol>
+	<li>AssemblyFlagsAttribute</li>
+	<li class="right">AssemblyKeyFileAttribute</li>
+	<li>AssemblyConfigurationAttribute</li>
+	<li class="right">AssemblyDelaySignAttribute</li>
+</ol>
+
+<h3>Question 71</h3>
+<p>You are developing an application that uses the Microsoft ADO.NET Entity Framework to retrieve order information from a Microsoft SQL Server database. The application includes the following code.</p>
+<img src="../sitebuilderpictures/70483/97.jpg">
+<p>The application must meet the following requirements:</p>
+<ul>
+	<li>Return only orders that have an OrderDate value other than null.</li>
+	<li>Return only orders that were placed in the year specified in the year parameter.</li>
+</ul>
+<p>You need to ensure that the application meets the requirements. Which code segment should you insert at line 08?</p>
+<img src="../sitebuilderpictures/70483/98.jpg">
+<ol>
+	<li>Option A</li>
+	<li class="right">Option B</li>
+	<li>Option C</li>
+	<li>Option D</li>
+</ol>
+
+<h3>Question 72 == 47</h3>
+
+<h3>Question 73</h3>
+<p>You are creating a class named Employee. The class exposes a string property named EmployeeType. The following code segment defines the Employee class.</p>
+<img src="../sitebuilderpictures/70483/100.jpg">
+<p>The EmployeeType property value must meet the following requirements:</p>
+<ul>
+	<li>The value must be accessed only by code within the Employee class or within a class derived from the Employee class.</li>
+	<li>The value must be modified only by code within the Employee class.</li>
+</ul>
+<p>You need to ensure that the implementation of the EmployeeType property meets the requirements. Which two actions should you perform?</p>
+<ol>
+	<li>Replace line 03 with the following code segment: public string EmployeeType</li>
+	<li>Replace line 06 with the following code segment: protected set;</li>
+	<li>Replace line 05 with the following code segment: private get;</li>
+	<li>Replace line 05 with the following code segment: protected get;</li>
+	<li class="right">Replace line 03 with the following code segment: protected string EmployeeType</li>
+	<li class="right">Replace line 06 with the following code segment: private set;</li>
+</ol>
+
+<h3>Question 74</h3>
+<p>You are developing an application by using C#. The application includes an object that performs a long running process. You need to ensure that the garbage collector does not release the object’s resources until the process completes. Which garbage collector method should you use?</p>
+<ol>
+	<li>RemoveMemoryPressure()</li>
+	<li>ReRegisterForFinalize()</li>
+	<li>WaitForFullGCComplete()</li>
+	<li class="right">KeepAlive()</li>
+</ol>
+
+<h3>Question 75</h3>
+<p>You are developing an application by using C#. The application will process several objects per second. You need to create a performance counter to analyze the object processing. Which three actions should you perform in sequence?</p>
+<p>
+<img src="../sitebuilderpictures/70483/102.jpg"><br>
+<img src="../sitebuilderpictures/70483/103.jpg"><br>
+<img src="../sitebuilderpictures/70483/104.jpg">
+</p>
+
+<h3>Question 76</h3>
+<p>You are developing an application. The application calls a method that returns an array of integers named customerIds. You define an integer variable named customerIdToRemove and assign a value to it. You declare an array named filteredCustomerIds. You have the following requirements:</p>
+<ul>
+	<li>Remove duplicate integers from the customerIds array.</li>
+	<li>Sort the array in order from the highest value to the lowest value.</li>
+	<li>Remove the integer value stored in the customerIdToRemove variable from the customerIds array.</li>
+</ul>
+<p>You need to create a LINQ query to meet the requirements. Which code segment should you use?</p>
+<img src="../sitebuilderpictures/70483/105.jpg">
+<ol>
+	<li>Option A</li>
+	<li>Option B</li>
+	<li class="right">Option C</li>
+	<li>Option D</li>
+</ol>
+
+<h3>Question 77</h3>
+<p>You are developing a C# application that includes a class named Product. The following code segment defines the Product class:</p>
+<img src="../sitebuilderpictures/70483/106.jpg">
+<p>You implement System.ComponentModel.DataAnnotations.IValidateableObject interface to provide a way to validate the Product object. The Product object has the following requirements:</p>
+<ul>
+	<li>The Id property must have a value greater than zero.</li>
+	<li>The Name property must have a value other than empty or null.</li>
+</ul>
+<p>You need to validate the Product object. Which code segment should you use?</p>
+<img src="../sitebuilderpictures/70483/107.jpg">
+<ol>
+	<li>Option A</li>
+	<li class="right">Option B</li>
+	<li>Option C</li>
+	<li>Option D</li>
+</ol>
+
+<h3>Question 78</h3>
+<p>You have the following class:</p>
+<img src="../sitebuilderpictures/70483/108.jpg">
+<p>You need to implement IEquatable. The Equals method must return true if both ID and Name are set to the identical values. Otherwise, the method must return false. Equals must not throw an exception. What should you do?</p>
+<img src="../sitebuilderpictures/70483/110.jpg"><br>
+<img src="../sitebuilderpictures/70483/111.jpg"><br>
+<img src="../sitebuilderpictures/70483/112.jpg">
+
+<h3>Question 79</h3>
+<p>You are reviewing the following code:</p>
+<img src="../sitebuilderpictures/70483/113.jpg">
+<p>For each of the following statements, select Yes if the statement is true. Otherwise, select No.</p>
+<img src="../sitebuilderpictures/70483/115.jpg">
+
+<h3>Question 80</h3>
+<p>You have the following code:<br>
+<img src="../sitebuilderpictures/70483/116.jpg">
+<p>To answer, complete each statement according to the information presented in the code.</p>
+<img src="../sitebuilderpictures/70483/118.jpg">
+
+<h3>Question 81</h3>
+<p>You have the following code:<br>
+<img src="../sitebuilderpictures/70483/119.jpg">
+<p>For each of the following statements, select Yes if the statement is true. Otherwise, select No.</p>
+<img src="../sitebuilderpictures/70483/121.jpg">
+<ul>
+	<li>The System.Runtime.Serialization namespace contains classes that can be used for serializing and deserializing objects. Serialization is the process of converting an object or a graph of objects into a linear sequence of bytes for either storage or transmission to another location. Deserialization is the process of taking in stored information and recreating objects from it.</li>
+	<li>The DataMemberAttribute.EmitDefaultValue Property gets or sets a value that specifies whether to serialize the default value for a field or property being serialized; true if the default value for a member should be generated in the serialization stream; otherwise, false.</li>
+</ul>
+
+<h3>Question 82</h3>
+<p>You have a method named GetCustomerIDs that returns a list of integers. Each entry in the list represents a customer ID that is retrieved from a list named Customers. The Customers list contains 1,000 rows. Another developer creates a method named ValidateCustomer that accepts an integer parameter and returns a Boolean value. ValidateCustomer returns true if the integer provided references a valid customer. ValidateCustomer can take up to one second to run. You need to create a method that returns a list of valid customer IDs. The code must execute in the shortest amount of time. What should you do?</p>
+<img src="../sitebuilderpictures/70483/123.jpg"><br>
+<img src="../sitebuilderpictures/70483/124.jpg">
+<p>ParallelEnumerable.AsParallel Method Enables parallelization of a query. We parallelize the exution of the ValidateCustomer instances.</p>
+
+<h3>Question 83</h3>
+<p>You are creating a class named Game. The Game class must meet the following requirements:</p>
+<ul>
+	<li>Include a member that represents the score for a Game instance.</li>
+	<li>Allow external code to assign a value to the score member.</li>
+	<li>Restrict the range of values that can be assigned to the score member.</li>
+</ul>
+<p>You need to implement the score member to meet the requirements. In which form should you implement the score member?</p>
+<ol>
+	<li>protected field</li>
+	<li>public static field</li>
+	<li>public static property</li>
+	<li class="right">public property</li>
+</ol>
+
+<h3>Question 84</h3>
+<p>You have a List object that is generated by executing the following code:</p>
+<img src="../sitebuilderpictures/70483/125.jpg">
+<p>You have a method that contains the following code:</p>
+<img src="../sitebuilderpictures/70483/126.jpg">
+<p>You need to alter the method to use a lambda statement. How should you rewrite lines 03 through 06 of the method?</p>
+<img src="../sitebuilderpictures/70483/127.jpg">
+<ol>
+	<li>Option A</li>
+	<li>Option B</li>
+	<li class="right">Option C</li>
+	<li>Option D</li>
+</ol>
+
+<h3>Question 85</h3>
+<p>You are developing code for a class named Account. The Account class includes the following method:</p>
+<img src="../sitebuilderpictures/70483/128.jpg">
+<p>You need to ensure that overflow exceptions are thrown when there is an error. Which type of block should you use?</p>
+<ol>
+	<li class="right">checked</li>
+	<li>try</li>
+	<li>using</li>
+	<li>unchecked</li>
+</ol>
+
+<h3>Question 86</h3>
+<p>You are developing an application that uses a .config file. The relevant portion of the .config file is shown as follows:</p>
+<img src="../sitebuilderpictures/70483/129.jpg">
+<p>You need to ensure that diagnostic data for the application writes to the event tog by using the configuration specified in the .config file. What should you include in the application code?</p>
+<img src="../sitebuilderpictures/70483/130.jpg">
+<ol>
+	<li>Option A</li>
+	<li>Option B</li>
+	<li>Option C</li>
+	<li class="right">Option D</li>
+</ol>
+
+<h3>Question 87</h3>
+<p>You have the following code:</p>
+<img src="../sitebuilderpictures/70483/131.jpg">
+<p>You need to identify the missing line of code at line 15. Which line of code should you identify?</p>
+<ol>
+	<li>using (fooSqlConn.BeginTransaction())</li>
+	<li class="right">while (fooSqlReader.Read())</li>
+	<li>while (fooSqlReader.NextResult())</li>
+	<li>while (fooSqlReader.GetBoolean(0))</li>
+</ol>
+
+<h3>Question 88</h3>
+<p>You are developing an application in C#. The application will display the temperature and the time at which the temperature was recorded. You have the following method:</p>
+<img src="../sitebuilderpictures/70483/132.jpg">
+<p>You need to ensure that the message displayed in the lblMessage object shows the time formatted according to the following requirements: The time must be formatted as hour:minute AM/PM, for example 2:00 PM. The date must be formatted as month/day/year, for example 04/21/2013. The temperature must be formatted to have two decimal places, for example 23-45. Which code should you insert at line 04? (To answer, select the appropriate options in the answer area.)</p>
+<img src="../sitebuilderpictures/70483/134.jpg">
+
+<h3>Question 89</h3>
+<p>You are developing an application that includes a Windows Communication Foundation (WCF) service. The service includes a custom TraceSource object named ts and a method named DoWork. The application must meet the following requirements: Collect trace information when the DoWork() method executes. Group all traces for a single execution of the DoWork() method as an activity that can be viewed in the WCF Service Trace Viewer Tool. You need to ensure that the application meets the requirements. How should you complete the relevant code?</p>
+<img src="../sitebuilderpictures/70483/137.jpg">
+
+<h3>Question 90</h3>
+<p>You are developing a class named Temperature. You need to ensure that collections of Temperature objects are sortable. How should you complete the relevant code segment?</p>
+<img src="../sitebuilderpictures/70483/139.jpg">
+
+<h3>Question 91</h3>
+<p>You are developing an application that will populate an extensive XML tree from a Microsoft SQL Server 2008 R2 database table named Contacts. You are creating the XML tree. The solution must meet the following requirements:</p>
+<ul>
+	<li>Minimize memory requirements.</li>
+	<li>Maximize data processing speed.</li>
+	<li>You open the database connection.</li>
+	<li>You need to create the XML tree.</li>
+</ul>
+<p>How should you complete the relevant code?</p>
+<img src="../sitebuilderpictures/70483/141.jpg">
+
+<h3>Question 92</h3>
+<p>You are creating a class named Data that includes a dictionary object named _data. You need to allow the garbage collection process to collect the references of the _data object. How should you complete the relevant code?</p>
+<img src="../sitebuilderpictures/70483/143.jpg">
+
+<h3>Question 93</h3>
+<p>You are creating a console application named App1. App1 retrieves data from the Internet by using JavaScript Object Notation (JSON). You are developing the following code segment:</p>
+<img src="../sitebuilderpictures/70483/144.jpg">
+<p>You need to ensure that the code validates the JSON string. Which code should you insert at line 03?</p>
+<ol>
+	<li>DataContractSerializer serializer = new DataContractSerializer();</li>
+	<li>var serializer = new DataContractSerializer();</li>
+	<li>XmlSerlalizer serializer = new XmlSerlalizer();</li>
+	<li class="right">var serializer = new JavaScriptSerializer();</li>
+</ol>
+<p>The JavaScriptSerializer Class Provides serialization and deserialization functionality for AJAX-enabled applications. The JavaScriptSerializer class is used internally by the asynchronous communication layer to serialize and deserialize the data that is passed between the browser and the Web server. You cannot access that instance of the serializer. However, this class exposes a public API. Therefore, you can use the class when you want to work with JavaScript Object Notation (JSON) in managed code.</p>
+
+<h3>Question 94</h3>
+<p>You are developing an application that uses several objects. The application includes the following code segment.</p>
+<img src="../sitebuilderpictures/70483/145.jpg">
+<p>You need to evaluate whether an object is null. Which code segment should you insert at line 03?</p>
+<img src="../sitebuilderpictures/70483/146.jpg">
+<ol>
+	<li>Option A</li>
+	<li>Option B</li>
+	<li>Option C</li>
+	<li class="right">Option D</li>
+</ol>
+<p>Use the == operator to compare values and in this case also use the null literal.</p>
+
+<h3>Question 95</h3>
+<p>You are developing an application. The application contains the following code segment:</p>
+<img src="../sitebuilderpictures/70483/147.jpg">
+<p>When you run the code, you receive the following error message: “Cannot implicitly convert type ‘object” to ‘int’. An explicit conversion exists (are you missing a cast?).” You need to ensure that the code can be compiled. Which code should you use to replace line 05?</p>
+<ol>
+	<li>var2 = arrayl[0] is int;</li>
+	<li class="right">var2 = ( (List&lt;int&gt;)arrayl) [0];</li>
+	<li>var2 = arrayl[0].Equals(typeof(int));</li>
+	<li>var2 = (int) arrayl [0];</li>
+</ol>
+<p>Make a list of integers of the array with = ( (List&lt;int&gt;)arrayl) then select the first item in the list with [0].</p>
+
+<h3>Question 96</h3>
+<p>You need to write a method that retrieves data from a Microsoft Access 2013 database. The method must meet the following requirements:</p>
+<ul>
+	<li>Be read-only.</li>
+	<li>Be able to use the data before the entire data set is retrieved.</li>
+	<li>Minimize the amount of system overhead and the amount of memory usage.</li>
+</ul>
+<p>Which type of object should you use in the method?</p>
+<ol>
+	<li>SqlDataAdapter</li>
+	<li>DataContext</li>
+	<li>DbDataAdapter</li>
+	<li class="right">OleDbDataReader</li>
+</ol>
+<p>OleDbDataReader Class Provides a way of reading a forward-only stream of data rows from a data source. Example:</p>
+<p><code>
+OleDbConnection cn = new OleDbConnection();<br>
+OleDbCommand cmd = new OleDbCommand();<br>
+DataTable schemaTable;<br>
+OleDbDataReader myReader;<br>
+//Open a connection to the SQL Server Northwind database.
+cn.ConnectionString = “Provider=SQLOLEDB;Data Source=server;User ID=login;<br>
+Password=password;Initial Catalog=Northwind”;
+</code></p>
+
+<h3>Question 97</h3>
+<p>You have the following code:</p>
+<img src="../sitebuilderpictures/70483/148.jpg">
+<p>You need to retrieve all of the numbers from the items variable that are greater than 80. Which code should you use?</p>
+<img src="../sitebuilderpictures/70483/149.jpg">
+<ol>
+	<li class="right">Option A</li>
+	<li>Option B</li>
+	<li>Option C</li>
+	<li>Option D</li>
+</ol>
+
+<h3>Question 98</h3>
+<p>You are creating a method that will split a single input file into two smaller output files. The method must perform the following actions:</p>
+<ul>
+	<li>Create a file named header.dat that contains the first 20 bytes of the input file.</li>
+	<li>Create a file named body.dat that contains the remainder of the input file.</li>
+</ul>
+<p>You need to create the method. How should you complete the relevant code?</p>
+<img src="../sitebuilderpictures/70483/151.jpg">
+
+<h3>Question 99</h3>
+<p>You are adding a function to a membership tracking application- The function uses an integer named memberCode as an input parameter and returns the membership type as a string. The function must meet the following requirements:</p>
+<ul>
+	<li>Return "Non-Member" if the memberCode is 0.</li>
+	<li>Return "Member" if the memberCode is 1.</li>
+	<li>Return "Invalid" if the memberCode is any value other than 0 or 1.</li>
+</ul>
+<p>You need to implement the function to meet the requirements. How should you complete the relevant code?</p>
+<img src="../sitebuilderpictures/70483/153.jpg">
+
+<h3>Question 100</h3>
+<p>You are developing the following classes named: Class1, Class2, Class3. All of the classes will be part of a single assembly named Assembly.dll. Assembly.dll will be used by multiple applications. All of the classes will implement the following interface, which is also part ofAssembly.dll:</p>
+<p><code>
+public interface Interface1<br>
+{<br>
+void Method1(decimal amount);<br>
+void Method2(decimal amount);<br>
+}<br>
+</code><p>
+<p>You need to ensure that the Method2 method for the Class3 class can be executed only when instances of the class are accessed through the Interface1 interface. The solution must ensure that calls to the Method1 method can be made either through the interface or through an instance of the class. Which signature should you use for each method? (To answer, select the appropriate signature for each method in the answer area.)</p>
+<img src="../sitebuilderpictures/70483/155.jpg">
+
+<h3>Question 101</h3>
+<p>You are implementing a method named ProcessReports that performs a long-running task. The ProcessReports() method has the following method signature: public void ProcessReports(List&lt;decimal&gt; values,CancellationTokenSource cts, CancellationToken ct) If the calling code requests cancellation, the method must perform the following actions:</p>
+<ul>
+	<li>Cancel the long-running task.</li>
+	<li>Set the task status to TaskStatus.Canceled.</li>
+</ul>
+<p>You need to ensure that the ProcessReports() method performs the required actions. Which code segment should you use in the method body?</p>
+<ol>
+	<li>if (ct.IsCancellationRequested) return;</li>
+	<li class="right">ct.ThrowIfCancellationRequested() ;</li>
+	<li>cts.Cancel();</li>
+	<li>throw new AggregateException();</li>
+</ol>
+
+<h3>Question 102</h3>
+<p>You are developing an application that will be deployed to multiple computers. You set the assembly name. You need to create a unique identity for the application assembly. Which two assembly identity attributes should you include in the source code?</p>
+<ol>
+	<li>AssemblyTitleAttribute</li>
+	<li class="right">AssemblyCultureAttribute</li>
+	<li class="right">AssemblyVersionAttribute</li>
+	<li>AssemblyKeyNameAttribute</li>
+	<li>AssemblyFileVersion</li>
+</ol>
+<p>The AssemblyName object contains information about an assembly, which you can use to bind to that assembly. An assembly’s identity consists of the following:</p>
+<ul>
+	<li>Simple name.</li>
+	<li>Version number.</li>
+	<li>Cryptographic key pair.</li>
+	<li>Supported culture.</li>
+</ul>
+<p>The AssemblyCultureAttribute specifies which culture the assembly supports, and is used by compilers to distinguish between a main assembly and a satellite assembly. A main assembly contains code and the neutral culture’s resources. A satellite assembly contains only resources for a particular culture, as in [assembly:AssemblyCultureAttribute("de")].</p>
+<p>The AssemblyVersionAttribute specifies the version of the assembly being attributed. The assembly version number is part of an assembly’s identity and plays a key part in binding to the assembly and in version policy.</p>
+
+<h3>Question 103</h3>
+<p>You are developing an application. You need to declare a delegate for a method that accepts an integer as a parameter, and then returns an integer. Which type of delegate should you use?</p>
+<ol>
+	<li>Action&lt;int&gt;</li>
+	<li>Action&lt;int,int&gt;</li>
+	<li class="right">Func&lt;int, int&gt;</li>
+	<li>Func&lt;int&gt;</li>
+</ol>
+
+<h3>Question 104</h3>
+<p>You are writing the following method:</p>
+<img src="../sitebuilderpictures/70483/156.jpg">
+<p>You need to ensure that CreateObject compiles successfully. What should you do?</p>
+<ol>
+	<li class="right">Insert the following code at line 02: where T : new()</li>
+	<li>Replace line 01 with the following code: public void CreateObject&lt;T&gt;()</li>
+	<li>Replace line 01 with the following code: public Object CreateObject&lt;T&gt;()</li>
+	<li>Insert the following code at line 02: where T : Object</li>
+</ol>
+
+<h3>Question 105</h3>
+<p>You are developing an application that includes the following code segment.</p>
+<img src="../sitebuilderpictures/70483/157.jpg">
+<p>You need to ensure that the DoWork(Widget widget) method runs. With which code segment should you replace line 24?</p>
+<ol>
+	<li class="right">DoWork((Widget)o);</li>
+	<li>DoWork(new Widget(o));</li>
+	<li>DoWork(o is Widget);</li>
+	<li>DoWork((ItemBase)o);</li>
+</ol>
+
+<h3>Question 106</h3>
+<p>An application uses X509 certificates for data encryption and decryption. The application stores certificates in the Personal certificates collection of the Current User store. On each computer, each certificate subject is unique. The application includes a method named LoadCertificate. The LoadCertificate() method includes the following code.</p>
+<img src="../sitebuilderpictures/70483/158.jpg">
+<p>The LoadCertificate() method must load only certificates for which the subject exactly matches the searchValue parameter value. You need to ensure that the LoadCertificate() method loads the correct certificates. Which code segment should you insert at line 06?</p>
+<img src="../sitebuilderpictures/70483/159.jpg">
+<ol>
+	<li>Option A</li>
+	<li>Option B</li>
+	<li>Option C</li>
+	<li class="right">Option D</li>
+</ol>
+
+<h3>Question 107</h3>
+<p>You are developing a class named Scorecard. The following code implements the Scorecard class.</p>
+<img src="../sitebuilderpictures/70483/160.jpg">
+<p>You create the following unit test method to test the Scorecard class implementation:</p>
+<img src="../sitebuilderpictures/70483/161.jpg">
+<p>You need to ensure that the unit test will pass. What should you do?</p>
+<img src="../sitebuilderpictures/70483/162.jpg">
+<ol>
+	<li class="right">Option A</li>
+	<li>Option B</li>
+	<li>Option C</li>
+	<li>Option D</li>
+</ol>
+
+<h3>Question 108</h3>
+<p>You are developing an application that will parse a large amount of text. You need to parse the text into separate lines and minimize memory use while processing data. Which object type should you use?</p>
+<ol>
+	<li>DataContractSerializer</li>
+	<li>StringBuilder</li>
+	<li class="right">StringReader</li>
+	<li>JsonSerializer</li>
+</ol>
+
+<h3>Question 109</h3>
+<p>You are developing code for an application that retrieves information about Microsoft .NET Framework assemblies. The following code segment is part of the application:</p>
+<img src="../sitebuilderpictures/70483/163.jpg">
+<p>You need to insert code at line 04. The code must load the assembly. Once the assembly is loaded, the code must be able to read the assembly metadata, but the code must be denied access from executing code from the assembly. Which code segment should you insert at line 04?</p>
+<ol>
+	<li>Assembly.ReflectionOnlyLoadFrom(bytes);</li>
+	<li>Assembly.ReflectionOniyLoad(bytes);</li>
+	<li class="right">Assembly.Load(bytes);</li>
+	<li>Assembly.LoadFrom(bytes);</li>
+</ol>
+
+<h3>Question 110</h3>
+<p>You are developing a method named GenerateHash that will create the hash value for a file. The method includes the following code.</p>
+<img src="../sitebuilderpictures/70483/164.jpg">
+<p>You need to return the cryptographic hash of the bytes contained in the fileBuffer variable. Which code segment should you insert at line 05?</p>
+<img src="../sitebuilderpictures/70483/165.jpg">
+<ol>
+	<li>Option A</li>
+	<li>Option B</li>
+	<li>Option C</li>
+	<li class="right">Option D</li>
+</ol>
+
+<h3>Question 111</h3>
+<p>You are modifying an existing application that manages employee payroll. The application includes a class named PayrollProcessor. The PayrollProcessor class connects to a payroll database and processes batches of paychecks once a week. You need to ensure that the PayrollProcessor class supports iteration and releases database connections after the batch processing completes. Which two interfaces should you implement? (Each correct answer presents part of the complete solution. Choose two.)</p>
+<ol>
+	<li>IEquatable</li>
+	<li class="right">IEnumerable</li>
+	<li class="right">IDisposable</li>
+	<li>IComparable</li>
+</ol>
+<p>
+<p>IEnumerable exposes an enumerator, which supports a simple iteration over a non-generic collection. IDisposable defines a method to release allocated resources. The primary use of this interface is to release unmanaged resources.</p>
+
+<h3>Question 112</h3>
+<p>You are developing an application that will read data from a text file and display the file contents. You need to read data from the file, display it, and correctly release the file resources. Which code segment should you use?</p>
+<img src="../sitebuilderpictures/70483/166.jpg">
+<ol>
+	<li class="right">Option A</li>
+	<li>Option B</li>
+	<li>Option C</li>
+	<li>Option D</li>
+</ol>
+
+<h3>Question 113</h3>
+<p>You are creating a method that saves information to a database. You have a static class named LogHelper. LogHelper has a method named Log to log the exception. You need to use the LogHelper Log method to log the exception raised by the database server. The solution must ensure that the exception can be caught by the calling method, while preserving the original stack trace. How should you write the catch block?</p>
+<img src="../sitebuilderpictures/70483/168.jpg"><br>
+<img src="../sitebuilderpictures/70483/169.jpg"><br>
+throw;<br>
+<img src="../sitebuilderpictures/70483/170.jpg">
+
+<h3>Question 114</h3>
+<p>You have the following code:</p>
+<img src="../sitebuilderpictures/70483/171.jpg">
+<p>For each of the following statements, select Yes if the statement is true. Otherwise, select No.</p>
+<img src="../sitebuilderpictures/70483/173.jpg">
+
+<h3>Question 115</h3>
+<p>You are building a data access layer in an application that contains the following code:</p>
+<img src="../sitebuilderpictures/70483/174.jpg">
+<p>For each of the following statements, select Yes if the statement is true. Otherwise, select No.</p>
+<img src="../sitebuilderpictures/70483/176.jpg">
+
+<h3>Question 116</h3>
+<p>You have the following code:</p>
+<img src="../sitebuilderpictures/70483/177.jpg">
+<p>For each of the following statements, select Yes if the statement is true. Otherwise, select No.</p>
+<img src="../sitebuilderpictures/70483/179.jpg">
+<ul>
+	<li>CustomerID is declared private.</li>
+	<li>CompanyName is declted protected.</li>
+	<li>State is declared protected.</li>
+</ul>
+<p>The protected keyword is a member access modifier. A protected member is accessible from within the class in which it is declared, and from within any class derived from the class that declared this member.</p>
+
+<h3>Question 117</h3>
+<p>You have the following code:</p>
+<img src="../sitebuilderpictures/70483/180.jpg">
+<p>To answer, complete each statement according to the information presented in the code.</p>
+<img src="../sitebuilderpictures/70483/182.jpg">
+
+<h3>Question 118</h3>
+<p>You need to create a method that can be called by using a varying number of parameters. What should you use?</p>
+<ol>
+	<li class="right">method overloading</li>
+	<li>interface</li>
+	<li>named parameters</li>
+	<li>lambda expressions</li>
+</ol>
+<p>Member overloading means creating two or more members on the same type that differ only in the number or type of parameters but have the same name. Overloading is one of the most important techniques for improving usability, productivity, and readability of reusable libraries. Overloading on the number of parameters makes it possible to provide simpler versions of constructors and methods. Overloading on the parameter type makes it possible to use the same member name for members performing identical operations on a selected set of different types.</p>
+
+<h3>Question 119</h3>
+<p>You are developing an application. The application contains the following code segment:</p>
+<img src="../sitebuilderpictures/70483/183.jpg">
+<p>When you run the code, you receive the following error message: “Cannot implicitly convert type ‘object” to ‘inf. An explicit conversion exists (are you missing a cast?).” You need to ensure that the code can be compiled. Which code should you use to replace line 05?</p>
+<ol>
+	<li class="right">var2 = ((List&lt;int&gt;) array1) [0];</li>
+	<li>var2 = array1[0].Equals(typeof(int));</li>
+	<li>var2 = Convert.ToInt32(array1[0]);</li>
+	<li>var2 = ((int[])array1)[0];</li>
+</ol>
+<p>Make a list of integers of the array with = ( (List&lt;int&gt;)arrayl) then select the first item in the list with [0].</p>
+
+<h3>Question 120</h3>
+<p>You have the following code:</p>
+<img src="../sitebuilderpictures/70483/184.jpg">
+<p>You need to ensure that if an exception occurs, the exception will be logged. Which code should you insert at line 28?</p>
+<img src="../sitebuilderpictures/70483/185.jpg">
+<ol>
+	<li>Option A</li>
+	<li class="right">Option B</li>
+	<li>Option C</li>
+	<li>Option D</li>
+</ol>
+<p>XmlWriterTraceListener directs tracing or debugging output as XML-encoded data to a TextWriter or to a Stream, such as a FileStream. TraceListener.TraceEvent Method (TraceEventCache, String, TraceEventType, Int32) writes trace and event information to the listener specific output:</p>
+<p><code>
+[ComVisibleAttribute(false)]<br>
+public virtual void TraceEvent(<br>
+TraceEventCache eventCache,<br>
+string source,<br>
+TraceEventType eventType,<br>
+int id<br>
+)<br>
+</code></p>
+
+<h3>Question 121</h3>
+<p>You write the following method:</p>
+<img src="../sitebuilderpictures/70483/186.jpg">
+<p>You need to ensure that the method extracts a list of URLs that match the following pattern:</p>
+<p><code>
+@http://(www\.)?([^\.]+)\.com;
+</code></p>
+<p>Which code should you insert at line 07?</p>
+<img src="../sitebuilderpictures/70483/187.jpg">
+<ol>
+	<li>Option A</li>
+	<li>Option B</li>
+	<li>Option C</li>
+	<li class="right">Option D</li>
+</ol>
+<p>MatchCollection represents the set of successful matches found by iteratively applying a regular expression pattern to the input string. The collection is immutable (read-only) and has no public constructor. The Regex.Matches method returns a MatchCollection object. The List&lt;T&gt;.Add Method adds an object to the end of the List&lt;T&gt;.</p>
+
+<h3>Question 122</h3>
+<p>You are creating a class library that will be used in a web application. You need to ensure that the class library assembly is strongly named. What should you do?</p>
+<ol>
+	<li>Use the gacutil.exe command-line tool.</li>
+	<li>Use the xsd.exe command-line tool.</li>
+	<li>Use the aspnet_regiis.exe command-line tool.</li>
+	<li class="right">Use assembly attributes.</li>
+</ol>
+<p>The Windows Software Development Kit (SDK) provides several ways to sign an assembly with a strong name:</p>
+<ul>
+	<li>Using the Assembly Linker (Al.exe) provided by the Windows SDK.</li>
+	<li>Using assembly attributes to insert the strong name information in your code. You can use either the AssemblyKeyFileAttribute or the AssemblyKeyNameAttribute, depending on where the key file to be used is located.</li>
+	<li>Using compiler options such /keyfile or /delaysign in C# and Visual Basic, or the /KEYFILE or /DELAYSIGN linker option in C++. (For information on delay signing, see Delay Signing an Assembly.)</li>
+</ul>
+<p>A strong name consists of the assembly’s identity—its simple text name, version number, and culture information (if provided)—plus a public key and a digital signature. It is generated from an assembly file (the file that contains the assembly manifest, which in turn contains the names and hashes of all the files that make up the assembly), using the corresponding private key. Microsoft® Visual Studio® .NET and other development tools provided in the .NET Framework SDK can assign strong names to an assembly. Assemblies with the same strong name are expected to be identical.</p>
+
+<h3>Question 123</h3>
+<p>You need to store the values in a collection. The solution must meet the following requirements:</p>
+<ul>
+	<li>The values must be stored in the order that they were added to the collection.</li>
+	<li>The values must be accessed in a first-in, first-out order.</li>
+</ul>
+<p>Which type of collection should you use?</p>
+<ol>
+	<li>SortedList</li>
+	<li class="right">Queue</li>
+	<li>ArrayList</li>
+	<li>Hashtable</li>
+</ol>
+
+<h3>Question 124</h3>
+<p>An application is throwing unhandled NullReferenceException and FormatException errors. The stack trace shows that the exceptions occur in the GetWebResult() method. The application includes the following code to parse XML data retrieved from a web service.</p>
+<img src="../sitebuilderpictures/70483/188.jpg">
+<p>You need to handle the exceptions without interfering with the existing error-handling infrastructure. Which two actions should you perform?</p>
+<img src="../sitebuilderpictures/70483/189.jpg">
+<ol>
+	<li class="right">Option A</li>
+	<li>Option B</li>
+	<li class="right">Option C</li>
+	<li>Option D</li>
+</ol>
+<ul>
+	<li>The TryParse method is like the Parse method, except the TryParse method does not throw an exception if the conversion fails. It eliminates the need to use exception handling to test for a FormatException in the event that s is invalid and cannot be successfully parsed.</li>
+	<li>If the UnhandledException event is handled in the default application domain, it is raised there for any unhandled exception in any thread, no matter what application domain the thread started in. If the thread started in an application domain that has an event handler for UnhandledException, the event is raised in that application domain.</li>
+</ul>
+
+<h3>Question 125</h3>
+<p>You are developing an application that retrieves patient data from a web service. The application stores the JSON messages returned from the web service in a string variable named PatientAsJson. The variable is encoded as UTF-8. The application includes a class named Patient that is defined by the following code:</p>
+<img src="../sitebuilderpictures/70483/190.jpg">
+<p>You need to populate the Patient class with the data returned from the web service. Which code segment should you use?</p>
+<img src="../sitebuilderpictures/70483/191.jpg">
+<ol>
+	<li class="right">Option A</li>
+	<li>Option B</li>
+	<li>Option C</li>
+	<li>Option D</li>
+</ol>
+
+<h3>Question 126</h3>
+<p>You are developing a game that allows players to collect from 0 through 1000 coins. You are creating a method that will be used in the game. The method includes the following code.</p>
+<p><code>
+01 public string FormatCoins(string name, int coins)<br>
+02 {<br>
+03<br>
+04 }<br>
+</code></p>
+<p>The method must meet the following requirements:</p>
+<ul>
+	<li>Return a string that includes the player name and the number of coins.</li>
+	<li>Display the number of coins without leading zeros if the number is 1 or greater.</li>
+	<li>Display the number of coins as a single 0 if the number is 0.</li>
+</ul>
+<p>You need to ensure that the method meets the requirements. Which code segment should you insert at line 03?</p>
+<img src="../sitebuilderpictures/70483/192.jpg">
+<ol>
+	<li class="right">Option A</li>
+	<li>Option B</li>
+	<li>Option C</li>
+	<li>Option D</li>
+</ol>
+
+<h3>Question 127</h3>
+<p>You have an application that will send confidential information to a Web server. You need to ensure that the data is encrypted when it is sent across the network. Which class should you use?</p>
+<ol>
+	<li class="right">CryptoStream</li>
+	<li>AuthenticatedStream</li>
+	<li>PipeStream</li>
+	<li>NegotiateStream</li>
+</ol>
+
+<h3>Question 128</h3>
+<p>You are developing a class named EmployeeRoster. The following code implements the EmployeeRoster class.</p>
+<img src="../sitebuilderpictures/70483/193.jpg">
+<p>You create the following unit test method to test the EmployeeRoster class implementation:</p>
+<img src="../sitebuilderpictures/70483/194.jpg">
+<p>You need to ensure that the unit test will pass. What should you do?</p>
+<img src="../sitebuilderpictures/70483/195.jpg">
+<ol>
+	<li>Option A</li>
+	<li class="right">Option B</li>
+	<li>Option C</li>
+	<li>Option D</li>
+</ol>
+
+<h3>Question 129</h3>
+<p>You are developing an application that produces an executable named MyApp.exe and an assembly named MyApp.dll. The application will be sold to several customers. You need to ensure that enough debugging information is available for MyApp.exe, so that if the application throws an error in a customer’s environment, you can debug the error in your own development environment. What should you do?</p>
+<ol>
+	<li>Digitally sign MyApp.dll.</li>
+	<li class="right">Produce program database (PDB) information when you compile the code.</li>
+	<li>Compile MyApp.exe by using the /unsafe compiler option.</li>
+	<li>Initializes a new instance of the AssemblyDelaySignAttribute class in the MyApp.dll constructor.</li>
+</ol>
+
+<h3>Question 130</h3>
+<p>You are modifying an existing banking application. The application includes an Account class and a Customer class. The following code segment defines the classes.</p>
+<img src="../sitebuilderpictures/70483/196.jpg">
+<p>You populate a collection named customerCollection with Customer and Account objects by using the following code segment:</p>
+<img src="../sitebuilderpictures/70483/197.jpg">
+<p>You create a largeCustomerAccounts collection to store the Account objects by using the following code segment: Collection&lt;Account&gt; largeCustomerAccounts = new Collection&lt;Account&gt; (); All accounts with a Balance value greater than or equal to 1,000,000 must be tracked. You need to populate the largeCustomerAccounts collection with Account objects. Which code segment should you use?</p>
+<img src="../sitebuilderpictures/70483/198.jpg">
+<ol>
+	<li>Option A</li>
+	<li>Option B</li>
+	<li class="right">Option C</li>
+	<li>Option D</li>
+</ol>
+
+<h3>Question 131</h3>
+<p>You are implementing a method named GetValidEmailAddresses. The GetValidEmailAddresses() method processes a list of string values that represent email addresses. The GetValidEmailAddresses() method must return only email addresses that are in a valid format. You need to implement the GetValidEmailAddresses() method. Which two code segments can you use to achieve this goal?</p>
+<img src="../sitebuilderpictures/70483/199.jpg">
+<ol>
+	<li>Option A</li>
+	<li class="right">Option B</li>
+	<li>Option C</li>
+	<li class="right">Option D</li>
+</ol>
+
+<h3>Question 132</h3>
+<p>You define a class by using the following code:</p>
+<img src="../sitebuilderpictures/70483/200.jpg">
+<p>To answer, complete each statement according to the information presented in the code.</p>
+<img src="../sitebuilderpictures/70483/202.jpg">
+
+<h3>Question 133</h3>
+<p>You are developing a C# console application that outputs information to the screen. The following code segments implement the two classes responsible for making calls to the Console object:</p>
+<img src="../sitebuilderpictures/70483/203.jpg">
+<p>When the application is run, the console output must be the following text:</p>
+<p><code>
+Log started<br>
+Base: Log continuing<br>
+Finished<br>
+</code></p>
+<p>You need to ensure that the application outputs the correct text. Which four lines of code should you use in sequence?</p>
+<img src="../sitebuilderpictures/70483/205.jpg"><br>
+<img src="../sitebuilderpictures/70483/206.jpg"><br>
+<img src="../sitebuilderpictures/70483/207.jpg"><br>
+<img src="../sitebuilderpictures/70483/208.jpg"><br>
+<p>The abstract keyword enables you to create classes and class members that are incomplete and must be implemented in a derived class. An abstract class cannot be instantiated. The purpose of an abstract class is to provide a common definition of a base class that multiple derived classes can share.</p>
+
+<h3>Question 134</h3>
+<p>You are creating an application that reads from a database. You need to use different databases during the development phase and the testing phase by using conditional compilation techniques. What should you do?</p>
+<ol>
+	<li>Configure the assembly metadata to use the pre-existing public key for the assembly identity by using the AssemblySignatureKeyAttribute attribute.</li>
+	<li>Disable the strong-name bypass feature of Microsoft .NET Framework in the registry.</li>
+	<li class="right">Configure the Define DEBUG constant setting in Microsoft Visual Studio.</li>
+	<li>Decorate the code by using the [assembly:AssemblyDelaySignAttribute(true)] attribute.</li>
+</ol>
+
+<h3>Question 135</h3>
+<p>You are troubleshooting an application that uses a class named FullName. The class is decorated with the DataContractAttribute attribute. The application includes the following code.</p>
+<img src="../sitebuilderpictures/70483/209.jpg">
+<p>You need to ensure that the entire FullName object is serialized to the memory stream object. Which code segment should you insert at line 09?</p>
+<ol>
+	<li class="right">binary.WriteEndDocument();</li>
+	<li>binary.WriteEndDocumentAsync();</li>
+	<li>binary.WriteEndElementAsync();</li>
+	<li>binary.Flush();</li>
+</ol>
+<p>The DataContractSerializer.WriteEndObject Method (XmlDictionaryWriter) Writes the closing XML element using an XmlDictionaryWriter. The DataContractSerializer.WriteObject Method Writes all the object data (starting XML element, content, and closing element) to an XML document or stream.</p>
+
+<h3>Question 136</h3>
+<p>You define a class by using the following code:</p>
+<img src="../sitebuilderpictures/70483/210.jpg">
+<p>You write the following code for a method:</p>
+<img src="../sitebuilderpictures/70483/211.jpg">
+<p>To answer, complete each statement according to the information presented in the code.</p>
+<img src="../sitebuilderpictures/70483/213.jpg">
+
+<h3>Question 137</h3>
+<p>You are creating a console application named App1. App1 will validate user input for order entries. You are developing the following code segment:</p>
+<img src="../sitebuilderpictures/70483/214.jpg">
+<p>You need to complete the code segment. The solution must ensure that prices are positive and have two decimal places. Which code should you insert at line 03?</p>
+<img src="../sitebuilderpictures/70483/215.jpg">
+<ol>
+	<li>Option A</li>
+	<li class="right">Option B</li>
+	<li>Option C</li>
+	<li>Option D</li>
+</ol>
+<p>Regex.IsMatch Method (String, String) indicates whether the specified regular expression finds a match in the specified input string.</p>
+
+<h3>Question 138</h3>
+<p>You have the following code:</p>
+<img src="../sitebuilderpictures/70483/216.jpg">
+<p>You need to ensure that if an exception occurs, the exception will be logged. Which code should you insert at line 28?</p>
+<img src="../sitebuilderpictures/70483/217.jpg">
+<ol>
+	<li>Option A</li>
+	<li>Option B</li>
+	<li class="right">Option C</li>
+	<li>Option D</li>
+</ol>
+<p>XmlWriterTraceListener Directs tracing or debugging output as XML-encoded data to a TextWriter or to a Stream, such as a FileStream. TraceListener.TraceEvent Method (TraceEventCache, String, TraceEventType, Int32) Writes trace and event information to the listener specific output. Syntax:</p>
+<p><code>
+[ComVisibleAttribute(false)]<br>
+public virtual void TraceEvent(<br>
+TraceEventCache eventCache,<br>
+string source,<br>
+TraceEventType eventType,<br>
+int id<br>
+)<br>
+</code></p>
+
+<h3>Question 139</h3>
+<p>You have the following code:</p>
+<img src="../sitebuilderpictures/70483/218.jpg">
+<p>You need to retrieve all of the numbers from the items variable that are greater than 80. Which code should you use?</p>
+<img src="../sitebuilderpictures/70483/219.jpg">
+<ol>
+	<li class="right">Option A</li>
+	<li>Option B</li>
+	<li>Option C</li>
+	<li>Option D</li>
+</ol>
+
+<h3>Question 140</h3>
+<p>You are creating a console application named Appl. App1 retrieves data from the Internet by using JavaScript Object Notation (JSON). You are developing the following code segment:</p>
+<img src="../sitebuilderpictures/70483/220.jpg">
+<p>You need to ensure that the code validates the JSON string. Which code should you insert at line 03?</p>
+<img src="../sitebuilderpictures/70483/221.jpg">
+<ol>
+	<li>Option A</li>
+	<li class="right">Option B</li>
+	<li>Option C</li>
+	<li>Option D</li>
+</ol>
+<p>The JavaScriptSerializer Class Provides serialization and deserialization functionality for AJAX-enabled applications. The JavaScriptSerializer class is used internally by the asynchronous communication layer to serialize and deserialize the data that is passed between the browser and the Web server. You cannot access that instance of the serializer. However, this class exposes a public API. Therefore, you can use the class when you want to work with JavaScript Object Notation (JSON) in managed code.</p>
+
+<h3>Question 141</h3>
+<p>You are evaluating a method that calculates loan interest- The application includes the following code segment.</p>
+<img src="../sitebuilderpictures/70483/222.jpg">
+<p>When the loanTerm value is 3 and the loanAmount value is 9750, the loanRate must be set to 8.25 percent. You need to adjust the loanRate value to meet the requirements. What should you do?</p>
+<ol>
+	<li>Replace line 04 with the following code segment: decimal loanRate = 0.0325m;</li>
+	<li>Replace line 17 with the following code segment: interestAmount = loanAmount * 0.0825m * loanTerm;</li>
+	<li class="right">Replace line 15 with the following code segment: loanRate = 0.0825m;</li>
+	<li>Replace line 07 with the following code segment: loanRate = 0.0825m;</li>
+</ol>
+
+<h3>Question 142</h3>
+<p>You are implementing a new method named ProcessData. The ProcessData() method calls a third-party component that performs a long-running operation. The third-party component uses the IAsyncResult pattern to signal completion of the longrunning operation. You need to ensure that the calling code handles the long-running operation as a System.Threading.Tasks.Task object. Which two actions should you perform?</p>
+<ol>
+	<li class="right">Call the component by using the TaskFactory.FromAsync() method.</li>
+	<li class="right">Create a TaskCompletionSource&lt;T&gt; object.</li>
+	<li>Apply the async modifier to the method signature.</li>
+	<li>Apply the following attribute to the method signature: [MethodImpl(MethodImplOptions.Synchronized)]</li>
+</ol>
+<p>The TaskFactory.FromAsync Method creates a Task that represents a pair of begin and end methods that conform to the Asynchronous Programming Model pattern. The TaskFactory.FromAsync(IAsyncResult, Action&lt;IAsyncResult&gt;) overload creates a Task that executes an end method action when a specified IAsyncResult completes.</p>
+<p>In many scenarios, it is useful to enable a Task&lt;TResult&gt; to represent an external asynchronous operation. TaskCompletionSource&lt;TResult&gt; is provided for this purpose. It enables the creation of a task that can be handed out to consumers, and those consumers can use the members of the task as they would any other. However, unlike most tasks, the state of a task created by a TaskCompletionSource is controlled explicitly by the methods on TaskCompletionSource. This enables the completion of the external asynchronous operation to be propagated to the underlying Task. The separation also ensures that consumers are not able to transition the state without access to the corresponding TaskCompletionSource.</p>
+
+<h3>Question 143</h3>
+<p>You are developing an application for a bank. The application includes a method named ProcessLoan that processes loan applications. The ProcessLoan() method uses a method named CalculateInterest. You need to declare a delegate to support the ProcessLoan() method. Which code segment should you use?</p>
+<img src="../sitebuilderpictures/70483/223.jpg">
+<ol>
+	<li>Option A</li>
+	<li>Option B</li>
+	<li class="right">Option C</li>
+	<li>Option D</li>
+</ol>
+
+<h3>Question 144</h3>
+<p>You are modifying an application that processes loans. The following code defines the Loan class.</p>
+<img src="../sitebuilderpictures/70483/224.jpg">
+<p>Loans are restricted to a maximum term of 10 years. The application must send a notification message if a loan request exceeds 10 years. You need to implement the notification mechanism. Which two actions should you perform?</p>
+<img src="../sitebuilderpictures/70483/225.jpg">
+<ol>
+	<li>Option A</li>
+	<li class="right">Option B</li>
+	<li>Option C</li>
+	<li class="right">Option D</li>
+</ol>
+
+<h3>Question 145</h3>
+<p>An application contains code that measures reaction times. The code runs the timer on a thread separate from the user interface. The application includes the following code.</p>
+<img src="../sitebuilderpictures/70483/226.jpg">
+<p>You need to ensure that the application cancels the timer when the user presses the Enter key. Which code segment should you insert at line 14?</p>
+<ol>
+	<li>tokenSource.Token.Register( () =&gt; tokenSource.Cancel() );</li>
+	<li class="right">tokenSource.Cancel();</li>
+	<li>tokenSource.IsCancellationRequested = true;</li>
+	<li>tokenSource.Dispose();</li>
+</ol>
+
+<h3>Question 146</h3>
+<p>You are developing an application that generates code. The application includes the following code segment.</p>
+<img src="../sitebuilderpictures/70483/227.jpg">
+<p>You need to ensure that code generated by the GenerateCode() method represents a class that can be accessed by all objects in its application domain. Which two code segments can you insert at line 05 to achieve this goal?</p>
+<img src="../sitebuilderpictures/70483/228.jpg">
+<ol>
+	<li class="right">Option A</li>
+	<li>Option B</li>
+	<li class="right">Option C</li>
+	<li>Option D</li>
+</ol>
+
+<h3>Question 147</h3>
+<p>You are developing an application that will process personnel records. The application must encrypt highly sensitive data. You need to ensure that the application uses the strongest available encryption. Which class should you use?</p>
+<ol>
+	<li>System.Security.Cryptography.DES</li>
+	<li class="right">System.Security.Cryptography.Aes</li>
+	<li>System.Security.Cryptography.TripleDES</li>
+	<li>System.Security.Cryptography.RC2</li>
+</ol>
+
+<h3>Question 148</h3>
+<p>You are developing an application that uses a .config file. The relevant portion of the .config file is shown as follows:</p>
+<img src="../sitebuilderpictures/70483/229.jpg">
+<p>You need to ensure that diagnostic data for the application writes to the event log by using the configuration specified in the .config file. What should you include in the application code?</p>
+<img src="../sitebuilderpictures/70483/230.jpg">
+<ol>
+	<li class="right">Option A</li>
+	<li>Option B</li>
+	<li>Option C</li>
+	<li>Option D</li>
+</ol>
+
+<h3>Question 149</h3>
+<p>You are developing an application that includes a class named Employee and a generic list of employees. The following code segment declares the list of employees: List&lt;Employee&gt; employeesList = new List&lt;Employee&gt;(); You populate the employeesList object with several hundred Employee objects. The application must display the data for five Employee objects at a time. You need to create a method that will return the correct number of Employee objects. Which code segment should you use?</p>
+<img src="../sitebuilderpictures/70483/231.jpg">
+<ol>
+	<li>Option A</li>
+	<li class="right">Option B</li>
+	<li>Option C</li>
+	<li>Option D</li>
+</ol>
+
+<h3>Question 150</h3>
+<p>You create an assembly named Assembly1.dll. You need to ensure that Assembly1.dll can be deployed to the global assembly cache (GAC). Which commands should you run?</p>
+<img src="../sitebuilderpictures/70483/233.jpg">
+
+<h3>Question 151</h3>
+<p>You have an application that accesses a Microsoft SQL Server database. The database contains a stored procedure named Proc1. Procl accesses several rows of data across multiple tables. You need to ensure that after Proc1 executes, the database is left in a consistent state. While Proc1 executes, no other operation can modify data already read or changed by Proc1.</p>
+<img src="../sitebuilderpictures/70483/235.jpg"><br>
+<img src="../sitebuilderpictures/70483/236.jpg"><br>
+<img src="../sitebuilderpictures/70483/237.jpg"><br>
+transaction.Commit();<br>
+<img src="../sitebuilderpictures/70483/238.jpg"><br>
+transaction.Rollback();<br>
+} finally {<br>
+<img src="../sitebuilderpictures/70483/239.jpg">
+
+<h3>Question 152</h3>
+<p>You have an application that uses paging. Each page displays 10 items from a list. You need to display the third page. (Develop the solution by selecting and ordering the required code snippets. You may not need all of the code snippets.)</p>
+Box 1: var page = items<br>
+Box 2: .Skip (20)<br>
+Box 3: .Take (10)</p>
+
+<h3>Question 153</h3>
+<p>You have a method that will evaluate a parameter of type Int32 named Status. You need to ensure that the method meets the following requirements:</p>
+<ul>
+	<li>If Status is set to Active, the method must return 1.</li>
+	<li>If Status is set to Inactive, the method must return 0.</li>
+	<li>If Status is any other value, the method must return -1.</li>
+</ul>
+
+<p>What should you do?</p>
+<img src="../sitebuilderpictures/70483/242.jpg">
+
+<h3>Question 154</h3>
+<p>You are developing an application that uses multiple asynchronous tasks to optimize performance. You need to retrieve the result of an asynchronous task. Which code segment should you use?</p>
+<img src="../sitebuilderpictures/70483/243.jpg">
+<ol>
+	<li>Option A</li>
+	<li>Option B</li>
+	<li class="right">Option C</li>
+	<li>Option D</li>
+</ol>
+
+<h3>Question 155</h3>
+<p>You are developing an application. The application contains the following code:</p>
+<img src="../sitebuilderpictures/70483/244.jpg">
+<p>When you compile the code, you receive the following syntax error message: “A previous catch clause already catches all exceptions of this or a super type (‘System.Exception’).” You need to ensure that the code can be compiled. What should you do?</p>
+<ol>
+	<li class="right">Catch the ArgumentException exception instead of the ArgumentNullException exception.</li>
+	<li>Throw a new exception in the second catch block.</li>
+	<li>Catch the ArgumentNullException exception first.</li>
+	<li>Re-throw the exception caught by the second catch block.</li>
+</ol>
+
+<h3>Question 156</h3>
+<p>You are developing an application that includes a method named SendMessage. You need to ensure that the SendMessage() method is called with the required parameters. Which two code segments can you use to achieve this goal?</p>
+<img src="../sitebuilderpictures/70483/245.jpg">
+<ol>
+	<li>Option A</li>
+	<li>Option B</li>
+	<li class="right">Option C</li>
+	<li class="right">Option D</li>
+</ol>
+<p>
+<p>An ExpandoObject represents an object whose members can be dynamically added and removed at run time. The ExpandoObject class enables you to add and delete members of its instances at run time and also to set and get values of these members. This class supports dynamic binding, which enables you to use standard syntax like sampleObject.sampleMember instead of more complex syntax like sampleObject.GetAttribute(“sampleMember”). / You can pass instances of the ExpandoObject class as parameters. Note that these instances are treated as dynamic objects in C# and late-bound objects in Visual Basic. This means that you do not have IntelliSense for object members and you do not receive compiler errors when you call non-existent members. If you call a member that does not exist, an exception occurs.</p>
+
+<p>Visual C# 2010 introduces a new type, dynamic. The type is a static type, but an object of type dynamic bypasses static type checking. In most cases, it functions like it has type object. At compile time, an element that is typed as dynamic is assumed to support any operation. Therefore, you do not have to be concerned about whether the object gets its value from a COM API, from a dynamic language such as IronPython, from the HTML Document Object Model (DOM), from reflection, or from somewhere else in the program. However, if the code is not valid, errors are caught at run time.</p>
+
+<h3>Question 157</h3>
+<p>You have an application that accesses a Web server named Server1. You need to download an image named Imagel.jpg from Server1 and store the image locally as Filel.jpg. Which code should you use?</p>
+<img src="../sitebuilderpictures/70483/246.jpg">
+<ol>
+	<li>Option A</li>
+	<li>Option B</li>
+	<li class="right">Option C</li>
+	<li>Option D</li>
+</ol>
+
+<h3>Question 158</h3>
+<p>You are developing a C# application. The application references and calls a RESTful web service named EmployeeService. The EmployeeService web service includes a method named GetEmployee, which accepts an employee ID as a parameter. The web service returns the following JSON data from the method. {“Id”:1,”Name”:”David Jones”&gt; The following code segment invokes the service and stores the result:</p>
+<img src="../sitebuilderpictures/70483/247.jpg">
+<p>You need to convert the returned JSON data to an Employee object for use in the application. Which code segment should you use?</p>
+<img src="../sitebuilderpictures/70483/248.jpg">
+<ol>
+	<li>Option A</li>
+	<li>Option B</li>
+	<li class="right">Option C</li>
+	<li>Option D</li>
+</ol>
+
+<h3>Question 159</h3>
+<p>You are developing an assembly. You plan to sign the assembly when the assembly is developed. You need to reserve space in the assembly for the signature. What should you do?</p>
+<ol>
+	<li>Run the Assembly Linker tool from the Windows Software Development Kit (Windows SDK).</li>
+	<li>Run the Strong Name tool from the Windows Software Development Kit (Windows SDK).</li>
+	<li>Add the AssemblySignatureKeyAttribute attribute the assembly.</li>
+	<li class="right">Add the AssemblyDelaySignAttribute attribute to the assembly.</li>
+</ol>
+
+<h3>Question 160</h3>
+<p>You have the following code:</p>
+<img src="../sitebuilderpictures/70483/249.jpg">
+<p>You need to ensure that if an exception occurs, the exception will be logged. Which code should you insert at line 28?</p>
+<img src="../sitebuilderpictures/70483/250.jpg">
+<ol>
+	<li class="right">Option A</li>
+	<li>Option B</li>
+	<li>Option C</li>
+	<li>Option D</li>
+</ol>
+<p>XmlWriterTraceListener directs tracing or debugging output as XML-encoded data to a TextWriter or to a Stream, such as a FileStream.</p>
+
+<h3>Question 161</h3>
+<p>You are troubleshooting an application that uses a class named FullName. The class is decorated with the DataContractAttribute attribute. The application includes the following code.</p>
+<img src="../sitebuilderpictures/70483/251.jpg">
+<p>You need to ensure that the entire FullName object is serialized to the memory stream object. Which code segment should you insert at line 09?</p>
+<ol>
+	<li class="right">binary.WriteEndElement();</li>
+	<li>binary.NriteEndDocument();</li>
+	<li>ms.Close() ;</li>
+	<li>binary.Flush();</li>
+</ol>
+<p>The DataContractSerializer.WriteEndObject Method (XmlDictionaryWriter) writes the closing XML element using an XmlDictionaryWriter. The DataContractSerializer.WriteObject Method writes all the object data (starting XML element, content, and closing element) to an XML document or stream.</p>
+
+<h3>Question 162</h3>
+<p>You write the following method:</p>
+<img src="../sitebuilderpictures/70483/252.jpg">
+<p>You need to ensure that the method extracts a list of URLs that match the following pattern: @http://(www\.)?([^\.]+)\.com; Which code should you insert at line 07?</p>
+<img src="../sitebuilderpictures/70483/253.jpg">
+<ol>
+	<li class="right">Option A</li>
+	<li>Option B</li>
+	<li>Option C</li>
+	<li>Option D</li>
+</ol>
+<p>A MatchCollection represents the set of successful matches found by iteratively applying a regular expression pattern to the input string. The collection is immutable (read-only) and has no public constructor. The Regex.Matches method returns a MatchCollection object.</p>
+<p>The List&lt;T&gt;.Add method adds an object to the end of the List&lt;T&gt;.</p>
+
+<h3>Question 163</h3>
+<p>You have the following code:</p>
+<img src="../sitebuilderpictures/70483/254.jpg">
+<p>You need to retrieve all of the numbers from the items variable that are greater than 80. Which code should you use?</p>
+<img src="../sitebuilderpictures/70483/255.jpg">
+<ol>
+	<li>Option A</li>
+	<li class="right">Option B</li>
+	<li>Option C</li>
+	<li>Option D</li>
+</ol>
+<p>Enumerable.Where&lt;TSource&gt; Method (IEnumerable&lt;TSource&gt;, Func&lt;TSource, Boolean&gt;) Filters a sequence of values based on a predicate.</p>
+<p><code>
+List&lt;string&gt; fruits =<br>
+new List&lt;string&gt; { "apple", "passionfruit", "banana", "mango",<br>
+"orange", "blueberry", "grape", "strawberry" };<br>
+IEnumerable&lt;string&gt; query = fruits.Where(fruit =&gt; fruit.Length &lt; 6);<br>
+foreach (string fruit in query)<br>
+{<br>
+Console.WriteLine(fruit);<br>
+}<br>
+/*<br>
+This code produces the following output:<br>
+apple<br>
+mango<br>
+grape<br>
+*/
+</code></p>
+ 
+<h3>Question 164</h3>
+<p>You are developing an application that uses several objects. The application includes the following code segment.</p>
+<img src="../sitebuilderpictures/70483/256.jpg">
+<p>You need to evaluate whether an object is null. Which code segment should you insert at line 03?</p>
+<img src="../sitebuilderpictures/70483/257.jpg">
+<ol>
+	<li>Option A</li>
+	<li class="right">Option B</li>
+	<li>Option C</li>
+	<li>Option D</li>
+</ol>
+<p>Use the == operator to compare values and in this case also use the null literal.</p>
+
+<h3>Question 165</h3>
+<p>You are implementing a new method named ProcessData. The ProcessData() method calls a third-party component that performs a long-running operation to retrieve stock information from a web service. The third-party component uses the IAsyncResult pattern to signal completion of the longrunning operation so that the UI can be updated with the new values. You need to ensure that the calling code handles the long-running operation as a System.Threading.Tasks.Task object to avoid blocking the UI thread. Which two actions should you perform?</p>
+<ol>
+	<li class="right">Create a TaskCompletionSource&lt;T&gt; object.</li>
+	<li class="right">Call the component by using the TaskFactory.FromAsync() method.</li>
+	<li>Apply the following attribute to the ProcessData() method signature: [Methodlmpl(MethodlmplOptions.Synchronized)]</li>
+	<li>Apply the async modifier to the ProcessData() method signature.</li>
+</ol>
+
+<h3>Question 166</h3>
+<p>You are developing a class named Account that will be used by several applications. The applications that will consume the Account class will make asynchronous calls to the Account class to execute several different methods. You need to ensure that only one call to the methods is executed at a time. Which keyword should you use?</p>
+<ol>
+	<li>sealed</li>
+	<li>protected</li>
+	<li>checked</li>
+	<li class="right">lock</li>
+</ol>
+
+<h3>Question 167</h3>
+<p>You are developing an application by using C#. The application will write events to an event log. You plan to deploy the application to a server. You create an event source named MySource and a custom log named MyLog on the server. You need to write events to the custom log. Which code segment should you use?</p>
+<img src="../sitebuilderpictures/70483/258.jpg">
+<ol>
+	<li>Option A</li>
+	<li>Option B</li>
+	<li>Option C</li>
+	<li class="right">Option D</li>
+</ol>
+
+<h3>Question 168</h3>
+<p>You plan to store passwords in a Windows Azure SQL Database database. You need to ensure that the passwords are stored in the database by using a hash algorithm, Which cryptographic algorithm should you use?</p>
+<ol>
+	<li>ECDSA</li>
+	<li>RSA-768</li>
+	<li>AES-256</li>
+	<li class="right">SHA-256</li>
+</ol>
+
+<h3>Question 169</h3>
+<p>You have an existing order processing system that accepts .xml files, The following code shows an example of a properly formatted order in XML:</p>
+<img src="../sitebuilderpictures/70483/259.jpg">
+<p>You create the following class that will be serialized:</p>
+<img src="../sitebuilderpictures/70483/260.jpg">
+<p>For each of the following properties, select Yes if the property is serialized according to the defined schema. Otherwise, select No.</p>
+<img src="../sitebuilderpictures/70483/262.jpg">
+
+<h3>Question 170</h3>
+<p>You are developing an application that includes methods named ConvertAmount and TransferFunds. You need to ensure that the precision and range of the value in the amount variable is not lost when the TransferFunds() method is called. Which code segment should you use?</p>
+<img src="../sitebuilderpictures/70483/263.jpg">
+<ol>
+	<li>Option A</li>
+	<li>Option B</li>
+	<li class="right">Option C</li>
+	<li>Option D</li>
+</ol>
+
+<h3>Question 171</h3>
+<p>You need to write a console application that meets the following requirements: If the application is compiled in Debug mode, the console output must display Entering debug mode. If the application is compiled in Release mode, the console output must display Entering release mode. Which code should you use?</p>
+<img src="../sitebuilderpictures/70483/264.jpg">
+<ol>
+	<li>Option A</li>
+	<li class="right">Option B</li>
+	<li>Option C</li>
+	<li>Option D</li>
+</ol>
+<p>When the C# compiler encounters an #if directive, followed eventually by an #endif directive, it will compile the code between the directives only if the specified symbol is defined. Unlike C and C++, you cannot assign a numeric value to a symbol; the #if statement in C# is Boolean and only tests whether the symbol has been defined or not. For example:</p>
+<p><code>
+#define DEBUG<br>
+// …<br>
+#if DEBUG<br>
+ Console.WriteLine(“Debug version”);<br>
+#endif
+</code></p>
+
+<h3>Question 172</h3>
+<p>You are adding a method to an existing application. The method uses an integer named statusCode as an input parameter and returns the status code as a string. The method must meet the following requirements:</p>
+<ul>
+	<li>Return “Error” if the statusCode is 0.</li>
+	<li>Return “Success” if the statusCode is 1.</li>
+	<li>Return “Unauthorized” if the statusCode is any value other than 0 or l.</li>
+</ul>
+<p>You need to implement the method to meet the requirements. How should you complete the relevant code?</p>
+<img src="../sitebuilderpictures/70483/266.jpg">
+
+<h3>Question 173</h3>
+<p>You have the following class:</p>
+<img src="../sitebuilderpictures/70483/267.jpg">
+<p>ServiceProxy is a proxy for a web service. Calls to the Update method can take up to five seconds. The Test class is the only class the uses Class1. You run the Execute method three times, and you receive the following results:</p>
+<p><code>
+213<br>
+312<br>
+231<br>
+</code></p>
+<p>You need to ensure that each value is appended to the Value property in the order that the Modify methods are invoked. What should you do?</p>
+<img src="../sitebuilderpictures/70483/268.jpg">
+<ol>
+	<li>Option A</li>
+	<li class="right">Option B</li>
+	<li>Option C</li>
+	<li>Option D</li>
+</ol>
+
+<h3>Question 174</h3>
+<p>You are developing a method named GetHash that will return a hash value for a file. The method includes the following code.</p>
+<img src="../sitebuilderpictures/70483/269.jpg">
+<p>You need to return the cryptographic hash of the bytes contained in the fileBytes variable. Which code segment should you insert at line 05?</p>
+<img src="../sitebuilderpictures/70483/270.jpg">
+<ol>
+	<li class="right">Option A</li>
+	<li>Option B</li>
+	<li>Option C</li>
+	<li>Option D</li>
+</ol>
+
+<h3>Question 175</h3>
+<p>You are developing an application that includes the following code segment:</p>
+<img src="../sitebuilderpictures/70483/271.jpg">
+<p>You need to implement the Open() method of each interface in a derived class named UseResources and call the Open() method of each interface. Which two code segments should you use?</p>
+<ol>
+	<li class="right">Option A</li>
+	<li>Option B</li>
+	<li class="right">Option C</li>
+	<li>Option D</li>
+</ol>
+<p>An interface contains only the signatures of methods, properties, events or indexers. A class or struct that implements the interface must implement the members of the interface that are specified in the interface definition. Example:</p>
+<p><code>
+interface ISampleInterface<br>
+{<br>
+ void SampleMethod();<br>
+}<br>
+class ImplementationClass : ISampleInterface<br>
+{<br>
+ // Explicit interface member implementation:<br>
+ void ISampleInterface.SampleMethod()<br>
+ {<br>
+ // Method implementation.
+ }<br>
+ static void Main()<br>
+ {<br>
+ // Declare an interface instance.
+ ISampleInterface obj = new ImplementationClass();<br>
+ // Call the member.
+ obj.SampleMethod();<br>
+ }<br>
+}<br>
+</code></p>
+
+<h3>Question 176</h3>
+<p>You are implementing a method named ProcessData that performs a long-running task. The ProcessData() method has the following method signature:</p>
+<p><code>
+public void ProcessData(List&lt;decimal&gt; values, CancellationTokenSource source, CancellationToken token)<br>
+</code></p>
+<p>If the calling code requests cancellation, the method must perform the following actions:</p>
+<ul>
+	<li>Cancel the long-running task.</li>
+	<li>Set the task status to TaskStatus.Canceled.</li>
+</ul>
+<p>You need to ensure that the ProcessData() method performs the required actions. Which code segment should you use in the method body?</p>
+<ol>
+	<li>if (token.IsCancellationRequested) return;</li>
+	<li>throw new AggregateException();</li>
+	<li class="right">token.ThrowIfCancellationRequested();</li>
+	<li>source.Cancel();</li>
+</ol>
+
+<h3>Question 177</h3>
+<p>You have the following code:</p>
+<img src="../sitebuilderpictures/70483/273.jpg">
+<p>To answer, complete each statement according to the information presented in the code.</p>
+<img src="../sitebuilderpictures/70483/275.jpg">
+
+<h3>Question 178</h3>
+<p>You are developing an application in C#. The application uses exception handling on a method that is used to execute mathematical calculations by using integer numbers. You write the following catch blocks for the method:</p>
+<img src="../sitebuilderpictures/70483/276.jpg">
+<p>You need to add the following code to the method:</p>
+<img src="../sitebuilderpictures/70483/277.jpg">
+<p>At which line should you insert the code?</p>
+<ol>
+	<li class="right">01</li>
+	<li>03</li>
+	<li>05</li>
+	<li>07</li>
+</ol>
+
+<h3>Question 179</h3>
+<p>You are developing an application that uses multiple asynchronous tasks to optimize performance. The application will be deployed in a distributed environment. You need to retrieve the result of an asynchronous task that retrieves data from a web service. The data will later be parsed by a separate task. Which code segment should you use?</p>
+<img src="../sitebuilderpictures/70483/278.jpg">
+<ol>
+	<li>Option A</li>
+	<li class="right">Option B</li>
+	<li>Option C</li>
+	<li>Option D</li>
+</ol>
+
+<h3>Question 180</h3>
+<p>You are implementing a method named GetValidPhoneNumbers. The GetValidPhoneNumbers() method processes a list of string values that represent phone numbers. The GetValidPhoneNumbers() method must return only phone numbers that are in a valid format. You need to implement the GetValidPhoneNumbers() method. Which two code segments can you use to achieve this goal?</p>
+<img src="../sitebuilderpictures/70483/279.jpg">
+<ol>
+	<li class="right">Option A</li>
+	<li class="right">Option B</li>
+	<li>Option C</li>
+	<li>Option D</li>
+</ol>
+
+<h3>Question 181</h3>
+<p>You are developing an application that will write data to a file. The application includes the following code segment. You need to ensure that the WriteData() method will write data to a file. Which four code segments should you insert in sequence at line 03?</p>
+<img src="../sitebuilderpictures/70483/281.jpg"><br>
+<img src="../sitebuilderpictures/70483/282.jpg"><br>
+<img src="../sitebuilderpictures/70483/283.jpg"><br>
+<img src="../sitebuilderpictures/70483/284.jpg">
+<p>The StreamWriter Constructor (String) Initializes a new instance of the StreamWriter class for the specified file by using the default encoding and buffer size. The StreamWriter class has no method Open.</p>
+
+<h3>Question 182</h3>
+<p>You are creating an application that reads from a database. You need to use different databases during the development phase and the testing phase by using conditional compilation techniques. What should you do?</p>
+<ol>
+	<li>Configure the Define TRACE constant setting in Microsoft Visual Studio.</li>
+	<li>Decorate the code by using the [DebuggerDisplay("Mydebug")] attribute.</li>
+	<li class="right">Configure the Define DEBUG constant setting in Microsoft Visual Studio.</li>
+	<li>Disable the strong-name bypass feature of Microsoft .NET Framework in the registry.</li>
+</ol>
+
+<h3>Question 183</h3>
+<p>You are creating a class named Loan. The Loan class must meet the following requirements: Include a member that represents the rate for a Loan instance. Allow external code to assign a value to the rate member. Restrict the range of values that can be assigned to the rate member. You need to implement the rate member to meet the requirements. In which form should you implement the rate member?</p>
+<ol>
+	<li>public static property</li>
+	<li class="right">public property</li>
+	<li>public static field</li>
+	<li>protected field</li>
+</ol>
+
+<h3>Question 184</h3>
+<p>You are creating a console application named App1. App1 retrieves data from the Internet by using JavaScript Object Notation (JSON). You are developing the following code segment:</p>
+<img src="../sitebuilderpictures/70483/285.jpg">
+<p>You need to ensure that the code validates the JSON string. Which code should you insert at line 03?</p>
+<img src="../sitebuilderpictures/70483/286.jpg">
+<ol>
+	<li>Option A</li>
+	<li>Option B</li>
+	<li>Option C</li>
+	<li class="right">Option D</li>
+</ol>
+<p>The JavaScriptSerializer Class Provides serialization and deserialization functionality for AJAX-enabled applications. The JavaScriptSerializer class is used internally by the asynchronous communication layer to serialize and deserialize the data that is passed between the browser and the Web server. You cannot access that instance of the serializer. However, this class exposes a public API. Therefore, you can use the class when you want to work with JavaScript Object Notation (JSON) in managed code.</p>
+
+<h3>Question 185</h3>
+<p>You are developing an application that includes methods named EvaluateLoan, ProcessLoan, and FundLoan. The application defines build configurations named TRIAL, BASIC, and ADVANCED. You have the following requirements:</p>
+<ul>
+	<li>The TRIAL build configuration must run only the EvaluateLoan() method.</li>
+	<li>The BASIC build configuration must run all three methods.</li>
+	<li>The ADVANCED build configuration must run only the EvaluateLoan() and ProcessLoan() methods.</li>
+</ul>
+<p>You need to meet the requirements. Which code segment should you use?</p>
+<img src="../sitebuilderpictures/70483/287.jpg">
+<ol>
+	<li>Option A</li>
+	<li>Option B</li>
+	<li class="right">Option C</li>
+	<li>Option D</li>
+</ol>
+
+<h3>Question 186</h3>
+<p>You are creating an application that processes a list of numbers. The application must define a method that queries the list and displays a subset of the numbers to the user. The method must not update the list. You need to create an extendable query by using LINQ. What should you do?</p>
+<img src="../sitebuilderpictures/70483/288.jpg">
+<ol>
+	<li>Option A</li>
+	<li>Option B</li>
+	<li class="right">Option C</li>
+	<li>Option D</li>
+</ol>
+
+<h3>Question 187</h3>
+<p>You are developing an application that contains a class named TheaterCustomer and a method named ProcessTheaterCustomer. The ProcessTheaterCustomer() method accepts a TheaterCustomer object as the input parameter. You have the following requirements:</p>
+<ul>
+	<li>Store the TheaterCustomer objects in a collection.</li>
+	<li>Ensure that the ProcessTheaterCustomer() method processes the TheaterCustomer objects in the order in which they are placed into the collection.</li>
+</ul>
+<p>You need to meet the requirements. What should you do?</p>
+<ol>
+	<li>Create a System.Collections.Stack collection. Use the Push() method to add TheaterCustomer objects to the collection, Use the Peek() method to pass the objects to the ProcessTheaterCustomer() method.</li>
+	<li class="right">Create a System.Collections.Queue collection. Use the Enqueue() method to add TheaterCustomer objects to the collection. Use the Dequeue() method to pass the objects to the ProcessTheaterCustomer() method.</li>
+	<li>Create a System.Collections.SortedList collection. Use the Add() method to add TheaterCustomer objects to the collection. Use the Remove() method to pass the objects to the ProcessTheaterCustomer() method.</li>
+	<li>Create a System.Collections.ArrayList collection. Use the Insert() method to add TheaterCustomer objects to the collection. Use the Remove() method to pass the objects to the ProcessTheaterCustomer() method.</li>
+</ol>
+
+<h3>Question 188</h3>
+<p>You are debugging a 64-bit C# application. Users report System.OutOfMemoryException exceptions. The system is attempting to use arrays larger than 2 GB in size. You need to ensure that the application can use arrays larger than 2 GB. What should you do?</p>
+<ol>
+	<li>Add the /3GB switch to the boot.ini file for the operating system.</li>
+	<li>set the IMAGE_FILE_LARGE_ADDRESS_AWARE flag in the image header for the application executable file.</li>
+	<li class="right">set the value of the gcAllowVeryLargeObjects property to true in the application configuration file.</li>
+	<li>Set the value of the user-mode virtual address space setting for the operating system to MAX.</li>
+</ol>
+
+<h3>Question 189</h3>
+<p>You develop an application by using C#. The application counts the number of times a specific word appears within a set of text files. The application includes the following code.</p>
+<img src="../sitebuilderpictures/70483/289.jpg">
+<p>You have the following requirements:</p>
+<ul>
+	<li>Populate the _wordCounts object with a list of words and the number of occurrences of each word.</li>
+	<li>Ensure that updates to the ConcurrentDictionary object can happen in parallel.</li>
+</ul>
+<p>You need to complete the relevant code. Which code segment should you insert at line 23?</p>
+<img src="../sitebuilderpictures/70483/290.jpg">
+<ol>
+	<li class="right">Option A</li>
+	<li>Option B</li>
+	<li>Option C</li>
+	<li>Option D</li>
+</ol>
+
+<h3>Question 190</h3>
+<p>You are evaluating a method that calculates loan interest. The application includes the following code segment.</p>
+<img src="../sitebuilderpictures/70483/291.jpg">
+<p>When the loanTerm value is 5 and the loanAmount value is 4500, the loanRate must be set to 6.5 percent. You need to adjust the loanRate value to meet the requirements. What should you do?</p>
+<ol>
+	<li class="right">Replace line 15 with the following code segment: loanRate = 0.065m;</li>
+	<li>Replace line 07 with the following code segment: loanRate = 0.065m;</li>
+	<li>Replace line 17 with the following code segment: interestAmount = loanAmount * 0.065m * loanTerm;</li>
+	<li>Replace line 04 with the following code segment: decimal loanRate = 0.065m;</li>
+</ol>
+
+<h3>Question 191</h3>
+<p>You are developing an application that includes a class named Customer and a generic list of customers. The following code segment declares the list of customers: List&lt;Customer&gt; customersList = new List&lt;Customer&gt; () ; You populate the customersList object with several hundred Customer objects. The application must display the data for five Customer objects at a time. You need to create a method that will return the correct number of Customer objects. Which code segment should you use?</p>
+<img src="../sitebuilderpictures/70483/292.jpg">
+<ol>
+	<li class="right">Option A</li>
+	<li>Option B</li>
+	<li>Option C</li>
+	<li>Option D</li>
+</ol>
+
+<h3>Question 192</h3>
+<p>You are developing an application that will use multiple asynchronous tasks to optimize performance. You create three tasks by using the following code segment.</p>
+<img src="../sitebuilderpictures/70483/293.jpg">
+<p>You need to ensure that the ProcessTasks() method waits until all three tasks complete before continuing. Which code segment should you insert at line 09?</p>
+<ol>
+	<li>Task.WaitFor(3);</li>
+	<li>tasks.Yield();</li>
+	<li>tasks.WaitForCompletion();</li>
+	<li class="right">Task.WaitAll(tasks);</li>
+</ol>
+
+<h3>Question 193</h3>
+<p>You are developing a C# application. The application includes the following code segment,</p>
+<img src="../sitebuilderpictures/70483/294.jpg">
+<p>The application fails at line 17 with the following error message: “An item with the same key has already been added.” You need to resolve the error. Which code segment should you insert at line 16?</p>
+<img src="../sitebuilderpictures/70483/295.jpg">
+<ol>
+	<li class="right">Option A</li>
+	<li>Option B</li>
+	<li>Option C</li>
+	<li>Option D</li>
+</ol>
+
+<h3>Question 194</h3>
+<p>You are developing an application by using C#. The application includes a method named SendMessage. The SendMessage() method requires a string input. You need to replace “Hello” with “Goodbye” in the parameter that is passed to the SendMessage() method. Which two code segments can you use to achieve this goal?</p>
+<img src="../sitebuilderpictures/70483/296.jpg">
+<ol>
+	<li>Option A</li>
+	<li class="right">Option B</li>
+	<li class="right">Option C</li>
+	<li>Option D</li>
+</ol>
+
+<h3>Question 195</h3>
+<p>You are developing an application that includes the following code segment:</p>
+<img src="../sitebuilderpictures/70483/297.jpg">
+<p>You need to implement both Start() methods in a derived class named UseStart that uses the Start() method of each interface. Which two code segments should you use?</p>
+<img src="../sitebuilderpictures/70483/298.jpg">
+<ol>
+	<li>Option A</li>
+	<li class="right">Option B</li>
+	<li>Option C</li>
+	<li>Option D</li>
+	<li class="right">Option E</li>
+	<li>Option F</li>
+</ol>
+
+<h3>Question 196</h3>
+<p>You need to write a console application that meets the following requirements: If the application is compiled in Debug mode, the console output must display Entering debug mode. If the application is compiled in Release mode, the console output must display Entering release mode. Which code should you use?</p>
+<img src="../sitebuilderpictures/70483/299.jpg">
+<ol>
+	<li>Option A</li>
+	<li>Option B</li>
+	<li>Option C</li>
+	<li class="right">Option D</li>
+</ol>
+<p>
+
+<h3>Question 197</h3>
+<p>You are developing an application by using C#. The application will write events to an event log. You plan to deploy the application to a server. You create an event source named AppSource and a custom log named AppLog on the server. You need to write events to the custom log. Which code segment should you use?</p>
+<img src="../sitebuilderpictures/70483/300.jpg">
+<ol>
+	<li class="right">Option A</li>
+	<li>Option B</li>
+	<li>Option C</li>
+	<li>Option D</li>
+</ol>
+
+<h3>Question 198</h3>
+<p>You are developing a C# application. The application includes a class named Rate. The following code segment implements the Rate class:</p>
+<img src="../sitebuilderpictures/70483/301.jpg">
+<p>You define a collection of rates named rateCollection by using the following code segment: Collection&lt;Rate&gt; rateCollection = new Collection&lt;Rate&gt;() ; The application receives an XML file that contains rate information in the following format:</p>
+<img src="../sitebuilderpictures/70483/302.jpg">
+<p>You need to parse the XML file and populate the rateCollection collection with Rate objects. How should you complete the relevant code? (To answer, drag the appropriate code segments to the correct locations in the answer area. Each code segment may be used once, more than once, or not at all. You may need to drag the split bar between panes or scroll to view content.)</p>
+<img src="../sitebuilderpictures/70483/304.jpg">
+
+<h3>Question 199</h3>
+<p>You are implementing a method named ProcessFile that retrieves data files from web servers and FTP servers. The ProcessFile () method has the following method signature: Public void ProcessFile(Guid dataFileld, string dataFileUri) Each time the ProcessFile() method is called, it must retrieve a unique data file and then save the data file to disk. You need to complete the implementation of the ProcessFile() method. Which code segment should you use?</p>
+<img src="../sitebuilderpictures/70483/310.jpg">
+<ol>
+	<li>Option A</li>
+	<li>Option B</li>
+	<li>Option C</li>
+	<li class="right">Option D</li>
+</ol>
+<p>The WebRequest.Create Method (Uri) Initializes a new WebRequest instance for the specified URI scheme. Example:</p>
+<p><code>
+// 1. create a WebRequest instance by calling Create with the URI of the resource<br>
+WebRequest request = WebRequest.Create(“http://www.contoso.com/”);<br>
+<br>
+// 2. set any property values that you need in the WebRequest. For example, to enable<br>
+// authentication, set the Credentials property to an instance of the NetworkCredential class.<br>
+request.Credentials = CredentialCache.DefaultCredentials;<br>
+<br>
+//3. To send the request to the server, call GetResponse. The actual type of the returned<br>
+// WebResponse object is determined by the scheme of the requested URI.<br>
+WebResponse response = request.GetResponse();<br>
+<br>
+// 4. To get the stream containing response data sent by the server, use the<br>
+// GetResponseStream method of the WebResponse.<br>
+Stream dataStream = response.GetResponseStream ();
+</code></p>
+
+<h3>Question 200</h3>
+<p>You are developing an application that will manage customer records. The application includes a method named FindCustomer. Users must be able to locate customer records by using the customer identifier or customer name. You need to implement the FindCustomer() method to meet the requirement. Which two sets of method signatures can you use to achieve this goal?</p>
+<img src="../sitebuilderpictures/70483/311.jpg">
+<ol>
+	<li>Option A</li>
+	<li class="right">Option B</li>
+	<li>Option C</li>
+	<li class="right">Option D</li>
+</ol>
+
+<h3>Question 201</h3>
+<p>You need to write a method that combines an unknown number of strings. The solution must minimize the amount of memory used by the method when the method executes. What should you include in the code?</p>
+<ol>
+	<li class="right">The String.Concat method</li>
+	<li>The StringBuilder.Append method</li>
+	<li>The + operator</li>
+	<li>The += operator</li>
+</ol>
+
+<h3>Question 202</h3>
+<p>You are modifying an existing application. The application includes a Loan class and a Customer class. The following code segment defines the classes.</p>
+<img src="../sitebuilderpictures/70483/312.jpg">
+<p>You populate a collection named customer-Collection with Customer and Loan objects by using the following code segment:</p>
+<img src="../sitebuilderpictures/70483/313.jpg">
+<p>You create a largeCustomerLoans collection to store the Loan objects by using the following code segment: Collection&lt;Loan&gt; largeCustomerLoans = new Collection&lt;Loan&gt;(); All loans with an Amount value greater than or equal to 4000 must be tracked. You need to populate the largeCustomerLoans collection with Loan objects. Which code segment should you use?</p>
+<img src="../sitebuilderpictures/70483/314.jpg">
+<ol>
+	<li>Option A</li>
+	<li>Option B</li>
+	<li>Option C</li>
+	<li class="right">Option D</li>
+</ol>
+</body>
+</html>

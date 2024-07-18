@@ -1,0 +1,420 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<title>Hector J. Rivas - Syntax Highlighting Done Right</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Expires" content="0">
+<meta name="description" content="Syntax Highlighting Done Right">
+<meta content="text/html; charset=iso-8859-1" http="http">
+<style type="text/css" media="all"><!-- media="all": hack to hide stuff from NS 4 --></style>
+<link rel="stylesheet" href="styles.css">
+<script type="text/javascript" src="prototypes.js"></script>
+<script type="text/javascript" src="dom.js"></script>
+<script type="text/javascript" src="utility.js"></script>
+<script type="text/javascript" src="syntax.js"></script>
+<script type="text/javascript" src="scripts.js"></script>
+</head>
+<body>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr><td class="tdheader"><table border="0" cellpadding="0" cellspacing="0" class="tbheader"><tr><td></td></tr></table></td></tr>
+<tr><td class="tdspacer"></td></tr>
+<tr><td class="tdcontent">
+<table  border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td>
+<h2>Syntax Highlighting Done Right</h2>
+<p>
+<img src="../sitebuilderpictures/syntaxhighlighting.0.jpg" align="right" class="imgfigure">
+<i>Syntax highlighting</i> is a secondary form of notation that helps  human readers interpret what a code snippet does and how. The idea is to use different colors&mdash;and other font attributes&mdash;for string literals so that the contrasts become visual cues for keywords, blocks of text, operators and symbols. Most code editors have a syntax highlighting strategy that along with <i>line numbering</i>, <i>brace matching</i>, and <i>code folding</i> help developers determine scope, detect errors and organize code into sections.
+</p>
+<p>
+At the heart of every syntax highlighter resides a <i>pattern recognition engine</i>, exactly what a <i>regular expression</i> object is. A syntax is made of sets of keywords, literals, operators, special characters and rules about order of appearance among them. Once a highlighter knows these sets, it can perform a pattern match and replace operation of any text against them. The replacement values wrap the matches in special tags&mdash;a secondary notation&mdash;that another engine knows how to display.
+</p>
+<p>
+This article presents a basic strategy that highlights well-formed code snippets using HTML, CSS and JavaScript: you do need to be somewhat familiar with the syntax and objects of these languages to understand how it all works. I use this strategy to highlight every code snippet on this website. It is an open-source, modular, cross-browser compatible, and customizable highlighting strategy; it is <i>not</i> a syntax parsing strategy: it does not check the syntax of code snippets. You are welcome to use it, test it, build on it, and break it&mdash;please do let me know!
+</p>
+<h3>The Basic Constructs of the Syntax Highlighter</h3>
+<p>
+The basic constructs of the syntax highlighter presented here are the highlighting engine (the <b>Syntax</b> class), and two classes contained by the engine: <i>keyword groups</i> (<b>Groups</b>) and <i>block definitions</i> (<b>Blocks</b>). Programming languages usually have keyword groups such as "intrinsic", "reserved", "constants", etc.; this grouping allows for further granularity when highlighting code. Blocks of text such as quoted string literals and comments are also quite typical in almost every programming language, and they can be easily identified by their opening and closing delimiters.
+</p>
+<p class="pfigure">
+Figure 1. The Basic Constructs of the Syntax Highlighter
+<br/>
+<br/>
+<img src="../sitebuilderpictures/syntaxhighlighting.1.jpg" class="imgfigure">
+</p>
+<p>
+A Syntax object holds a language, a reference to a HTML DOM style sheet object, a CSS rule, a tab size, and arrays of groups, and blocks.
+The syntax object exposes methods to add groups and blocks to the respective arrays, and a method to "parse" the text to highlight.
+</p>
+<p>
+Upon construction of a Syntax object, the passed-in CSS rule is appended to the passed-in style sheet using the AddRule utility function (a wrapper for the <a href="http://msdn.microsoft.com/en-us/library/ie/ff975163(v=vs.85).aspx" target="blank" title="insertRule method (Internet Explorer)">HTML DOM's insertRule method</a>). The passed-in rule defines the general style for the language&mdash;font family, padding, margins, etc. Groups and blocks have their own CSS rule&mdash;additional style attributes such as font color and weight&mdash;which are created one level below the language rule. This is the whole point of "cascading styles", and is illustrated by the format string of the <b>printf</b> utility function (a function similar to C#'s <font color="#0000FF"><b>String</b>.Format</font> method).
+</p>
+<p>
+It is worth mentioning that style rules are created "on the fly" using HTML DOM methods, so that the user dictates how to highlight text. Moreover, the function that instances a <b>Syntax</b> object must pass a reference to an existing style sheet element, which can also be created on the fly.
+</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<span class="linenumbers"></span>
+</td>
+<td valign="top">
+<textarea class="code">
+function Syntax(language, styleSheet, rule, tabSize)
+{
+	this.language = language;
+	tabSize  |= 4;
+
+	var Groups = [];
+	var Blocks = [];
+
+	// add the language CSS rule to the style sheet
+	AddRule(styleSheet, printf(".{0}", language), rule);
+
+	// add keyword group
+	this.AddGroup = function(name, keywords, rule, flags)
+	{
+		// push the group (with a decorated name) into the array
+		Groups.push(new Group(name += randomHex(4), keywords, flags));
+		
+		// add the CSS rule of this group
+		AddRule(styleSheet, printf(".{0} .{1}", language, name), rule);
+	}
+
+	// add block
+	this.AddBlock = function(name, regexp, rule, realizeHTML)
+	{
+		// <a href="http://msdn.microsoft.com/en-us/library/6d0cbb1w(v=vs.94).aspx" target="blank" title="MSDN JavaScript Array push method">push</a> the block (with a decorated name) into the array
+		Blocks.push(new Block(name += randomHex(4), regexp, realizeHTML));
+
+		// add the CSS rule of this block
+		AddRule(styleSheet, printf(".{0} .{1}", language, name), rule);
+	}
+}
+</textarea>
+<pre class="JavaScript"></pre>
+</td>
+</tr>
+</table>
+<p>
+Group and block names are decorated to lower the chances of being interpreted as a keyword or as existing CSS rules. For example, the keyword group named "reserved" is turned into "reserved4ADB". Do notice that these decorated names are still at risk of becoming keywords: groundBEEF, cyberCAFE and liveFEED are quite possible, but it is fairly easy to minimize this side effect by using lengthier (or more complex) decorated names.
+</p>
+<h3>Groups</h3>
+<p>
+<b>Groups</b> take in a list of keywords (a space-delimited string) and regular expression flags (any combination of 'g', 'm' and 'i') to control case sensitivity. For the purposes of encapsulation, these two arguments are used to build a regular expression of keywords as choices delimited by word boundaries, in <a href="http://msdn.microsoft.com/en-us/library/1400241x(v=vs.94).aspx" target="blank" title="MSDN JavaScript Regular Expression Syntax">regular expression jargon</a>.
+</p>
+<p>
+The template property is a HTML element to which we apply the group's decorated name as a class name, e.g., <b>&lt;span class="reserved4ADB"&gt;{0}&lt;/span&gt;</b>, to match the style rule created when the <b>Syntax</b> object instances the group. Notice that upon construction, the template property remains a printf template, for later use in the Parse method.
+</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<span class="linenumbers"></span>
+</td>
+<td valign="top">
+<textarea class="code">
+function Group(name, keywords, flags)
+{
+	var regexp   = null;
+	var template = null;
+	
+	// no keywords, no regexp
+	if (keywords)
+		regexp = new RegExp(printf("\\b({0})\\b", keywords.replace(/\s+/g, '|')), flags || 'g');
+
+	// no name, no template
+	if (name)
+		template = printf("&amp;lt;span class=\"{0}\"&amp;gt;{1}&amp;lt;/span&amp;gt;", name, "{0}");
+
+	this.Parse = function(text)
+	{
+		if (regexp && template)
+			return text.replace(regexp, printf(template, "$1"));
+		
+		// no shirt, no shoes, no service!
+		return text;
+	}
+}
+</textarea>
+<pre class="JavaScript"></pre>
+</td>
+</tr>
+</table>
+<p>
+The Parse method takes in text&mdash;usually an entire code snippet&mdash;and surrounds keywords with the template's HTML tags. The conditional statements just prevent parsing of malformed keyword groups (those without a name or without keywords).
+</p>
+<h3>Blocks</h3>
+<p>
+A block's template property is identical to a group's template property (a HTML element with the CSS class attribute). Blocks take in a regular expression object that&mdash;hopefully&mdash;defines the block's opening and closing delimiters, and what is allowed between them. 
+</p>
+<p>
+Parsing blocks is fundamentally differently from parsing keyword groups. Blocks must be "hidden" before parsing keywords because they are very likely to contain keywords. The Hide method accomplishes this by replacing blocks with pseudo-random unique identifiers.
+</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<span class="linenumbers"></span>
+</td>
+<td valign="top">
+<textarea class="code">
+function Block(name, regexp)
+{
+	var template = printf("<span class=\"{0}\">{1}</span>", name, "{0}");
+	var id       = printf("{0}{1}", randomString(25), "{0}");
+	var Matches;
+
+	this.Hide = function(text)
+	{
+		// save the matches so we can restore them later
+		Matches = text.match(regexp) || [];
+
+		for (var i = 0; i < Matches.length; i++)
+		{
+			// replace each match by its indexed base26 id
+			text = text.replace(Matches[i], printf(id, i.toBase26()));
+			
+			// tweak each match to preserve white space accross lines
+			Matches[i] = Matches[i].replace(/^ +/, function($1) { return "&&#27;nbsp;".times($1.length); });
+		}
+		
+		return text;
+	}
+}
+</textarea>
+<pre class="JavaScript"></pre>
+</td>
+</tr>
+</table>
+<p>
+The id property gets initialized with a lengthy random string and a placeholder for an index number. More complex identifiers can be devised by mixing case or by adding special characters, provided they do not interfere with the syntax highlighting engine, the regular expression syntax and ultimately with the HTML engine. So far, my lengthy and strictly uppercase alphabetic identifiers are very unlikely to be mistaken for keywords.
+</p>
+<p>
+The Hide method fills the Matches private array and replaces each match with the corresponding indexed id. In case you are wondering, the index is a <a href="http://en.wikipedia.org/wiki/Hexavigesimal#Bijective_base_26" target="blank" title="bijective base 26 on Wikipedia">bijective base 26</a> "number": 'A', 'B', 'C', ..., 'AA', 'AB' and so on. I use this numeral system to circumvent a problem when there is a block definition for numbers in our Syntax object: base 10 index digits at the very end of the id will be replaced by the next id in the sequence, an undesirable side-effect that could go on indefinetely.
+</p>
+<p>
+Finally, the Hide method takes additional provisions to preserve indentation across lines (typically white space after consecutive lines used to align comments after the statement terminator).
+</p>
+<p>
+The Restore method (below) simply replaces the id's with each stored match.
+</p>
+<p>
+Blocks are very likely to be embedded within other blocks. This block <i>nesting</i> is not explicitly implemented in my strategy, but it is implicitly defined by the order in which blocks are added to the Syntax object. To handle embedded blocks I implemented the RestoreEmbedded method, which builds a new regular expression to replace id's with their corresponding matches until none are left.
+</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<span class="linenumbers"></span>
+</td>
+<td valign="top">
+<textarea class="code">
+this.Restore = function(text)
+{
+	for (var i = 0; i < Matches.length; i++)
+		text = text.replace(printf(id, i.toBase26()), printf(template, Matches[i]));
+
+	return text;
+}
+
+this.RestoreEmbedded = function(text)
+{
+	if (Matches.length)
+	{
+		var re = new RegExp(printf('(' + id + ')', "(\\w+)"));
+		
+		while (text.search(re) != -1)
+			text = text.replace(RegExp.$1, Matches[RegExp.$2.fromBase26()]);
+	}
+	
+	return text;
+}
+</textarea>
+<pre class="JavaScript"></pre>
+</td>
+</tr>
+</table>
+<p>
+As mentioned before, the Syntax object's Parse method hides blocks, highlights keywords and restores blocks and embedded blocks. The last thing left to do is to "tabify" the code snippet to the specified tab size:
+</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<span class="linenumbers"></span>
+</td>
+<td valign="top">
+<textarea class="code">
+this.Parse = function(text)
+{
+	// hide blocks (replace them with tags)
+	for (var i = 0; i < Blocks.length; i++)
+		text = Blocks[i].Hide(text);
+	
+	// parse text for keywords
+	for (var i = 0; i < Groups.length; i++)
+		text = Groups[i].Parse(text);
+		
+	// restore tagged blocks
+	for (var i = 0; i < Blocks.length; i++)
+		text = Blocks[i].Restore(text);
+
+	// restore embedded blocks
+	for (var i = 0; i < Blocks.length; i++)
+		text = Blocks[i].RestoreEmbedded(text);
+
+	// tabify to tabSize
+	text = text.replace(/\t/g, "&;&#27;nbsp;".times(tabSize));
+
+	return text;
+}
+</textarea>
+<pre class="JavaScript"></pre>
+</td>
+</tr>
+</table>
+<p>
+I tested distinct CSS attributes to tabify the code (tab-size, -moz-tab-size, -o-tab-size, etc.), but none of them acted consistently across browsers, therefore I declared browser independence with a simple replace. It does require using actual tab characters in code snippets for indentation purposes, but I can live with that.
+</p>
+<h3>Using the Syntax Class</h3>
+<p>
+For the purpose of modularity, the <b>Syntax</b> object serves as a base class for objects of a specific language. a <b>BatchSyntax</b> object instances a <b>Syntax</b> object, adds groups and blocks to it and returns it; A <b>JavaScriptSyntax</b> object does exactly the same with different arguments:
+</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<span class="linenumbers"></span>
+</td>
+<td valign="top">
+<textarea class="code">
+function JavaScriptSyntax(styleSheet)
+{
+	// instance a base class object
+	var s = new Syntax("JavaScript", styleSheet, "display: inline-block; font-size: 10pt; font-family: Consolas ...;");
+
+	// append known keyword groups
+	s.AddGroup("reserved",   "abstract boolean break byte case catch ...     ", "color: #0000FF");
+	s.AddGroup("intrinsic",  "ActiveXObject arguments Array ...              ", "color: #0000FF; font-weight: bold");
+	s.AddGroup("constants",  "E Infinity LN10 LN2 LOG10E LOG2E MAX_VALUE ... ", "color: #FF00FF");
+	s.AddGroup("properties", "arguments callee caller constructor ...        ", "color: #0000FF");
+	
+	// object, string and array objects' methods
+	s.AddGroup("methods1",   "hasOwnProperty isPrototypeOf ... ", "color: #0000FF");
+	s.AddGroup("methods2",   "charAt charCodeAt concat ...     ", "color: #0000FF");
+	s.AddGroup("methods3",   "every filter forEach join ...    ", "color: #0000FF");
+
+	// append known blocks; notice that order affects block nesting
+	s.AddBlock("html",      /<(\S+)\b[^>]*>.*?<\&amp;#47;\1>/g);                     // embedded html
+	s.AddBlock("regexp1",   /\$[0-9_&+`']/g,              "color: #C00000"); // RegExp's $x shorthand notation
+	s.AddBlock("regexp2",   /\&amp;#47;.+?\&amp;#47;[gmi]{0,3}/g,         "color: #C00000"); // regular expressions
+	s.AddBlock("strings1",  /&amp;#34;(\\.|[^\\&amp;#34;])*&amp;#34;/g,           "color: #FF6820"); // double quoted string literals
+	s.AddBlock("strings2",  /'(?:.{0,1}|\\{1,2}.)'/g,     "color: #00A0A0"); // single quoted character literals
+	s.AddBlock("comments1", /\&amp;#47;\*[\S\s]*?\*\&amp;#47;/g,          "color: #008000; font-style: italic"); // multiline or inline
+	s.AddBlock("comments2", /\&amp;#47;\&amp;#47;.*/g,                    "color: #008000; font-style: italic"); // single line
+	s.AddBlock("numbers",   /\b\d+/g,                     "color: #FF0000"); // numeric literals
+
+	// return the wrapped Syntax object
+	return s;
+}
+</textarea>
+<pre class="JavaScript"></pre>
+</td>
+</tr>
+</table>
+<p>
+The block definitions are rather cryptic; the tradeoff for being a compact strategy is that users need to be well-versed in regular expression syntax. If it is any consolation, I put a good deal of research and debuging time to come up with the right expressions. Testing a block definition is an <i>argumentative conversational act</i>: you need to see if the argument achieves the desired effect to test its validity!
+</p>
+<p>
+All the definitions use the global flag; most of them have opening and closing delimiters and need to escape characters with special meaning in regular expression syntax. For example, the slash and backslash characters must be escaped (with a backslash character!). Some regular expressions take a lookahead, and others need to be explicitly non-greedy. I will go over some of them to clarify things a little.
+</p>
+<p>
+The html block expects an opening tag of the form "the tag opening character (<font color="#C00000">&lt;</font>) immediately followed by any word (<font color="#C00000">(\S+)\b</font>) followed by anything&mdash;tag attributes&mdash;<i>except</i> the tag closing character zero or more times (<font color="#C00000">[^&gt;]*</font>) <i>and then</i> the tag closing character (<font color="#C00000">&gt;</font>)". The closing tag requires the slash character (which must be escaped) and uses a <i>back reference</i> (<font color="#C00000">\1</font>) to the word captured in the opening tag by using parenthesis. Anyhing is allowed between the tags, and the search is <i>non-greedy</i>, specified by the <font color="#C00000">?</font> after the <font color="#C00000">.*</font>, meaning we want to match tags individually. This block definition allows "realizing" HTML in code snippets, which is useful for embedding email addresses, hyperlinks, or images in comment blocks.
+</p>
+<p>JavaScript makes no distinction between single-quoted and doubled-quoted string literals, but CSharp does. I like making the distinction in my JavaScript code, hence the block definition for single-quoted string literals, which incidentally is an example of how to customize the highlighter. It uses quantifiers (<font color="#C00000">{0,1}</font>) to capture '', 's' or (<font color="#C00000">|</font>) escaped and double-escaped characters, '\t' and '\\n' (<font color="#C00000">\\{1,2}.</font>).
+</p>
+<p>Another customization example is adding your own set of keywords: you may have noticed how I highlight my own utility functions and non-intrinsic methods (printf, toBase26 and so on) in pink by adding a "user" keyword group to the JavaScriptSyntax object after instantiation.
+</p>
+<p>
+The definition for multiline comments expects the <font color="#C00000">/*</font> opening delimiter an the <font color="#C00000">*/</font> closing delimiter. Both characters must be escaped because they have special meaning in regular expressions. To capture newline characters so that the block includes multiple lines, a sequence of zero or more white space or non white space characters are included in a range (<font color="#C00000">[\S\s]*</font>) and the block is made non-greedy by adding the <font color="#C00000">?</font> right after the range.
+</p>
+<h3>Known Issues</h3>
+<ul>
+<li>
+There is no nesting of keyword groups or blocks; each one is parsed in the order in which they were created, and I have found that to be a problem when the order is changed.</li>
+<li>
+Complex regular expressions will break the highlighting. For example, since the regular expression block definition is non-greedy, the HTML block definition breaks it on the closing tag's forward slash. If I make the search greedy, the match will not terminate until the next forward slash, which may be the start of a comment or the start of another regular expression. The block definitions shown above are correctly highlighted because the slash character is escaped manually. Incidentally, the double quote character is also escaped inside regular expressions.</li>
+<li>
+Microsoft's shorthand notation for regular expression properties in JavaScript can break the highlighing engine, unless caught early on by a block definition.
+</li>
+<li>
+There are no provisions for language nesting. Web pages typically have script elements written in other than the HTML language, and style elements written with the CSS syntax. Some approaches can identify certain tags and switch languages. Some engines catch tags intrinsic to the language (e.g., the &lt;script&gt; or &lt;stlye&gt; tags for HTML) and switch automatically; some other engines define special tags for the highlighting engine. It would be easy to include a "language switching" block, but the additional logic is beyond the scope of this article.
+</li>
+<li>Although "realizing" embedded HTML&mdash;a popular function of most code editors&mdash;is beyond the scope of this article, it is a nice feature to have. Then again, it creates lots of problems:
+<ul>
+<li>
+Parsing embedded HTML requires a block definition for HTML <i>before</i> any other block definition. Without it, the HTML will be parsed by other block definitons (e.g., doble-quoted attribute values are treated as string literals, and the slashes in http:// are treated as the start of a single-line comment), breaking the highlighting.</li>
+<li>
+Nested HTML elements of the same type will break the block definition for HTML. For example, in <b>&lt;div&gt;one&lt;div&gt;two&lt;/div&gt;</b>&lt;/div&gt;, the match is in bold type.</li>
+<li>
+Embedded HTML that we <i>do not</i> want to parse must also be escaped manually. For example, HTML tag characters (&lt; and &gt;) must be escaped as &amp;amp;lt; and &amp;amp;gt; manually in the source text. This could be automated by setting up certain rules, e.g., "HTML inside quoted strings should not be parsed", but again, that is beyond the scope of this article.</li>
+<li>
+HTML entities must be tweaked with a non-printing character (such as the ESC character). For example, &amp;amp;nbsp; will still be rendered as a space by the HTML engine. To circumvent this, I must use &amp;&amp;#27;nbsp; instead.</li>
+</ul>
+</ul>
+</p>
+<h3>Concluding Remarks</h3>
+<p>
+This article presented a lightweight syntax highlighting strategy that works. Because it is written in JavaScript and it relies heavily on the power of regular expressions, the most difficult scenario it faces is processing JavaScript with a block definition for regular expressions. It employs client side "on the fly" HTML/CSS. Although it needs more code to pre-process complex snippets and perform more advanced functions, it sufficiently shows what is at the heart of a syntax highlighting strategy.
+</p>
+<p>
+In part II, I will demonstrate how I use the Syntax object to highlight code in my website. You can save this webpage to download the code; 
+The engine's objects are in syntax.js; scripts.js handles the window onload to instance and process the proper syntax objects, and the rest of the utility functions are either in prototypes.js, dom.js or utility.js.
+</p>
+
+<h3>The HTML code table</h3>
+<p>
+A HTML page typically contains more than one code snippet, therefore I use a repeatable structure to identify and contain code snippets: a
+table with a specific ID that equals the name attribute (for cross-browser compatibility) containing certain elements:
+</p>
+<p class="pfigure">
+Figure 1. HTML elements in a code table
+<br/>
+<br/>
+<img src="../sitebuilderpictures/syntaxhighlighting.n.jpg" class="imgfigure">
+</p>
+<p>
+The text area element is the <b>source</b> control, where the actual code resides. It is hidden through the style attribute, so it is just a
+placeholder. As opposed to most HTML tags, the contents of a text area element are <i>not</i> parsed by the HTML engine, which is in
+advantage in this scenario, particularly if the code language contains embedded HTML entities or special characters.
+In fact, you can paste HTML code on a text area without worrying about it being parsed and&mdash;quite possibly&mdash;breaking the HTML.
+</p>
+<p>
+The preformatted (PRE) element is the <b>target</b> control, where the highligted code will be shown, and the span
+control is the placeholder for line numbers, filled after highlighting the code. I could have used any other tag, but if the syntax
+highlighter fails for any reason, the contents of the text area are copied to the preformatted tag, ensuring that the code is shown 
+with a mono-spaced font.
+</p>
+</td>
+</tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td class="tdcloser">
+<a href="../.."><img alt="Hector [.j.] Rivas" border="" src="../sitebuilderpictures/webassets/logo.gif" vspace="0" hspace="5"></a>
+</td>
+</tr>
+<tr>
+<td class="tdcloser">
+<div itemscope itemtype="http://data-vocabulary.org/Person"> 
+<span itemprop="name" style="font-size:10px;">Hector [.j.] Rivas</span>
+</div>
+</td>
+</tr>
+</table>
+</td></tr>
+<tr>
+<td class="tdfooter">
+<div class="divcontact">Rowlett, TX&nbsp;| 214.789.1733&nbsp;| <a href="mailto:hector.j.rivas@hotmail.com">hector.j.rivas@hotmail.com</a></div>
+<div class="divhosting"><a href="http://www.register.com/retail/product/website.rcmx" target="_blank">Powered by Register.com</a></div>
+</td>
+</tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,263 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<title>Hector J. Rivas - WPF Docking Done Right</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Expires" content="0">
+<meta name="description" content="WPF Docking Done Right">
+<meta content="text/html; charset=iso-8859-1" http="http">
+<style type="text/css" media="all"><!-- media="all": hack to hide stuff from NS 4 --></style>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="alphadock.css">
+<script type="text/javascript" src="prototypes.js"></script>
+<script type="text/javascript" src="DOM.js"></script>
+<script type="text/javascript" src="utility.js"></script>
+<script type="text/javascript" src="syntax.js"></script>
+<script type="text/javascript" src="scripts.js"></script>
+<script type="text/javascript" src="alphadock.js"></script>
+</head>
+<body>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr><td class="tdheader"><table border="0" cellpadding="0" cellspacing="0" class="tbheader"><tr><td></td></tr></table></td></tr>
+<tr><td class="tdspacer"></td></tr>
+<tr><td class="tdcontent">
+<table  border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td>
+<h2>WPF Docking Done Right</h2>
+
+<p><img src="../sitebuilderpictures/alphadock.0.jpg" align="right" class="imgfigure" width="500">
+After hitting a wall when stretching the native WPF dock panel control, I decided to play around with the open source frameworks available.
+</p>
+<p>I was partial to Synergy’s <a href="http://mixmodessynergy.codeplex.com/">WPF Toolkit</a>, a good start point for understanding what exactly is required
+for a docking framework (such as commands, behaviors, adorners, etc.) but it does not implement the
+<a href="http://en.wikipedia.org/wiki/Model_View_ViewModel">Model-View-View Model</a> (MVVM) paradigm.
+</p>
+<p>I then discovered Xceed’s <a href="https://avalondock.codeplex.com/">Avalon Dock 2.0</a> framework, which is one of the most comprehensive docking frameworks
+out there—and also part of a large toolkit. It supports MVVM and is based on the use of templates and themes. Additionally it implements regionalization via
+resources, handles interoperation with the OS nicely and uses most features of WPF/XAML, C# and OOP, such as interfaces, extensions, subclass polymorphism,
+singletons, etc.
+</p>
+<p>I will assume my audience is proficient in C# and very familiar with WPF/XAML; I will brush on concepts, frameworks and paradigms around it, including
+references wherever possible.</p>
+<h3>Why MVVM?</h3>
+<p>We can trace the MVVM paradigm all the way back to Edsger W. Dijkstra  and his 1974 paper, <a
+href="https://www.cs.utexas.edu/users/EWD/transcriptions/EWD04xx/EWD447.html">"On
+the role of scientific thought"</a>, where he introduces the concept of <i>Separation of Concerns</i>, in a nutshell the idea of splitting your
+software program into sections addressing different concerns.
+</p>
+<p>In MVVM we split the program into the <b>Model</b> section (short for Data Model, or in Entity-Framework parlance, an Entity), the <b>View Model</b>,
+which encapsulates an instance of the Model and the methods and rules (the logic) for manipulating it, as well as the properties displayed by the <b>View</b>,
+the GUI window, page or control used to display and interact with the Model. Suffice it to say that the view is loosely coupled to the view model, hence
+separating the concern of updating the model from that of updating the view.
+</p>
+<p>In WPF/XAML parlance, the View Model is the <b>Data Context</b> of the View (thanks be to Microsoft), and the Model properties to display or interact with are
+set via data <b>bindings</b>. Adding a new property to the model obviously requires adding some wiring to the view model and adding a new GUI element with
+a binding to the view, but these tasks are no longer a concern for the model developer: these are now concerns for the programmer and the interface or
+user experience (UX) designer respectively. Similarly, the UX designer can apply styles and entire themes to the GUI with little concern-and lower risk-of affecting
+the model.
+</p>
+<p>
+If you happen to wear the three hats (data architect, developer and designer), the model still helps you in keeping concerns separate: start from the model, wire
+the view model and then change the view-or design a magnificent control wired with default values so that it is ready for anything you throw at it.
+</p>
+<p>Of course the MVVM design pattern is not perfect or ideal for all situations: the boundary between business and presentation logic is blurry at best, and wiring
+the view model is obviously concerned with both the model and the view. Nonetheless, the pattern is still a good one and it has stood the test of time as a
+productivity booster.
+</p>
+
+<h3>Why Refactor Avalon Dock?</h3>
+
+<p>For entirely academic purposes-namely to teach myself how it works, how to develop WPF custom controls and to improve on its current documentation.
+I also wanted to use different names and naming conventions, strip it down to its very minimum (eliminating unreferenced code) and extend or improve on it;
+ultimately I refactor most code because I get a kick out of it.
+</p>
+<p>This is hardly a developer's reference for Avalon Dock, given I changed so many type and property names, but it can be used as such if you keep in mind that I
+removed the word "Layout" from the layout interfaces and classes, and replaced "Anchorable" with "Tool".
+</p>
+<p>Just to be sure, the framework's goal is to provide a user interface that allows dragging, floating, dropping and docking documents and tools, as well as groups
+of documents and tools. It also aims at doing it in MVVM fashion and using WPF themes.
+</p>
+<h3>Layout Interfaces</h3>
+<p>
+How do you support polymorphism in C# when a class can only inherit from a single class? By inheriting from one or more interfaces. An interface is basically a
+class that declares properties, methods and/or events but does not implement them: it is a signature, a blueprint or a contract for inheritors so that they are
+enforced to implement them.
+</p>
+<p>
+The next diagram presents the layout interfaces of the docking framework. Hover over each interface for a peek into its intended purpose.
+</p>
+<ul id="map1">
+<li><p class="IElement"><span><b>IElement</b><br/>
+The base <i>element</i> public interface, which derives from WPF’s System Component Model interfaces for notifying data bound clients that data is changing or has changed.
+</span></p></li>
+
+<li><p class="IRenderable"><span><b>IRenderable</b><br/>
+A public contract for implementing whether an element is visible or not.
+</span></p></li>
+
+<li><p class="IFloatable"><span><b>IFloatable</b><br/>
+A public contract for keeping track of an element’s floating position and size.
+</span></p></li>
+
+<li><p class="IDockable"><span><b>IDockable</b><br/>
+A public contract for keeping track of an element’s docked position and size.
+</span></p></li>
+
+<li><p class="IContainer"><span><b>IContainer</b><br/>
+A public contract for an element that wraps a collection of child elements, and declares methods for removing and replacing elements in the collection.
+</span></p></li>
+
+<li><p class="IHidableContainer"><span><b>IHidableContainer</b><br/>
+A public contract for a hidable container.
+</span></p></li>
+
+<li><p class="IHidable"><span><b>IHidable</b><br/>
+A public interface that enforces the computation of the visibility of a container based on the visibility of its children.
+</span></p></li>
+
+<li><p class="IGroup"><span><b>IGroup</b><br/>
+A public contract that enforces the implementation of methods to access container elements at random.
+<br/>
+<br/>
+A group also enforces inheritors to implementing an event handler when the children collection is updated.
+</span></p></li>
+
+<li><p class="IOrientableGroup"><span><b>IOrientableGroup</b><br/>
+A public interface that enforces the implementation of WPF’s plane Orientation property on inheritors.
+</span></p></li>
+
+<li><p class="IPane"><span><b>IPane</b><br/>
+A public contract for a <i>pane</i>: a renderable, hidable container, in turn, a separate area for the display of and interaction with other elements or groups
+of elements.
+</span></p></li>
+
+<li><p class="IRendered"><span><b>IRendered</b><br/>
+An internal contract for keeping track of an element’s actual dimensions after the entire visual tree has been laid out.
+</span></p></li>
+
+<li><p class="ITransferrable"><span><b>ITransferrable</b><br/>
+An internal interface for keeping track of the previous container when dragging elements or moving them from one container to another.
+</span></p></li>
+
+<li><p class="ISerializable"><span><b>ISerializable</b><br/>
+An internal interface that enforces the implementation of an ID property for serialization purposes.
+</span></p></li>
+
+<li><p class="IRootLayout"><span><b>IRootLayout</b><br/>
+A public contract for the root visual layout, incorporating view models for docking sites (sides and center panel), as well as observable
+collections of floating windows and hidden tools.
+<br/>
+<br/>
+The root layout must also keeps track of the currently active content, hold a reference to the <i>docking manager</i>--the object
+in charge of operations--and cleanup after itself.
+</span></p></li>
+
+<li><p class="IContentSelector"><span><b>IContentSelector</b><br/>
+A public interface for keeping track of the selected content in containers with multiple content.
+</span></p></li>
+
+<li><p class="IUpdateStrategy"><span><b>IUpdateStrategy</b><br/>
+A public interface for actions that take place before or after an element is inserted in the framework.
+</span></p></li>
+
+<li><p class="IControl"><span><b>IControl</b><br/>
+A public interface for controls (views) requiring the implementation of the view model property.
+</span></p></li>
+</ul>
+<p class="pfigure">Figure 1. Layout Interfaces</p>
+
+<p>It all starts with the base <i>element</i> interface, which derives
+from the WPF’s <a
+href="https://msdn.microsoft.com/en-us/library/system.componentmodel(v=vs.110).aspx">System
+Component Model</a> interfaces for notifying data bound clients that data is
+changing or has changed.</p>
+
+<p>An element in the docking framework holds a reference to its
+parent element—the element that contains it—and to its root element—a special
+kind of ancestor of the element if you will, once you follow the chain of
+parents all the way up.</p>
+
+<p>An element implementing the <i>renderable</i> interface must expose
+whether it is visible or not. This is crucial to the whole framework: when an
+element’s visibility changes it must notify its parent so that it in turn has
+an opportunity to show or hide itself.</p>
+
+<p>The <i>floatable</i> interface is a contract for keeping track of an
+element’s floating position and size; conversely the <i>dockable</i> interface keeps
+track of a docked element’s position and size; notice that a dockable element
+is necessarily floatable (and draggable). Similarly, the <i>rendered</i> interface
+keeps track of the actual size of something rendered by WPF after the entire
+visual tree has been laid out.</p>
+
+<p>The <i>container</i> interface wraps a collection of child elements,
+and declares methods for removing and replacing elements in the collection.</p>
+
+<p>The <i>group</i> interface is a contract for a random access
+container: you can get the index of the passed-in element and insert, remove or replace at the passed-in position. It is also an active container, notifying
+of any changes to the collection. The <i>orientable group</i> interface additionally
+demands the implementation of WPF’s horizontal or vertical plane Orientation
+property.</p>
+
+<p>The other branch of containers are <i>panes</i>, separate areas for
+the display of and interaction with other elements or groups of elements. A
+pane in the docking framework is a renderable, <i>hidable</i> container. The hidable
+interface imposes the computation of the visibility of a container based on the
+visibility of its children. A hidable container—and therefore, a pane—must also implement the move and remove at methods.</p>
+
+<p>Other helper interfaces include the <i>transferable</i> interface,
+for keeping track of the previous container when moving elements from one container to another or floating them, the <i>serializable</i>
+interface, for imposing an ID property to implementers, and the <i>content
+selector</i> interface, for keeping track of the selected content in containers
+with multiple content.</p>
+
+<p>
+</p>
+
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+public class Person : INotifyPropertyChanged
+{
+	public Person()
+	{
+	}
+	
+	// 1. Create a property whose value will be the source of a data binding.
+	private int age;
+	
+	public int Age
+	{
+		get { return age; }
+		set
+		{
+			age = value;
+			
+			// 4. Call the method created in 2 when the property value changes.
+			OnPropertyChanged("Age");
+		}
+	}
+	
+	// 2. Declare an event handler, a delegate method that will handle the change.
+    public event PropertyChangedEventHandler PropertyChanged;
+
+	// 3. Create a method to raise the event. 
+	protected void OnPropertyChanged(string name)
+	{
+		if (PropertyChanged != null)
+			PropertyChanged(this, new PropertyChangedEventArgs(name));
+	}
+}
+</textarea>
+</td>
+<td valign="top">
+<pre class="CSharp"></pre>
+</td>
+</tr>
+</table>
+</body>
+</html>

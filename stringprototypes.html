@@ -1,0 +1,454 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<title>Hector J. Rivas - JavaScript String Prototypes Done Right</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Expires" content="0">
+<meta name="description" content="JavaScript String Prototypes Done Right">
+<meta content="text/html; charset=iso-8859-1" http="http">
+<style type="text/css" media="all"><!-- media="all": hack to hide stuff from NS 4 --></style>
+<link rel="stylesheet" href="styles.css">
+<script type="text/javascript" src="prototypes.js"></script>
+<script type="text/javascript" src="DOM.js"></script>
+<script type="text/javascript" src="utility.js"></script>
+<script type="text/javascript" src="syntax.js"></script>
+<script type="text/javascript" src="scripts.js"></script>
+</head>
+<body>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr><td class="tdheader"><table border="0" cellpadding="0" cellspacing="0" class="tbheader"><tr><td></td></tr></table></td></tr>
+<tr><td class="tdspacer"></td></tr>
+<tr><td class="tdcontent">
+<h2>JavaScript String Prototypes Done Right</h2>
+<p>
+<a class="adownload" href="prototypes.js">Download prototypes.js</a>
+</p>
+<p>
+The ability to extend  intrinsic objects with  your own functions is one  of the features I like  most about JavaScript.
+I have written extensibly about it in my code project article,
+<a href="http://www.codeproject.com/Articles/16010/Extending-JavaScript-Intrinsic-Objects-with-Protot">Extending&nbsp;JavaScript&nbsp;Intrinsic&nbsp;Objects&nbsp;with&nbsp;Prototypes</a>,
+where you will also find other extension methods that I have found to be quite useful in my coding adventures.</p>
+<p>
+Sometimes I need to tweak one or two of my extension methods. Either the needs of the project at hand change or
+somebody suggests a better way to do something. In lieu of this, here is my latest collection of <font color="#0000FF">String</font>
+extension methods. For the most  part, they are simple  one-liners with a few statements  that allow string manipulation
+operations that are typically required when parsing fully-qualified file paths, text files, data files and code files.
+</p>
+<p>
+Let us start with two of the most popular string manipulation methods: converting a string into an array and reversing a string.
+</p>
+<b>toArray</b> converts the string into an array object, providing indexed access to a string. Yes, there is the <font color="#0000FF">charAt</font> function, but there are
+advantages to turning a string into an array: it can save some typing, it improves code readability and it allows the use of array intrinsic 
+(and extension) methods, such as the <b>reverse</b> method, next.
+</p>
+<p>
+<b>reverse</b> simply wraps the <font color="#0000FF">Array</font> object's <b>reverse</b> method and glues it back with its <b>join</b> method. Think about getting file
+names and extensions from fully-qualified paths.
+</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="JavaScript"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+// String prototypes
+String.prototype.toArray  = function() { return this.split(''); }
+String.prototype.reverse  = function() { return this.toArray().reverse().join(''); }
+
+function Test()
+{
+	// test string
+	var hello = "Hello";
+	
+	// toArray and reverse
+	var hello1 = hello.toArray(); // [ 'H', 'e', 'l', 'l', 'o' ]
+	var hello2 = hello.reverse(); // "olleH"
+
+	// indexed character access
+	var hello3 = hello1[1];       // 'e'
+}
+</textarea>
+<pre class="JavaScript"></pre>
+</td>
+</tr>
+</table>
+<p>
+Notice that although JavaScript makes no  distinction between single-quoted  and double-quoted string  literals, 
+the C/C++/C# convention is in effect: character literals  are single quoted (e.g., 'x' and '\t') and string literals
+are "double-quoted". This improves code readability&mdash;particularly if a syntax highlighter can make the distinction as well.
+</p>
+<p>
+Moving on, the <b>words</b> method returns an array using white space as the <b>split</b> separator. Do notice that punctuation
+marks become part of a "word".
+</p>
+<p>
+In turn, <b>compact</b> converts the <b>words</b> array into a string separated by a single space character, effectively "compacting" white space found on the the string.
+</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="JavaScript"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+String.prototype.words   = function() { return this.split(/\s+/); }
+String.prototype.compact = function() { return this.words().join(' '); }
+
+function Test()
+{
+	// test multiline string with some white space
+	var hello = "\tHello,\n(prototype)\t\n\n\t\tworld.";
+	
+	// words and compact
+	var hello1 = hello.words();   // [ "Hello,", "(prototype)", "world." ]
+	var hello2 = hello.compact(); // "Hello, (prototype) world."
+}
+</textarea>
+<pre class="JavaScript"></pre>
+</td>
+</tr>
+</table>
+<p>
+<a id="sidenote1">As a side note</a>, using /\s/ as the split's argument is the same as using /\s+/: the '+' seems to be implied when using a
+regular expression, ergo two or more contiguous separators are considered a single separator. If you use a string as the
+argument for the split though, two or more contiguous separators are considered two or more separators, and "holes" are
+created in the returned array:
+</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="JavaScript"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+var what1 = "whaat";
+
+var what2 = what1.split(/a/);  // [ "wh", "t" ]
+var what3 = what1.split(/a+/); // [ "wh", "t" ]
+var what4 = what1.split("a");  // [ "wh", "", "t" ]
+</textarea>
+<pre class="JavaScript"></pre>
+</td>
+</tr>
+</table>
+<p>
+Personally, I would rather have both /a/ and "a" return the holes and /a+/ eat contiguous a's. I will keep using the plus
+sign as a matter of rigor and make sure I tell someone at the ECMA about this, but let us get back on track with some lighter matters.
+</p>
+<p>
+Sometimes it might be too costly to turn the string into an
+array, i.e., when all we want is the first or last character, hence <b>fChar</b> and <b>lChar</b> are just good shortcuts
+to the <b>charAt</b> function:
+</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="JavaScript"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+String.prototype.fChar = function() { return this.charAt(0); }
+String.prototype.lChar = function() { return this.charAt(this.length - 1); }
+
+function Test()
+{
+	// test multiline string with some white space
+	var hello = "\tHello,\n(prototype)\t\n\n\t\tworld.";
+	
+	// first and last char
+	var hello1 = hello.fChar(); // '\t'
+	var hello2 = hello.lChar(); // '.'
+}
+</textarea>
+<pre class="JavaScript"></pre>
+</td>
+</tr>
+</table>
+<p>
+The <font color="#0000FF">String</font> <b>times</b> extension method is the JavaScript version of the Visual Basic <b>STRING</b> function:
+</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="JavaScript"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+String.prototype.times = function(n) { for (var r = "", i = 0; i < n; i++) r += this; return r; }
+
+function Test()
+{
+	// test string
+	var hello = "Hello";
+	
+	// times
+	var hello1 = hello.times(2);    // "HelloHello"
+	var hello2 = "&amp;nbsp;".times(4); // "&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;"
+}
+</textarea>
+<pre class="JavaScript"></pre>
+</td>
+</tr>
+</table>
+<p>
+There have been questions about the performance of this method with large strings. I have put it to the test, and the results are in: a 1 MB file
+replicated about 700 times (the most I could handle before running out of memory) takes about 0.7 seconds on average. Some other
+processing and outer loops may cost you some performance when calling this function, but unless you are parsing an entire directory
+tree with thousands of files looking for things to replicate a thousand times, the <b>times</b> extension method should do fine!
+</p>
+<p>
+Next, the <b>box</b> method wraps a string and every newline character found in it with the passed-in string (or the default '|' symbol). I use it to detect white space
+when testing and debugging my scripts.
+</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="JavaScript"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+String.prototype.box = function(s) { var r = s || '|'; return r + this.replace(/\n/g, r + '\n' + r) + r; }
+</textarea>
+<pre class="JavaScript"></pre>
+</td>
+</tr>
+</table>
+<p>
+<b>trim</b> has made it into recent standards as an intrinsic method, but if it is not defined in the JavaScript version you are using,
+feel free to use these implementations.
+</p>
+<p>
+<b>l[eft]trim</b> and  <b>r[ight]trim</b>  build a regular  expression object  with the passed-in  string and flags. The
+string has a  default  value of  "\s+" (white  space), and  the flags  default to  none (only  'g', 'm' and  'i', or any
+combination thereof  are allowed -but  not checked). With  no arguments, ltrim  and rtrim eliminate  both horizontal and
+vertical white space at the beginning and the end of a string, respectively.
+</p>
+<p>
+<b>m[ultiline]trim</b> (or <b>m[iddle]trim</b> if you will) is a trim variant that trims both horizontal and vertical
+white space by default, by forcing the global and multiline flags to ltrim and rtrim. This way it effectively eliminates
+empty lines in a multiline string, as shown below in <b>hello3</b>. This may be important in some scenarios, e.g.,
+when parsing a code file: empty lines can be eliminated to save some memory or skipped in a loop to improve efficiency.
+</p>
+<p>
+On the other hand you can pass in a string or a regular expression (making sure you double-escape the backslash character).
+In the example, <b>hello4</b> passes in a request for trimming horizontal white space only, effectively preserving
+empty lines. This may be important in some other scenarios, e.g., when highlighting the syntax of a code file: empty lines
+are important visual clues. <b>hello5</b> trims some punctuation marks and parentheses along with white space for each line.
+</p>
+<p>
+Finally, <b>trim</b> simply calls both ltrim and rtrim with the default flags and passes on what to trim.
+</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="JavaScript"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+String.prototype.ltrim = function(s, f) { return this.replace(new RegExp('^' + (s || "\\s+"), f || ''), ''); }
+String.prototype.rtrim = function(s, f) { return this.replace(new RegExp((s || "\\s+") + "$", f || ''), ''); }
+String.prototype.mtrim = function(s)    { return this.ltrim(s, "gm").rtrim(s, "gm"); }
+String.prototype.trim  = function(s)    { return this.ltrim(s).rtrim(s); }
+
+function Test()
+{
+	// test string with white space
+	var hello = "\tHello,\n(prototype)  \n\n\t\tworld. ";
+
+	var hello1 = hello.ltrim();
+	var hello2 = hello.rtrim();
+
+	var hello3 = hello.mtrim();
+	var hello4 = hello.mtrim("[ \\t]+");
+	var hello5 = hello.mtrim("[\\s,.()]+");
+
+	/*
+	   hello            hello1           hello2          hello3       hello4         hello5
+	   ---------------  ---------------  --------------  -----------  -------------  -------------
+	   ····Hello,       Hello,           ····Hello,      Hello,       Hello,         Hello 
+	   (prototype)··    (prototype)··    (prototype)··   (prototype)  (prototype)    prototype 
+	                                                     world.                      world 
+	   ········world.·  ········world.·  ········world.               world.
+	*/
+}
+</textarea>
+<pre class="JavaScript"></pre>
+</td>
+</tr>
+</table>
+<p>
+So far we have a character split and a "word" split; how about a line split? Sometimes you need to process a line of text at a time, e.g.
+when the operation on a line depends on the state of the previous line.
+</p>
+<p>
+Unfortunately as explained in the <a href="#sidenote1">side note</a> about the split method, splitting both <b>hello3</b> and <b>hello4</b> above with /\n/
+results in all contiguous newline characters becoming a single separator. This is sometimes desirable, so the method takes an
+argument that will compress vertical white space, but it defaults to preserving it with a negative lookahead expression:
+</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="JavaScript"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+String.prototype.lines = function(c) { return this.split(c ? /\r*\n/ : /\r*\n(?!\r*\n)/); }
+
+function Test()
+{
+	// test string with white space
+	var hello = "\tHello,\n(prototype)  \n\n\t\tworld. ";
+
+	var hello1 = hello.lines(0).join('\n');
+	var hello2 = hello.lines(1).join('\n');
+
+	/*
+	   hello            hello1           hello2
+	   ---------------  ---------------  --------------
+	   ····Hello,       ····Hello,       ····Hello,
+	   (prototype)··    (prototype)··    (prototype)··
+	                                     ·······world.·
+	   ········world.·  ········world.·
+	*/
+}
+</textarea>
+<pre class="JavaScript"></pre>
+</td>
+</tr>
+</table>
+<p>
+Notice that the <font color="#0000FF">Array</font> <b>join</b> method is used above for illustration purposes only. Also, I have added
+provisions for carriage return characters.
+</p>
+<p>
+If you are still with me, you can probably see how a white space replace (such as the one in trim) and a split/join could be used
+to achieve the same results (in fact, <b>compact</b> was my original multiline trim). The replace performance should be
+unnoticeably better in most applications, but in general, I like to avoid using split unless it is absolutely neccessary.
+</p>
+<p>
+As an apart, I myself cannot find a good reason to preserve trailing white space in a line or before the EOF; I seriously believe that
+banning it (or at least pre-processing it) would give the Internet a boost&mdash;think of all the trailing white space that gets
+emailed each day.
+</p>
+<p>
+Text parsing and formatting (a.k.a. beautifying) usually requires some indentation methods. The <b>indentation</b> method returns
+the number of tabs at the beginning of the string, the length of <font color="#0000FF">RegExp</font>.$1, which gets updated after
+the match method call.
+</p>
+<p>
+The <b>unindent</b> method simply wraps a left trim with no arguments, but this is one of those ocassions in which defining a method
+improves code redeability.
+</p>
+<p>
+The <b>indent</b> method returns the unidented string indented by a passed-in number of tabs.
+</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="JavaScript"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+String.prototype.indentation = function()  { this.match(/^(\t+)\s*\S/); return RegExp.$1.length; }
+String.prototype.unindent    = function()  { return this.ltrim(); }
+String.prototype.indent      = function(n) { return '\t'.times(n) + this.unindent(); }
+
+function Test()
+{
+	// indented string
+	var hello = "\t\thello";
+	
+	var hello1 = hello.unindent();    // "Hello"
+	var hello2 = hello1.indent(1);    // "\tHello"
+	var hello3 = hello.indentation(); // 2
+}
+</textarea>
+<pre class="JavaScript"></pre>
+</td>
+</tr>
+</table>
+<p>
+Incidentally, you can define methods to be synonyms of each other using this syntax instead:
+</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="JavaScript"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+String.prototype.unindent = 
+String.prototype.ltrim    = function(s, f) { return this.replace(new RegExp('^' + (s || "\\s+"), f || ''), ''); }
+</textarea>
+<pre class="JavaScript"></pre>
+</td>
+</tr>
+</table>
+<p>
+But then again calling unindent with arguments  (e.g., unindent("[th]", "i")) can deteriorate code readability.
+</p>
+<p>
+Finally, syntax highlighting involves tagging keywords and blocks of code (such as string literals or numbers) so that
+a rendering engine (such as HTML) can change the formatting of such keywords and blocks. A problem usually arises when
+the input code uses the highliter's tag characters. In such cases the tag characters must be "escaped". Another problem
+arises when you literally need to read an escaped tag, in which case you must first "unescape" the input:
+</p>
+<table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
+<tr>
+<td valign="top">
+<pre class="JavaScript"></pre>
+</td>
+<td valign="top">
+<textarea class="code">
+String.prototype.escapeTags   = function() { return this.replace('<', "&amp;&#27;lt;").replace('>', "&amp;&#27;gt;"); }
+String.prototype.unescapeTags = function() { return this.replace(/&amp;&#27;lt;/g, '<').replace(/&amp;&#27;gt;/g, '>'); }
+
+function Test()
+{
+	var hello = "&amp;lt;b&amp;gt;some &amp;lt;a href=""&amp;gt;HTML&amp;lt;&amp;#47;a&amp;gt;&amp;lt;&amp;#47;b&amp;gt;";
+	
+	var hello1 = hello.escapeTags();    // &amp;&#27;lt;b&amp;&#27;gt;some &amp;&#27;lt;a href=""&amp;&#27;gt;HTML&amp;&#27;lt;&amp;&#27;&amp;#47;a&amp;&#27;gt;&amp;&#27;lt;&amp;#47;b&amp;&#27;gt;
+	var hello2 = hello1.unescapeTags(); // &amp;lt;b&amp;gt;some &amp;lt;a href=""&amp;gt;HTML&amp;lt;&amp;#47;a&amp;gt;&amp;lt;&amp;#47;b&amp;gt;
+}
+</textarea>
+<pre class="JavaScript"></pre>
+</td>
+</tr>
+</table>
+<p>
+Incidentally, to display "&amp;lt;" in HTML you must escape the "&" symbol with the <b>&amp;amp;</b> entity, e.g., "&amp;amp;lt;". 
+Also notice that these functions have nothing to do with the ecape and unescape functions of the <font color="#0000FF">Global</font>
+JavaScript object.
+</p>
+<p>
+So there you have it. These methods&mdash;along with my array object extension methods&mdash;are essential to the file and directory parsing
+operations that I have to deal with on a day to day basis, whether it is cleaning up temporary files, migrating data files,
+parsing code files, crawling and scraping web pages, highlighting text found in files, smart indenting, justifying and tabifying
+scripts... you name it. Some of the methods have been with me since the last millenium, some have been revamped as recently as
+yesterday, all of them are very useful to me. I hope you find them useful as well!
+</p>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td class="tdcloser">
+<a href="../.."><img alt="Hector [.j.] Rivas" border="" src="../sitebuilderpictures/webassets/logo.gif" vspace="0" hspace="5"></a>
+</td>
+</tr>
+<tr>
+<td class="tdcloser">
+<div itemscope itemtype="http://data-vocabulary.org/Person"> 
+<span itemprop="name" style="font-size:10px;">Hector [.j.] Rivas</span>
+</div>
+</td>
+</tr>
+</table>
+</td></tr>
+<tr>
+<td class="tdfooter">
+<div class="divcontact">Rowlett, TX&nbsp;| 214.789.1733&nbsp;| <a href="mailto:hector.j.rivas@hotmail.com">hector.j.rivas@hotmail.com</a></div>
+<div class="divhosting"><a href="http://www.register.com/retail/product/website.rcmx" target="_blank">Powered by Register.com</a></div>
+</td>
+</tr>
+</table>
+</body>
+</html>
