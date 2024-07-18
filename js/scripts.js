@@ -123,8 +123,8 @@ function LoadSyntaxes()
 
 	for (var i = 0, j; i < ctables.length; i++)
 	{
-		var source = ctables[i].getElementsByTagName("TEXTAREA")[0],
-			target = ctables[i].getElementsByTagName("PRE")[1];
+		var source = ctables[i].getElementsByTagName("TEXTAREA")[0];
+		var target = ctables[i].getElementsByTagName("PRE")[0];
 
 		// skip ill-formed code tables
 		if (source == null || target == null)
