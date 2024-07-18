@@ -147,7 +147,7 @@ function LoadSyntaxes()
 function Load()
 {
 	// initialize browser info
-	//BrowserInfo.init();
+	BrowserInfo.init();
 	
 	// pre-load syntax objects for languages found on the page
 	LoadSyntaxes();

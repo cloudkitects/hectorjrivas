@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE HTML">
 <html>
 <head>
 <title>Hector J. Rivas - Syntax Highlighting Done Right</title>
@@ -48,7 +48,7 @@ A Syntax object holds a language, a reference to a HTML DOM style sheet object, 
 The syntax object exposes methods to add groups and blocks to the respective arrays, and a method to "parse" the text to highlight.
 </p>
 <p>
-Upon construction of a Syntax object, the passed-in CSS rule is appended to the passed-in style sheet using the AddRule utility function (a wrapper for the <a href="http://msdn.microsoft.com/en-us/library/ie/ff975163(v=vs.85).aspx" target="blank" title="insertRule method (Internet Explorer)">HTML DOM's insertRule method</a>). The passed-in rule defines the general style for the language&mdash;font family, padding, margins, etc. Groups and blocks have their own CSS rule&mdash;additional style attributes such as font color and weight&mdash;which are created one level below the language rule. This is the whole point of "cascading styles", and is illustrated by the format string of the <b>printf</b> utility function (a function similar to C#'s <font color="#0000FF"><b>String</b>.Format</font> method).
+Upon construction of a Syntax object, the passed-in CSS rule is appended to the passed-in style sheet using the AddRule utility function (a wrapper for the <a href="http://msdn.microsoft.com/en-us/library/ie/ff975163(v=vs.85).aspx" target="blank" title="insertRule method">CSSStyleSheet:insertRule()</a> method). The passed-in rule defines the general style for the language&mdash;font family, padding, margins, etc. Groups and blocks have their own CSS rule&mdash;additional style attributes such as font color and weight&mdash;which are created one level below the language rule. This is the whole point of "cascading styles", and is illustrated by the format string of the <b>printf</b> utility function (a function similar to C#'s <font color="#0000FF"><b>String</b>.Format</font> method).
 </p>
 <p>
 It is worth mentioning that style rules are created "on the fly" using HTML DOM methods, so that the user dictates how to highlight text. Moreover, the function that instances a <b>Syntax</b> object must pass a reference to an existing style sheet element, which can also be created on the fly.
@@ -402,9 +402,7 @@ with a mono-spaced font.
 </tr>
 <tr>
 <td class="tdcloser">
-<div itemscope itemtype="http://data-vocabulary.org/Person"> 
-<span itemprop="name" style="font-size:10px;">Hector [.j.] Rivas</span>
-</div>
+	Hector [.j.] Rivas
 </td>
 </tr>
 </table>
