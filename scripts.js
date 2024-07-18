@@ -154,4 +154,4 @@ function Load()
 }
 
 // add a handler for the load event
-addEventListener("load", Load);
+document.addEventListener("load", Load);
