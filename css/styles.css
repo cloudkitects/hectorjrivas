@@ -19,7 +19,7 @@ li
 
 .tdheader
 {
-	background-image: url(../sitebuilderpictures/webassets/tdheader.bg.jpg);
+	background-image: url(../img/webassets/tbheader.bg.jpg);
 	background-color: #3A7EE1;
 	background-repeat:repeat-x;
 	background-position: top;
@@ -29,7 +29,7 @@ li
 
 .tbheader
 {  
-	background-image: url(../sitebuilderpictures/webassets/tbheader.bg.jpg);
+	background-image: url(../img/webassets/tbheader.bg.jpg);
 	background-repeat: no-repeat;
 	background-position: top left; 
 	background-color: transparent;
@@ -64,7 +64,7 @@ li
 
 .tdfooter
 {
-	background-image: url(../sitebuilderpictures/webassets/tdfooter.bg.jpg);
+	background-image: url(../img/webassets/tdfooter.bg.jpg);
 	background-color: #377FE1;
 	background-repeat:no-repeat;
 	background-position: top right;
