@@ -124,7 +124,7 @@ function LoadSyntaxes()
 	for (var i = 0, j; i < ctables.length; i++)
 	{
 		var source = ctables[i].getElementsByTagName("TEXTAREA")[0],
-			target = ctables[i].getElementsByTagName("PRE")[1];
+			target = ctables[i].getElementsByTagName("PRE")[0];
 
 		// skip ill-formed code tables
 		if (source == null || target == null)
@@ -147,7 +147,7 @@ function LoadSyntaxes()
 function Load()
 {
 	// initialize browser info
-	//BrowserInfo.init();
+	BrowserInfo.init();
 	
 	// pre-load syntax objects for languages found on the page
 	LoadSyntaxes();

@@ -107,7 +107,7 @@ li
 {
 	display: table;
 	border-collapse: collapse;
-	width: 0%;
+	width: 0;
  	border-radius: 0em 0 1em 0em;
  	box-shadow: 10px 10px 10px #808080;
 }
@@ -119,11 +119,7 @@ li
 
 #tbcode td
 {
-	/*border: 1px dotted black;*/
-
 	display: table-cell;
-	/*-webkit-column-span: all;
-	column-span: all;*/
 }
 
 #tbcode td:first-child
@@ -139,8 +135,8 @@ li
 /* code textareas */
 .code
 {
-	width:0;
-	height:0;
+	width: 0;
+	height: 0;
 	display: none;
 }
 
@@ -149,7 +145,7 @@ li
 	display: inline-block;
 
 	color: #FFFFFF;
-	background: #000099 url("../sitebuilderpictures/webassets/gradient.png") repeat-x;
+	background: #000099 url("../img/webassets/gradient.png") repeat-x;
 
 	margin: 3px;
 	padding: 5px 10px;
@@ -165,7 +161,7 @@ li
 }
 .adownload:hover
 {
-	background: #6633FF url("../sitebuilderpictures/webassets/gradient.png") repeat-x;
+	background: #6633FF url("../img/webassets/gradient.png") repeat-x;
 
 	cursor: hand;
 }
