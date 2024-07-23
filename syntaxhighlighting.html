@@ -1,4 +1,4 @@
-<!DOCTYPE HTML">
+<!DOCTYPE html>
 <html>
 <head>
 <title>Hector J. Rivas - Syntax Highlighting Done Right</title>
@@ -56,10 +56,10 @@ It is worth mentioning that style rules are created "on the fly" using HTML DOM 
 <table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
 <tr>
 <td valign="top">
-<span class="linenumbers"></span>
+<pre class="JavaScript"></pre>
 </td>
 <td valign="top">
-<textarea class="code">
+<textarea id="ta1" class="code">
 function Syntax(language, styleSheet, rule, tabSize)
 {
 	this.language = language;
@@ -109,10 +109,10 @@ The template property is a HTML element to which we apply the group's decorated 
 <table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
 <tr>
 <td valign="top">
-<span class="linenumbers"></span>
+<pre class="JavaScript"></pre>
 </td>
 <td valign="top">
-<textarea class="code">
+<textarea id="ta2" class="code">
 function Group(name, keywords, flags)
 {
 	var regexp   = null;
@@ -153,10 +153,10 @@ Parsing blocks is fundamentally differently from parsing keyword groups. Blocks 
 <table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
 <tr>
 <td valign="top">
-<span class="linenumbers"></span>
+<pre class="JavaScript"></pre>
 </td>
 <td valign="top">
-<textarea class="code">
+<textarea id="ta3" class="code">
 function Block(name, regexp)
 {
 	var template = printf("<span class=\"{0}\">{1}</span>", name, "{0}");
@@ -203,10 +203,10 @@ Blocks are very likely to be embedded within other blocks. This block <i>nesting
 <table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
 <tr>
 <td valign="top">
-<span class="linenumbers"></span>
+<pre class="JavaScript"></pre>
 </td>
 <td valign="top">
-<textarea class="code">
+<textarea id="ta4" class="code">
 this.Restore = function(text)
 {
 	for (var i = 0; i < Matches.length; i++)
@@ -238,10 +238,10 @@ As mentioned before, the Syntax object's Parse method hides blocks, highlights k
 <table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
 <tr>
 <td valign="top">
-<span class="linenumbers"></span>
+<pre class="JavaScript"></pre>
 </td>
 <td valign="top">
-<textarea class="code">
+<textarea id="ta5" class="code">
 this.Parse = function(text)
 {
 	// hide blocks (replace them with tags)
@@ -280,10 +280,10 @@ For the purpose of modularity, the <b>Syntax</b> object serves as a base class f
 <table border="0" cellpadding="0" cellspacing="0" id="tbcode" name="tbcode">
 <tr>
 <td valign="top">
-<span class="linenumbers"></span>
+<pre class="JavaScript"></pre>
 </td>
 <td valign="top">
-<textarea class="code">
+<textarea id="ta6" class="code">
 function JavaScriptSyntax(styleSheet)
 {
 	// instance a base class object

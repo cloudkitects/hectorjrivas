@@ -44,65 +44,67 @@ function LoadSyntax(language)
 	var syntax = Syntaxes.find("language", language);
 
 	// none found, create it
-	if (syntax == null)
+	if (syntax != null)
 	{
-		// a stylesheet object
-		var style = createStyleElement();
-
-		switch (language)
-		{
-			case "CSharp":
-
-				syntax = new CSharpSyntax(style);
-				
-				// TODO: move to each page's script
-				syntax.addGroup("user1", "HJR ReadPassword", "color: #FF46A3");
-
-				break;
-
-			case "Batch":
-
-				syntax = new BatchSyntax(style);
-
-				break;
-	
-			case "JavaScript":
-
-				syntax = new JavaScriptSyntax(style);
-
-				// TODO: move to each page's script
-				syntax.addGroup("user1", "addRule box compact escapeTags fChar fromBase26 indent indentation lChar lines ltrim mtrim printf randomGUID randomHex randomString reverse rtrim times toArray toBase26 trim unescapeTags unindent words", "color: #FF46A3");
-				syntax.addGroup("user2", "Syntax Group Block BatchSyntax CSharpSyntax JavaScriptSyntax", "color: #FF46A3");
-
-				break;
-	
-			case "XML":
-				syntax = new XMLSyntax(style);
-
-				break;
-
-			case "XAML":
-				syntax = new XAMLSyntax(style);
-
-				break;
-
-			case "HTML":
-				syntax = new HTMLSyntax(style);
-
-				break;
-
-			default:
-				break;
-		}
-	
-		// save the subclassed syntax object for reuse
-		if (syntax != null)
-		{
-			Syntaxes.push(syntax);
-		}
-		
 		return syntax;
 	}
+
+	// a stylesheet object
+	var style = createStyleElement();
+
+	switch (language)
+	{
+		case "CSharp":
+
+			syntax = new CSharpSyntax(style);
+			
+			// TODO: move to each page's script
+			syntax.addGroup("user1", "HJR ReadPassword", "color: #FF46A3");
+
+			break;
+
+		case "Batch":
+
+			syntax = new BatchSyntax(style);
+
+			break;
+
+		case "JavaScript":
+
+			syntax = new JavaScriptSyntax(style);
+
+			// TODO: move to each page's script
+			syntax.addGroup("user1", "addRule box compact escapeTags fChar fromBase26 indent indentation lChar lines ltrim mtrim printf randomGUID randomHex randomString reverse rtrim times toArray toBase26 trim unescapeTags unindent words", "color: #FF46A3");
+			syntax.addGroup("user2", "Syntax Group Block BatchSyntax CSharpSyntax JavaScriptSyntax", "color: #FF46A3");
+
+			break;
+
+		case "XML":
+			syntax = new XMLSyntax(style);
+
+			break;
+
+		case "XAML":
+			syntax = new XAMLSyntax(style);
+
+			break;
+
+		case "HTML":
+			syntax = new HTMLSyntax(style);
+
+			break;
+
+		default:
+			break;
+	}
+
+	// save the subclassed syntax object for reuse
+	if (syntax != null)
+	{
+		Syntaxes.push(syntax);
+	}
+	
+	return syntax;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -119,19 +121,55 @@ function LoadSyntaxes()
 
 	// nothing to do
 	if (ctables == null)
+	{
 		return;
+	}
 
 	for (var i = 0, j; i < ctables.length; i++)
 	{
+		var linens = ctables[i].getElementsByTagName("PRE")[0];
 		var source = ctables[i].getElementsByTagName("TEXTAREA")[0];
-		var target = ctables[i].getElementsByTagName("PRE")[0];
+		var target = ctables[i].getElementsByTagName("PRE")[1];
 
 		// skip ill-formed code tables
 		if (source == null || target == null)
+		{
 			continue;
+		}	
 
 		// the PRE element's class attribute indicates the language
-		LoadSyntax(target.className);
+		var syntax = LoadSyntax(target.className);
+
+		if (syntax)
+		{
+			// parse the source
+			try 
+			{
+				target.innerHTML = syntax.parse(source.innerText);
+			}
+			catch (e)
+			{
+				target.innerHTML = source.innerHTML;
+			}
+
+			// count source lines
+			linens.innerHTML = lineCountHTML(source);
+			
+			// copy and modify line numbers' style
+			//linens.className = language;
+			
+			with (linens.style)
+			{
+				borderRadius = 0;
+				textAlign = "right";
+				backgroundColor = "#C0C0C0";
+				color = "#FFFFFF";
+			}
+		}
+		else
+		{
+			target.innerHTML = source.innerHTML;
+		}
 	}
 }
 
