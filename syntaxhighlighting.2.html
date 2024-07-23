@@ -1,4 +1,4 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
 <head>
 <title>Hector J. Rivas - Syntax Highlighting Done Right, Part II</title>
@@ -36,7 +36,7 @@ In this last part of the series, I will I demonstrate how I use the Syntax objec
 <h3>The HTML code table</h3>
 <p>
 A HTML page typically contains more than one code snippet, therefore I use a repeatable structure to identify and contain code snippets: a
-table with a specific ID (tbcode) containing certain elements:
+table with <code>id="tbcode"</code> containing certain elements:
 </p>
 <p class="pfigure">
 Figure 1. HTML elements in a code table
@@ -64,7 +64,7 @@ When a page on my website loads, I gather browser info to handle cross-browser m
 <pre class="JavaScript"></pre>
 </td>
 <td valign="top">
-<textarea class="code">
+<textarea id="ta1" class="code">
 window.onload = function()
 {
 	// get browser info
@@ -97,7 +97,7 @@ The onload event continues by looping through code tables, and for each, it grab
 <pre class="JavaScript"></pre>
 </td>
 <td valign="top">
-<textarea class="code">
+<textarea id="ta2" class="code">
 for (var i = 0, j; i < ctables.length; i++)
 {
 	var _linens = ctables[i].getElementsByTagName("SPAN")[0];
@@ -168,7 +168,7 @@ Still inside the code tables loop, if a syntax object is successfully created, i
 <pre class="JavaScript"></pre>
 </td>
 <td valign="top">
-<textarea class="code">
+<textarea id="ta3" class="code">
 // we managed to create a syntax object ( === language is known )
 if (syntax)
 {			
